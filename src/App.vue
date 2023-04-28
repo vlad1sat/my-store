@@ -1,25 +1,41 @@
 <template>
-  <header class="header">
-    <p class="header-text header-phone">PHONE: 8900000000</p>
-    <p class="header-text header-name-store">VLAD1SAT STORE</p>
-    <button @click=openBasket() class="header-basket"></button>
-  </header>
-  <main>
-    <div v-for="good in goods" :key="good.id" class="div-good" @click="openGood()">
-        <h2 class="div-good-text div-good-title">{{good.title}}</h2>
-        <img :src="good.image" width="250" height="300" alt="cloth" class="div-good-img">
-        <h2 class="div-good-text div-good-title-category pd-55">RATING:</h2>
-        <p class="div-good-text div-good-base-text pd-55">RATE: {{good.rating.rate}}&nbsp;&nbsp;&nbsp;&nbsp;COUNT: {{good.rating.count}}</p>
-        <h2 class="div-good-text div-good-title-category pd-55">CATEGORY:</h2>
-        <p class="div-good-text div-good-base-text pd-55">{{good.category}}</p>
-    </div>
-  </main>
-  <footer>
+    <header class="header">
+        <p class="header-text header-phone">PHONE: 8900000000</p>
+        <p class="header-text header-name-store">VLAD1SAT STORE</p>
+        <button @click=openBasket() class="header-basket"></button>
+    </header>
+    <main>
+        <div v-for="good in goods" :key="good.id" class="div-good" @click="openGood()">
+            <h2 class="div-good-text div-good-title">{{good.title}}</h2>
+            <img :src="good.image" width="250" height="300" alt="cloth" class="div-good-img">
+            <h2 class="div-good-text div-good-title-category pd-55">RATING:</h2>
+            <p class="div-good-text div-good-base-text pd-55">RATE: {{good.rating.rate}}&nbsp;&nbsp;&nbsp;&nbsp;COUNT: {{good.rating.count}}</p>
+            <h2 class="div-good-text div-good-title-category pd-55">CATEGORY:</h2>
+            <p class="div-good-text div-good-base-text pd-55">{{good.category}}</p>
+        </div>
 
-  </footer>
+<!--        <div class="modal-background">
+            <div class="modal-good-completely">
+                <h2 class="modal-text text-up modal-title">Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops</h2>
+                <h3 class="modal-text text-up modal-category">men's clothing</h3>
+                <img src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg" class="modal-picture" alt="picture-cloth" width="250" height="350">
+                <p class="modal-text modal-description">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday</p>
+                <h2 class="modal-text text-up modal-rating">Rating:</h2>
+                <div>
+                    <p class="modal-text text-up modal-rate">rate: 3.9</p>
+                    <img src="./smile.svg" alt="smile" width="44" height="44" class="modal-smile">
+                </div>
+                <p class="modal-text text-up modal-count">Count: 123</p>
+            </div>
+        </div>-->
+    </main>
+    <footer>
+
+    </footer>
 </template>
 
 <script lang="ts">
+
     export default {
         data() {
             return {
@@ -113,6 +129,7 @@
     .header-text {
         font-family: 'Inter', sans-serif;
         font-weight: 900;
+        text-transform: uppercase;
     }
 
     .header-phone {
@@ -165,6 +182,7 @@
         font-weight: 900;
         font-size: 20px;
         color: #FFFFFF;
+        text-transform: uppercase;
     }
 
     .div-good-title {
@@ -186,5 +204,85 @@
 
     .pd-55 {
         padding-left: 55px;
+    }
+</style>
+
+
+//modal-good
+<style>
+    .modal-good-completely {
+        width: 1200px;
+        height: 700px;
+        position: absolute;
+        left: calc(50% - 1200px/2);
+        top: calc(50% - 700px/2 + 72px);
+        background-color: #FFFFFF;
+    }
+
+    .modal-text {
+        font-family: 'Inter', sans-serif;
+        font-weight: 900;
+        color: #7F89F8;
+        font-size: 24px;
+    }
+
+    .text-up {
+        text-transform: uppercase;
+    }
+
+    .modal-category {
+        font-size: 16px;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .modal-title {
+        font-size: 32px;
+        text-align: center;
+    }
+
+    .modal-picture {
+        padding-left: 475px;
+    }
+
+    .modal-description {
+        font-size: 20px;
+        text-align: center;
+        font-weight: 500;
+        padding: 10px 50px;
+    }
+
+    .modal-background {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(3, 3, 3, 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-rating {
+        text-align: center;
+        margin-bottom: 0;
+    }
+
+    .modal-rate {
+        float: left;
+        padding: 10px;
+        padding-left: 200px;
+        margin: 0;
+        margin-left: 15px;
+    }
+
+    .modal-smile {
+        float: left;
+    }
+
+    .modal-count {
+        margin: 0;
+        padding: 7px 0 0 800px;
     }
 </style>
