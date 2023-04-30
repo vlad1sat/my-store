@@ -28,7 +28,7 @@
                                 <img :src="basketGood.image" width="90" height="120" class="basket-img" alt="picture good">
                                 <h3 class="basket-title-good">{{ basketGood.title }}</h3>
                             </div>
-                            <p class="basket-price">{{  (basketGood.price * basketGood.count).toFixed(2) }} $</p>
+                            <h3 class="basket-price">{{  (basketGood.price * basketGood.count).toFixed(2) }} $</h3>
                             <div class="basket-count-goods">
                                 <p class="count-goods">{{ basketGood.count }} шт.</p>
                                 <button style="margin-left: 10px" class="bn-basket-count-goods bn-basket-move" @click="plusCountGoods(basketGood)">+</button>
@@ -37,6 +37,7 @@
                             <button class="basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">delete</button>
                         </div>
                 </div>
+                <h2 v-if="basketGoods.length" class="basket-total-sum">Total sum: {{ totalSum }} $</h2>
                 <button class="basket-bn-buy" :disabled="!basketGoods.length" @click="buyBasket()">buy</button>
             </div>
         </div>
@@ -140,6 +141,12 @@
             };
         },
 
+        computed: {
+            totalSum() {
+                return this.basketGoods.reduce((sum, good) => sum += good.price * good.count, 0).toFixed(2);
+            }
+        },
+
         methods: {
             //goods
             openGood(good) {
@@ -179,7 +186,6 @@
             //basket
             openBasket() {
                 this.isShowBasket = true;
-                console.log(this.isShowBasket)
             },
 
             closeBasket() {
@@ -228,10 +234,9 @@
             },
 
             buyBasket() {
-                alert('Вы успешно заказати товары! Ожидайте подтверждения операции!')
+                alert(`Вы успешно заказати товары!\nОжидайте подтверждения операции!\nСумма заказа: ${this.totalSum} $`)
                 this.basketGoods = []
                 this.closeBasket()
-
             }
 
         }
@@ -514,7 +519,7 @@
     .basket-title {
         font-weight: 900;
         font-size: 32px;
-        margin: 27px 0 40px 182px;
+        margin: 27px 0 20px 182px;
     }
 
     .basket-img {
@@ -587,7 +592,7 @@
         border: none;
         font-size: 24px;
         position: fixed;
-        top: 760px;
+        top: 770px;
         left: 850px;
     }
 
@@ -598,6 +603,11 @@
 
     .basket-bn-buy:disabled {
         background-color: #AAAFEE;
+    }
+
+    .basket-total-sum {
+        margin: 0;
+        padding-left: 130px;
     }
 
 
