@@ -27,7 +27,8 @@
                             <div>
                                 <img :src="basketGood.image" width="90" height="120" class="basket-img" alt="picture good">
                                 <h3 class="basket-title-good">{{ basketGood.title }}</h3>
-
+                            </div>
+                            <p class="basket-price">{{  (basketGood.price * basketGood.count).toFixed(2) }} $</p>
                             <div class="basket-count-goods">
                                 <p class="count-goods">{{ basketGood.count }} шт.</p>
                                 <button style="margin-left: 10px" class="bn-basket-count-goods bn-basket-move" @click="plusCountGoods(basketGood)">+</button>
@@ -35,7 +36,6 @@
                             </div>
                             <button class="basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">delete</button>
                         </div>
-                    </div>
                 </div>
                 <button class="basket-bn-buy" :disabled="!basketGoods.length" @click="buyBasket()">buy</button>
             </div>
@@ -191,6 +191,7 @@
                     title: this.selectedGood.title,
                     id: this.selectedGood.id,
                     count: 1,
+                    price: this.selectedGood.price,
                     image: this.selectedGood.image
                 };
 
@@ -521,10 +522,17 @@
         float: left;
     }
 
+    .basket-price {
+        margin: 10px 0 10px 270px;
+        font-size: 20px;
+
+    }
+
     .basket-title-good {
-        margin-left: 160px;
+        margin: 18px 0 0 150px;
         padding-top: 10px;
         display: block;
+        text-align: center;
         width: 300px;
     }
 
