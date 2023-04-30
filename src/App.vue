@@ -22,17 +22,19 @@
                 <button class="bn-basket-close bn-basket-move" @click="closeBasket()"></button>
                 <h2 class="basket-title">basket</h2>
                 <p v-if="!basketGoods.length" class="basket-no-goods">Товаров нет</p>
-                <div v-for="basketGood in basketGoods" :key="basketGood.id" class="basket-good">
-                        <div>
-                            <img :src="basketGood.image" width="90" height="120" class="basket-img" alt="picture good">
-                            <h3 class="basket-title-good">{{ basketGood.title }}</h3>
+                <div class="basket-goods">
+                    <div v-for="basketGood in basketGoods" :key="basketGood.id" class="basket-good">
+                            <div>
+                                <img :src="basketGood.image" width="90" height="120" class="basket-img" alt="picture good">
+                                <h3 class="basket-title-good">{{ basketGood.title }}</h3>
 
-                        <div class="basket-count-goods">
-                            <p class="count-goods">{{ basketGood.count }} шт.</p>
-                            <button style="margin-left: 10px" class="bn-basket-count-goods bn-basket-move" @click="plusCountGoods(basketGood)">+</button>
-                            <button class="bn-basket-count-goods bn-basket-move" @click="minusCountGood(basketGood)">–</button>
+                            <div class="basket-count-goods">
+                                <p class="count-goods">{{ basketGood.count }} шт.</p>
+                                <button style="margin-left: 10px" class="bn-basket-count-goods bn-basket-move" @click="plusCountGoods(basketGood)">+</button>
+                                <button class="bn-basket-count-goods bn-basket-move" @click="minusCountGood(basketGood)">–</button>
+                            </div>
+                            <button class="basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">delete</button>
                         </div>
-                        <button class="basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">delete</button>
                     </div>
                 </div>
                 <button class="basket-bn-buy" :disabled="!basketGoods.length" @click="buyBasket()">buy</button>
@@ -491,6 +493,12 @@
         margin: 20px 0 0 430px;
         border: none;
         position: absolute;
+    }
+
+    .basket-goods {
+        overflow: auto;
+        width: 500px;
+        height: 500px;
     }
 
     .basket-good {
