@@ -18,24 +18,24 @@
 
 <!--basket-->
         <div class="basket-background" :class="{ showBasket: isShowBasket }">
-            <p v-if="!basketGoods">Товаров нет</p>
             <div class="basket">
                 <button class="bn-basket-close bn-basket-move" @click="closeBasket()"></button>
                 <h2 class="basket-title">basket</h2>
+                <p v-if="!basketGoods.length" class="basket-no-goods">Товаров нет</p>
                 <div v-for="basketGood in basketGoods" :key="basketGood.id" class="basket-good">
                         <div>
-                            <img :src="basketGood.image" width="90" height="120" class="basket-img">
+                            <img :src="basketGood.image" width="90" height="120" class="basket-img" alt="picture good">
                             <h3 class="basket-title-good">{{ basketGood.title }}</h3>
 
                         <div class="basket-count-goods">
-                            <p class="count-goods">1 шт.</p>
-                            <button style="margin-left: 10px" class="bn-basket-count-goods bn-basket-move">+</button>
-                            <button class="bn-basket-count-goods bn-basket-move">–</button>
+                            <p class="count-goods">{{ basketGood.count }} шт.</p>
+                            <button style="margin-left: 10px" class="bn-basket-count-goods bn-basket-move" @click="plusCountGoods(basketGood)">+</button>
+                            <button class="bn-basket-count-goods bn-basket-move" @click="minusCountGood(basketGood)">–</button>
                         </div>
-                        <button class="basket-bn-delete">delete</button>
+                        <button class="basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">delete</button>
                     </div>
                 </div>
-                <button class="basket-bn-buy">buy</button>
+                <button class="basket-bn-buy" :disabled="!basketGoods.length" @click="buyBasket()">buy</button>
             </div>
         </div>
 
@@ -47,7 +47,8 @@
                     <h2 class="modal-text modal-title">{{ selectedGood.title }}</h2>
                     <h3 class="modal-text modal-category">{{ selectedGood.category }}</h3>
                 </div>
-                <img :src="selectedGood.image" class="modal-picture" alt="picture-cloth" width="250" height="350">
+                <img :src="selectedGood.image" class="modal-picture" alt="picture-cloth" width="230" height="330">
+                <h3 class="modal-text modal-price">{{ selectedGood.price }} $</h3>
                 <p class="modal-text modal-description">{{ selectedGood.description }}</p>
                 <div>
                     <h2 class="modal-text modal-rating">Rating:</h2>
@@ -184,16 +185,17 @@
             },
 
             addToBasket() {
-                let good = {
+                const good = {
                     title: this.selectedGood.title,
                     id: this.selectedGood.id,
+                    count: 1,
                     image: this.selectedGood.image
                 };
 
                 let isInBasket = false;
 
-                if (good.title.split(' ').length > 10) {
-                    good.title = good.title.split(' ').slice(0, 10).join(' ') + '...';
+                if (good.title.split(' ').length > 6) {
+                    good.title = good.title.split(' ').slice(0, 6).join(' ') + '...';
                 }
                 this.basketGoods.forEach(goodBasket => {
                     if (goodBasket.id === good.id) {
@@ -206,7 +208,29 @@
                     console.log(this.basketGoods)
                 }
                 this.closeGood();
+            },
+
+            deleteGoodFromBasket(good) {
+                console.log(this.basketGoods)
+                this.basketGoods = this.basketGoods.filter(basketGood => good.id !== basketGood.id)
+                console.log(this.basketGoods)
+            },
+
+            minusCountGood(basketGood) {
+                basketGood.count > 1 ? --basketGood.count : this.deleteGoodFromBasket(basketGood);
+            },
+
+            plusCountGoods(basketGood) {
+                basketGood.count < 100 ? ++basketGood.count : alert('Превышен лимит товаров')
+            },
+
+            buyBasket() {
+                alert('Вы успешно заказати товары! Ожидайте подтверждения операции!')
+                this.basketGoods = []
+                this.closeBasket()
+
             }
+
         }
     }
 </script>
@@ -310,10 +334,10 @@
 <style>
     .modal-good-completely {
         width: 1200px;
-        height: 750px;
+        height: 800px;
         position: absolute;
         left: calc(50% - 1200px/2);
-        top: calc(40% - 700px/2 + 72px);
+        top: calc(37% - 700px/2 + 72px);
         background-color: #FFFFFF;
         cursor: default;
     }
@@ -339,13 +363,19 @@
     }
 
     .modal-picture {
-        margin-left: 475px;
+        margin-left: 490px;
+    }
+
+    .modal-price {
+        text-align: center;
+        margin: 23px 0 15px 0;
     }
 
     .modal-description {
         font-size: 20px;
         text-align: center;
         font-weight: 500;
+        margin-top: 10px;
         padding: 10px 50px;
         text-transform: none;
     }
@@ -394,7 +424,7 @@
         color: #FFFFFF;
         background-color: #7F89F8;
         border: none;
-        margin: 5px 0 0 140px;
+        margin: 5px 0 0 145px;
     }
 
     .bn-modal-close {
@@ -445,6 +475,13 @@
 
     .showBasket {
         visibility: visible;
+    }
+
+    .basket-no-goods {
+        margin-top: 230px;
+        font-weight: 900;
+        font-size: 26px;
+        text-align: center;
     }
 
     .bn-basket-close {
@@ -525,22 +562,26 @@
 
     .basket-bn-buy {
         width: 200px;
-        height: 30px;
+        height: 40px;
         background-color: #7F89F8;
         color: #FFFFFF;
         font-family: 'Inter', sans-serif;
         font-weight: bold;
         text-transform: uppercase;
         border: none;
-        font-size: 20px;
+        font-size: 24px;
         position: fixed;
-        top: 780px;
+        top: 760px;
         left: 850px;
     }
 
-    .basket-bn-buy:hover {
+    .basket-bn-buy:hover:enabled {
         transform: scale(1.1);
         cursor: pointer;
+    }
+
+    .basket-bn-buy:disabled {
+        background-color: #AAAFEE;
     }
 
 
