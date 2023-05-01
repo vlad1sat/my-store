@@ -2,14 +2,30 @@
     <header class="header">
         <p class="header-text header-phone">PHONE: 8900000000</p>
         <p class="header-text header-name-store">VLAD1SAT STORE</p>
+        <button class="header-magnifier" @click="isShowSort = !isShowSort"></button>
         <button class="header-favorites" @click="openFavorites()" :class="{ 'open-favorites': isShowFavorites}"></button>
         <button class="header-basket" @click="openBasket()"></button>
     </header>
     <main>
-        <!--search-->
-        <div class="search-div">
-            <h2 class="search-text">Поиск по странице</h2>
-            <input placeholder="Введите название интересуещего товара" v-model="searcher" class="search-input"/>
+
+        <div v-if="isShowSort" class="search-modal">
+            <button class="bn-basket-close bn-basket-move" @click="isShowSort = !isShowSort"></button>
+            <h2 class="search-text search-text-title">SETUP</h2>
+            <div class="search-main-window">
+                <div class="search-div">
+                    <h2 class="search-text">Поиск по странице</h2>
+                    <input placeholder="Введите название интересуещего товара" v-model="searcher" class="search-input"/>
+                </div>
+                <div>
+                    <h2 class="search-text">сортировка по:</h2>
+                    <select v-model="sort" class="search-sort">
+                        <option disabled>Выберите сортировку</option>
+                        <option value="1">prise</option>
+                        <option value="2">alphabet</option>
+                        <option>–</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <p v-if="!appGoods.length" class="div-good-text text-no-goods">Товаров нет</p>
@@ -25,7 +41,7 @@
         </div>
 
 <!--basket-->
-        <div class="basket-background" :class="{ 'show-basket': isShowBasket }">
+        <div v-if="isShowBasket" class="basket-background">
             <div class="basket">
                 <button class="bn-basket-close bn-basket-move" @click="closeBasket()"></button>
                 <h2 class="basket-title">basket</h2>
@@ -51,7 +67,7 @@
         </div>
 
 <!--        good-->
-        <div class="modal-background" :class="{ showGood: isShowGood }">
+        <div v-if="isShowGood" class="modal-background">
             <div class="modal-good-completely">
                 <button class="bn-modal-close bn-modal-move" @click="closeGood()"></button>
                 <div>
@@ -152,6 +168,9 @@
                 isShowFavorites: false,
 
                 searcher: '',
+
+                isShowSort: '',
+                sort: '–',
             };
         },
 
@@ -161,12 +180,27 @@
             },
 
             appGoods() {
-                let result = [];
-                if (this.searcher) {
-                    result = this.goods.filter(good => good.title.toLowerCase().startsWith(this.searcher.toLowerCase()) )
+                let result = this.goods.slice();
+
+                if (this.sort !== '–') {
+                    if (this.sort === "1") {
+                        result = result.sort((el1, el2) => el1.price - el2.price);
+                    } else {
+                        result = result.sort((el1, el2) => el1.title.localeCompare(el2.title))
+                    }
                 } else {
-                    result = this.goods;
+                    result = this.goods
                 }
+
+                console.log('sort', this.goods)
+
+                if (this.searcher) {
+                    result = result.filter(good => good.title.toLowerCase().startsWith(this.searcher.toLowerCase()) )
+                }
+
+                console.log('search', this.goods)
+
+
                 if (!this.isShowFavorites) {
                     return result;
                 }  else {
@@ -211,6 +245,8 @@
                     },
                 };
 
+                this.isShowSort = false;
+
                 this.imageRating = this.selectedGood.rating.rate >= 4.0 ? require("./smile.svg") : require("./bad.svg");
                 this.isShowGood = true;
             },
@@ -235,6 +271,7 @@
             //basket
             openBasket() {
                 this.isShowBasket = true;
+                this.isShowSort = false;
             },
 
             closeBasket() {
@@ -329,12 +366,21 @@
         cursor: default;
     }
 
+    .header-magnifier {
+        background: Transparent no-repeat url("magnifier.svg");
+        width: 70px;
+        height: 70px;
+        border: none;
+        cursor: pointer;
+        margin: 40px 5px 0 250px;
+    }
+
     .header-basket {
         background: Transparent no-repeat url("basket.svg");
         width: 90px;
         height: 90px;
         border: none;
-        margin: 30px 0 0 0;
+        margin: 30px 5px 0 0;
         cursor: pointer;
     }
 
@@ -343,7 +389,7 @@
         width: 80px;
         height: 80px;
         border: none;
-        margin: 37px 0 0 300px;
+        margin-top: 37px;
         cursor: pointer;
     }
 
@@ -352,7 +398,8 @@
     }
 
     .header-basket:hover,
-    .header-favorites:hover {
+    .header-favorites:hover,
+    .header-magnifier:hover {
         transform: scale(1.1);
     }
 
@@ -363,31 +410,57 @@
 
 //search
 <style>
-    .search-div {
-        margin: 50px 0 0 700px;
+    .search-modal {
+        width: 500px;
+        height: 300px;
+        position: fixed;
+        left: 1300px;
+        top: 178px;
+        background-color: #FFFFFF;
+        cursor: default;
+        z-index: 1000;
     }
 
     .search-text {
-        font-size: 32px;
+        font-size: 16px;
         font-family: 'Inter', sans-serif;
         font-weight: 900;
         text-transform: uppercase;
         color: #7F89F8;
-        margin-left: 60px;
+    }
+
+    .search-text-title {
+        text-align: center;
+        font-size: 32px;
     }
 
     .search-input {
-        width: 500px;
-        height: calc(2.25rem + 2px);
-        font-size: 20px;
+        width: 400px;
+        height: 30px;
+        font-size: 16px;
         color: #7F89F8;
         font-family: 'Inter', sans-serif;
-        border: none;
+        border: #7F89F8 2px solid;
+        border-radius: 7px;
+    }
+
+    .search-main-window {
+        margin-left: 35px;
     }
 
     .search-input:focus {
         transform: scale(1.01);
         outline: none;
+    }
+
+    .search-sort {
+        width: 200px;
+        height: 30px;
+        font-size: 16px;
+        color: #7F89F8;
+        font-family: 'Inter', sans-serif;
+        border: #7F89F8 2px solid;
+        border-radius: 7px;
     }
 
 
@@ -523,11 +596,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        visibility: hidden;
-    }
-
-    .showGood {
-        visibility: visible;
     }
 
     .modal-rating {
@@ -604,11 +672,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        visibility: hidden;
-    }
-
-    .show-basket {
-        visibility: visible;
     }
 
     .basket-no-goods {
