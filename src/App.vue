@@ -2,22 +2,24 @@
     <header class="header">
         <p class="header-text header-phone">PHONE: 8900000000</p>
         <p class="header-text header-name-store">VLAD1SAT STORE</p>
+        <button class="header-favorites" @click="test()"></button>
         <button class="header-basket" @click="openBasket()"></button>
     </header>
     <main>
         <p v-if="!goods.length">Товаров нет.</p>
 
-        <div v-for="good in goods" :key="good.id" class="div-good" @click="openGood(good)">
+        <div v-for="good in appGoods" :key="good.id" class="div-good" @click="openGood(good)">
             <h2 class="div-good-text div-good-title">{{good.title}}</h2>
             <img :src="good.image" width="250" height="300" alt="cloth" class="div-good-img">
             <h2 class="div-good-text div-good-title-category pd-55">RATING:</h2>
             <p class="div-good-text div-good-base-text pd-55">RATE: {{good.rating.rate}}&nbsp;&nbsp;&nbsp;&nbsp;COUNT: {{good.rating.count}}</p>
             <h2 class="div-good-text div-good-title-category pd-55">CATEGORY:</h2>
-            <p class="div-good-text div-good-base-text pd-55">{{good.category}}</p>
+            <p class="div-good-text div-good-base-text pd-55" style="margin-bottom: 0; display: inline">{{good.category}}</p>
+            <button class="div-good-bn-like" :class="{ 'div-good-bn-like-active': good.isLikeBnActive }" @click.stop="addToFavorite(good)"></button>
         </div>
 
 <!--basket-->
-        <div class="basket-background" :class="{ showBasket: isShowBasket }">
+        <div class="basket-background" :class="{ 'show-basket': isShowBasket }">
             <div class="basket">
                 <button class="bn-basket-close bn-basket-move" @click="closeBasket()"></button>
                 <h2 class="basket-title">basket</h2>
@@ -59,6 +61,7 @@
                     <img :src="imageRating" alt="emotion" width="44" height="44" class="modal-smile">
                     <p class="modal-text modal-count">Count: {{selectedGood.rating.count }}</p>
                 </div>
+                <button class="bn-modal modal-text bn-modal-move" @click="addToFavorite(selectedGood)">add to favorite</button>
                 <button class="bn-modal modal-text bn-modal-move" @click="addToBasket()">BUY</button>
             </div>
         </div>
@@ -133,21 +136,55 @@
                         rate: 0,
                         count: 0
                     },
+                    isLikeBnActive: false,
                 },
                 imageRating: require("./smile.svg"),
 
                 isShowBasket: false,
                 basketGoods: [],
+
+                isShowFavorites: false,
+                favoriteGoods: [],
             };
         },
 
         computed: {
             totalSum() {
                 return this.basketGoods.reduce((sum, good) => sum += good.price * good.count, 0).toFixed(2);
+            },
+
+            appGoods() {
+                if (!this.isShowFavorites) {
+                    return this.goods;
+                }  else {
+                    return this.favoriteGoods;
+                }
             }
         },
 
         methods: {
+
+            test() {
+                this.isShowFavorites = !this.isShowFavorites;
+            },
+
+
+            addToFavorite(good) {
+                good.isLikeBnActive = !good.isLikeBnActive;
+
+                this.goods.forEach(baseGood => {
+                    if (baseGood.id === good.id) {
+                        baseGood.isLikeBnActive = good.isLikeBnActive;
+                    }
+                })
+
+                if (good.isLikeBnActive) {
+                    this.favoriteGoods.push(good);
+                } else {
+                    this.favoriteGoods = this.favoriteGoods.filter(favoriteGood => favoriteGood.id !== good.id)
+                }
+            },
+
             //goods
             openGood(good) {
                 this.selectedGood = {
@@ -183,6 +220,7 @@
                 };
             },
 
+
             //basket
             openBasket() {
                 this.isShowBasket = true;
@@ -206,9 +244,11 @@
                 if (good.title.split(' ').length > 6) {
                     good.title = good.title.split(' ').slice(0, 6).join(' ') + '...';
                 }
+
                 this.basketGoods.forEach(goodBasket => {
                     if (goodBasket.id === good.id) {
                         isInBasket = true;
+                        ++goodBasket.count;
                     }
                 })
 
@@ -237,7 +277,8 @@
                 alert(`Вы успешно заказати товары!\nОжидайте подтверждения операции!\nСумма заказа: ${this.totalSum} $`)
                 this.basketGoods = []
                 this.closeBasket()
-            }
+            },
+
 
         }
     }
@@ -278,15 +319,25 @@
     }
 
     .header-basket {
-        background: Transparent no-repeat url("basket-img.svg");
+        background: Transparent no-repeat url("basket.svg");
         width: 90px;
         height: 90px;
         border: none;
-        margin: 30px 0 0 484px;
+        margin: 30px 0 0 0;
         cursor: pointer;
     }
 
-    .header-basket:hover {
+    .header-favorites {
+        background: Transparent no-repeat url("favourites.svg");
+        width: 80px;
+        height: 80px;
+        border: none;
+        margin: 37px 0 0 300px;
+        cursor: pointer;
+    }
+
+    .header-basket:hover,
+    .header-favorites:hover {
         transform: scale(1.1);
     }
 
@@ -335,6 +386,26 @@
     .pd-55 {
         padding-left: 55px;
     }
+
+    .div-good-bn-like {
+        background: Transparent no-repeat url("like-empty.svg");
+        width: 50px;
+        height: 50px;
+        border: none;
+        cursor: pointer;
+        position: relative;
+        float: right;
+        display: block;
+    }
+
+    .div-good-bn-like:hover {
+        transform: scale(1.05);
+    }
+
+    .div-good-bn-like-active {
+        background: Transparent no-repeat url("like.svg");
+    }
+
 </style>
 
 
@@ -435,6 +506,7 @@
         margin: 5px 0 0 145px;
     }
 
+
     .bn-modal-close {
         width: 40px;
         height: 40px;
@@ -481,7 +553,7 @@
         visibility: hidden;
     }
 
-    .showBasket {
+    .show-basket {
         visibility: visible;
     }
 
@@ -592,7 +664,7 @@
         border: none;
         font-size: 24px;
         position: fixed;
-        top: 770px;
+        top: 780px;
         left: 850px;
     }
 
@@ -607,7 +679,7 @@
 
     .basket-total-sum {
         margin: 0;
-        padding-left: 130px;
+        padding-left: 125px;
     }
 
 
