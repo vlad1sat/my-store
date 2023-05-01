@@ -6,6 +6,12 @@
         <button class="header-basket" @click="openBasket()"></button>
     </header>
     <main>
+        <!--search-->
+        <div class="search-div">
+            <h2 class="search-text">Поиск по странице</h2>
+            <input placeholder="Введите название интересуещего товара" v-model="searcher" class="search-input"/>
+        </div>
+
         <p v-if="!appGoods.length" class="div-good-text text-no-goods">Товаров нет</p>
 
         <div v-for="good in appGoods" :key="good.id" class="div-good" @click="openGood(good)">
@@ -144,6 +150,8 @@
                 basketGoods: [],
 
                 isShowFavorites: false,
+
+                searcher: '',
             };
         },
 
@@ -153,10 +161,16 @@
             },
 
             appGoods() {
+                let result = [];
+                if (this.searcher) {
+                    result = this.goods.filter(good => good.title.toLowerCase().startsWith(this.searcher.toLowerCase()) )
+                } else {
+                    result = this.goods;
+                }
                 if (!this.isShowFavorites) {
-                    return this.goods;
+                    return result;
                 }  else {
-                    return this.goods.filter(good => good.isLikeBnActive)
+                    return result.filter(good => good.isLikeBnActive)
                 }
             }
         },
@@ -347,13 +361,45 @@
     }
 </style>
 
+//search
+<style>
+    .search-div {
+        margin: 50px 0 0 700px;
+    }
+
+    .search-text {
+        font-size: 32px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: #7F89F8;
+        margin-left: 60px;
+    }
+
+    .search-input {
+        width: 500px;
+        height: calc(2.25rem + 2px);
+        font-size: 20px;
+        color: #7F89F8;
+        font-family: 'Inter', sans-serif;
+        border: none;
+    }
+
+    .search-input:focus {
+        transform: scale(1.01);
+        outline: none;
+    }
+
+
+</style>
+
 //good
 <style>
     .div-good {
         width: 400px;
         height: 600px;
         background-color: #7F89F8;
-        margin-top: 80px;
+        margin-top: 50px;
         cursor: pointer;
         margin-left: 55px;
         float: left;
