@@ -2,11 +2,11 @@
     <header class="header">
         <p class="header-text header-phone">PHONE: 8900000000</p>
         <p class="header-text header-name-store">VLAD1SAT STORE</p>
-        <button class="header-favorites" @click="test()"></button>
+        <button class="header-favorites" @click="openFavorites()" :class="{ 'open-favorites': isShowFavorites}"></button>
         <button class="header-basket" @click="openBasket()"></button>
     </header>
     <main>
-        <p v-if="!goods.length">Товаров нет.</p>
+        <p v-if="!appGoods.length" class="div-good-text text-no-goods">Товаров нет</p>
 
         <div v-for="good in appGoods" :key="good.id" class="div-good" @click="openGood(good)">
             <h2 class="div-good-text div-good-title">{{good.title}}</h2>
@@ -15,7 +15,7 @@
             <p class="div-good-text div-good-base-text pd-55">RATE: {{good.rating.rate}}&nbsp;&nbsp;&nbsp;&nbsp;COUNT: {{good.rating.count}}</p>
             <h2 class="div-good-text div-good-title-category pd-55">CATEGORY:</h2>
             <p class="div-good-text div-good-base-text pd-55" style="margin-bottom: 0; display: inline">{{good.category}}</p>
-            <button class="div-good-bn-like" :class="{ 'div-good-bn-like-active': good.isLikeBnActive }" @click.stop="addToFavorite(good)"></button>
+            <button class="div-good-bn-like" :class="{ 'div-good-bn-like-active': good.isLikeBnActive }" @click.stop="addToFavoriteLike(good)"></button>
         </div>
 
 <!--basket-->
@@ -61,8 +61,8 @@
                     <img :src="imageRating" alt="emotion" width="44" height="44" class="modal-smile">
                     <p class="modal-text modal-count">Count: {{selectedGood.rating.count }}</p>
                 </div>
-                <button class="bn-modal modal-text bn-modal-move" @click="addToFavorite(selectedGood)">add to favorite</button>
-                <button class="bn-modal modal-text bn-modal-move" @click="addToBasket()">BUY</button>
+                <button class="bn-modal modal-text bn-modal-move" @click="addToFavoriteGood(selectedGood)">add to favorite</button>
+                <button class="bn-modal modal-text bn-modal-move" @click="addToBasket(selectedGood)">BUY</button>
             </div>
         </div>
     </main>
@@ -144,7 +144,6 @@
                 basketGoods: [],
 
                 isShowFavorites: false,
-                favoriteGoods: [],
             };
         },
 
@@ -157,33 +156,31 @@
                 if (!this.isShowFavorites) {
                     return this.goods;
                 }  else {
-                    return this.favoriteGoods;
+                    return this.goods.filter(good => good.isLikeBnActive)
                 }
             }
         },
 
         methods: {
 
-            test() {
+            openFavorites() {
                 this.isShowFavorites = !this.isShowFavorites;
             },
 
-
-            addToFavorite(good) {
-                good.isLikeBnActive = !good.isLikeBnActive;
-
-                this.goods.forEach(baseGood => {
+            addToFavoriteGood(good) {
+                this.goods.find(baseGood => {
                     if (baseGood.id === good.id) {
-                        baseGood.isLikeBnActive = good.isLikeBnActive;
+                        baseGood.isLikeBnActive = true;
                     }
                 })
-
-                if (good.isLikeBnActive) {
-                    this.favoriteGoods.push(good);
-                } else {
-                    this.favoriteGoods = this.favoriteGoods.filter(favoriteGood => favoriteGood.id !== good.id)
-                }
+                alert("Товар успешно добавлен в избранное!")
             },
+
+            addToFavoriteLike(good) {
+                good.isLikeBnActive = !good.isLikeBnActive;
+            },
+
+
 
             //goods
             openGood(good) {
@@ -336,6 +333,10 @@
         cursor: pointer;
     }
 
+    .open-favorites {
+        background-image: url("favourites-use.svg");
+    }
+
     .header-basket:hover,
     .header-favorites:hover {
         transform: scale(1.1);
@@ -404,6 +405,13 @@
 
     .div-good-bn-like-active {
         background: Transparent no-repeat url("like.svg");
+    }
+
+    .text-no-goods {
+        font-size: 40px;
+        color: #7F89F8;
+        text-align: center;
+        margin-top: 80px;
     }
 
 </style>
