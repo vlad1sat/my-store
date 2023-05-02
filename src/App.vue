@@ -25,6 +25,14 @@
                         <option>–</option>
                     </select>
                 </div>
+                <div>
+                    <h2 class="search-text">фильтрация по:</h2>
+                    <select v-model="filterCategory" class="search-sort">
+                        <option disabled>Выберите фильтрацию</option>
+                        <option v-for="(category, index) in categories" :key="index">{{ category }}</option>
+                        <option>–</option>
+                    </select>
+                </div>
             </div>
         </div>
 
@@ -94,11 +102,12 @@
 </template>
 
 <script>
+    import index from "vuex";
 
     export default {
         data() {
             return {
-                goods:  [
+                goods: [
                     {
                         category: "men's clothing",
                         description: "Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to 15 inches) in the padded sleeve, your everyday",
@@ -171,6 +180,9 @@
 
                 isShowSort: '',
                 sort: '–',
+
+                categoriesApp: this.categories,
+                filterCategory: '–',
             };
         },
 
@@ -178,6 +190,11 @@
             totalSum() {
                 return this.basketGoods.reduce((sum, good) => sum += good.price * good.count, 0).toFixed(2);
             },
+
+            categories() {
+                return new Set(this.goods.map(good => good.category))
+            },
+
 
             appGoods() {
                 let result = this.goods.slice();
@@ -192,13 +209,15 @@
                     result = this.goods
                 }
 
-                console.log('sort', this.goods)
-
                 if (this.searcher) {
                     result = result.filter(good => good.title.toLowerCase().startsWith(this.searcher.toLowerCase()) )
                 }
 
-                console.log('search', this.goods)
+                if (this.filterCategory !== '–') {
+                    result = result.filter(good => good.category === this.filterCategory)
+                }
+
+                console.log('filter', this.goods)
 
 
                 if (!this.isShowFavorites) {
@@ -412,7 +431,7 @@
 <style>
     .search-modal {
         width: 500px;
-        height: 300px;
+        height: 350px;
         position: fixed;
         left: 1300px;
         top: 178px;
@@ -431,6 +450,7 @@
 
     .search-text-title {
         text-align: center;
+        margin: 20px 0;
         font-size: 32px;
     }
 
