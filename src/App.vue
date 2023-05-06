@@ -104,6 +104,7 @@
 </template>
 
 <script>
+import getDataGoods from "@/getGoods";
     export default {
         data() {
             return {
@@ -141,10 +142,8 @@
         },
 
         mounted() {
-            fetch('https://fakestoreapi.com/products')
-                .then(res => res.json())
-                .then(res => (this.goods = res))
-            },
+            getDataGoods().then(res => (this.goods = res));
+        },
 
         computed: {
             totalSum() {
@@ -156,7 +155,9 @@
             },
 
             appGoods() {
-                let result = this.goods/*.slice()*/;
+                console.log('good', this.goods)
+                let result = this.goods
+                /*.slice()*/
 
                 if (this.sort !== '–') {
                     if (this.sort === "1") {
@@ -175,9 +176,6 @@
                 if (this.filterCategory !== '–') {
                     result = result.filter(good => good.category === this.filterCategory)
                 }
-
-                console.log('filter', this.goods)
-
 
                 if (!this.isShowFavorites) {
                     return result;
