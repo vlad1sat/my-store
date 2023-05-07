@@ -1,16 +1,18 @@
 <template>
-    <header class="header">
-        <p class="header-text header-phone">PHONE: 8900000000</p>
-        <p class="header-text header-name-store">VLAD1SAT STORE</p>
-        <button class="header-magnifier" @click="isShowSort = !isShowSort"></button>
-        <button class="header-favorites" @click="openFavorites()" :class="{ 'open-favorites': isShowFavorites}"></button>
-        <button class="header-basket" @click="openBasket()"></button>
-    </header>
+    <the-header :is-show-favorites="stateApp.isShowFavorites"
+                :is-show-sort="stateApp.isShowSort"
+                @openBasket="openBasket"
+                @openFavorites="openFavorites"
+                @viewSort="viewSort">
+
+    </the-header>
     <main>
         <div style="padding-top: 150px"></div>
 <!--        search-->
-        <div v-if="isShowSort" class="search-modal">
-            <button class="bn-basket-close bn-basket-move" @click="isShowSort = !isShowSort"></button>
+        <div v-if="stateApp.isShowSort" class="search-modal">
+            <button class="bn-basket-close bn-basket-move"
+                    @click="stateApp.isShowSort = false">
+            </button>
             <h2 class="search-text search-text-title">SETUP</h2>
             <div class="search-main-window">
                 <div class="search-div">
@@ -49,14 +51,14 @@
 
 <!--basket-->
         <the-basket @closeBasket="closeBasket"
-                    :is-show-basket="isShowBasket"
+                    :is-show-basket="stateApp.isShowBasket"
                     :basket-goods="basketGoods">
 
         </the-basket>
 
         <!--        good-->
         <the-modal-good @closeGood="closeGood"
-                        :is-show-good="isShowGood"
+                        :is-show-good="stateApp.isShowGood"
                         :goods="goods"
                         :basket-goods="basketGoods"
                         :selected-good="selectedGood">
@@ -92,14 +94,23 @@
 import TheModalGood from "@/components/TheModalGood.vue";
 import TheBasket from "@/components/TheBasket.vue";
 import GoodCard from "@/components/GoodCard.vue";
+import TheHeader from "@/components/TheHeader.vue";
+
 import getDataGoods from "@/getGoods";
+
     export default {
-        components: {GoodCard, TheBasket, TheModalGood},
+        components: {TheHeader, GoodCard, TheBasket, TheModalGood},
         data() {
             return {
                 goods: [],
 
-                isShowGood: false,
+                stateApp: {
+                    isShowGood: false,
+                    isShowBasket: false,
+                    isShowFavorites: false,
+                    isShowSort: false,
+                },
+
                 selectedGood: {
                     category: '',
                     description: '',
@@ -114,13 +125,9 @@ import getDataGoods from "@/getGoods";
                     isLikeBnActive: false,
                 },
 
-                isShowBasket: false,
                 basketGoods: [],
 
-                isShowFavorites: false,
-
                 searcher: '',
-
                 isShowSort: '',
                 sort: '–',
 
@@ -171,19 +178,26 @@ import getDataGoods from "@/getGoods";
         methods: {
             openGood(data) {
                 this.selectedGood = data.selectedGood;
-                this.isShowGood = data.isShowGood;
-                this.isShowSort = data.isShowSort;
 
+                const stateApp = this.stateApp;
+                stateApp.isShowGood = data.isShowGood;
+                stateApp.isShowSort = data.isShowSort;
+            },
+
+            viewSort(data) {
+                this.stateApp.isShowSort = data;
             },
 
             closeGood(data) {
-                this.isShowGood = data.isShowGood
-                this.selectedGood = data.selectedGood;
+                this.stateApp.isShowGood = data.isShowGood
+                this.stateApp.selectedGood = data.selectedGood;
             },
 
-            openFavorites() {
-                this.isShowFavorites = !this.isShowFavorites;
+            openFavorites(data) {
+                this.stateApp.isShowFavorites = data;
             },
+
+
 
             cleanFilter() {
                 this.sort = '–';
@@ -191,95 +205,22 @@ import getDataGoods from "@/getGoods";
                 this.searcher = '';
             },
 
-            //basket
-            openBasket() {
-                this.isShowBasket = true;
-                this.isShowSort = false;
+            openBasket(data) {
+                this.stateApp.isShowBasket = data.isShowBasket;
+                this.stateApp.isShowSort = data.isShowSort;
             },
 
             closeBasket(data) {
-                this.isShowBasket = data;
+                this.stateApp.isShowBasket = data;
             },
         }
     }
 </script>
 
 <style>
-  body {
-      margin: 0;
-      background-color: #FFF5D9;
-  }
-</style>
-
-//header
-<style scoped>
-    .header {
-        height: 150px;
-        width: 100%;
-        background-color: #7F89F8;
-        color: #FFFFFF;
-        display: flex;
-        position: fixed;
-        border-bottom: 5px #FFFFFF solid;
-        z-index: 10;
-    }
-
-    .header-text {
-        font-family: 'Inter', sans-serif;
-        font-weight: 900;
-        text-transform: uppercase;
-    }
-
-    .header-phone {
-        font-size: 24px;
-        margin: 61px 354px 0 118px;
-        cursor: pointer;
-    }
-
-    .header-name-store {
-        font-size: 48px;
-        cursor: default;
-    }
-
-    .header-magnifier {
-        background: Transparent no-repeat url("magnifier.svg");
-        width: 70px;
-        height: 70px;
-        border: none;
-        cursor: pointer;
-        margin: 40px 5px 0 250px;
-    }
-
-    .header-basket {
-        background: Transparent no-repeat url("basket.svg");
-        width: 90px;
-        height: 90px;
-        border: none;
-        margin: 30px 5px 0 0;
-        cursor: pointer;
-    }
-
-    .header-favorites {
-        background: Transparent no-repeat url("favourites.svg");
-        width: 80px;
-        height: 80px;
-        border: none;
-        margin-top: 37px;
-        cursor: pointer;
-    }
-
-    .open-favorites {
-        background-image: url("favourites-use.svg");
-    }
-
-    .header-basket:hover,
-    .header-favorites:hover,
-    .header-magnifier:hover {
-        transform: scale(1.1);
-    }
-
-    .header-phone:hover {
-        opacity: 0.5;
+    body {
+        margin: 0;
+        background-color: #FFF5D9;
     }
 </style>
 
@@ -294,6 +235,15 @@ import getDataGoods from "@/getGoods";
         background-color: #FFFFFF;
         cursor: default;
         z-index: 1000;
+    }
+
+    .bn-basket-close {
+        width: 40px;
+        height: 40px;
+        background: Transparent no-repeat url("close.svg");
+        margin: 20px 0 0 430px;
+        border: none;
+        position: absolute;
     }
 
     .search-text {
