@@ -33,7 +33,9 @@ export default {
     },
 
     data() {
-        return {}
+        return {
+            imageRating: require("../smile.svg"),
+        }
     },
 
     methods: {
@@ -72,6 +74,7 @@ export default {
             if (!isInBasket) {
                 this.basketGoods.push(good)
             }
+
             this.closeGood();
         },
 
@@ -92,6 +95,12 @@ export default {
                 },
             });
         },
+    },
+
+    watch: {
+        isShowGood() {
+            this.imageRating = this.selectedGood.rating.rate >= 4.0 ? require("../smile.svg") : require("../bad.svg");
+        }
     }
 
 }
