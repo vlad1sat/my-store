@@ -1,7 +1,7 @@
 // npx ts-node getGoods.ts
 import IGoodApp from "@/IGoodApp";
 
-const ADDRESS_GOODS : string = 'https://fakestoreapi.com/products'
+const ADDRESS_GOODS : string = 'https://fakestoreapi.com/products';
 
 const addLikeBnActive = (arr: IGoodApp[]): void => {
     arr.forEach((el: IGoodApp) => Object.assign(el, {isLikeBnActive: false}));

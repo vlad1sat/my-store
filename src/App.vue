@@ -76,8 +76,16 @@
             </div>
         </div>
 
-<!--        good-->
-        <div v-if="isShowGood" class="modal-background">
+        <!--        good-->
+        <the-modal-good @closeGoods="closeGoods"
+                        :is-show-good="isShowGood"
+                        :goods="goods"
+                        :basket-goods="basketGoods"
+                        :selected-good="selectedGood">
+
+        </the-modal-good>
+
+<!--        <div v-if="isShowGood" class="modal-background">
             <div class="modal-good-completely">
                 <button class="bn-modal-close bn-modal-move" @click="closeGood()"></button>
                 <div>
@@ -96,7 +104,7 @@
                 <button class="bn-modal modal-text bn-modal-move" @click="addToFavoriteGood(selectedGood)">add to favorite</button>
                 <button class="bn-modal modal-text bn-modal-move" @click="addToBasket(selectedGood)">BUY</button>
             </div>
-        </div>
+        </div>-->
     </main>
     <footer>
 
@@ -104,8 +112,10 @@
 </template>
 
 <script>
+import TheModalGood from "@/components/TheModalGood.vue";
 import getDataGoods from "@/getGoods";
     export default {
+        components: {TheModalGood},
         data() {
             return {
                 goods: [],
@@ -187,6 +197,11 @@ import getDataGoods from "@/getGoods";
 
         methods: {
 
+            closeGoods(data) {
+                this.isShowGood = data.isShowGood
+                this.selectedGood = data.selectedGood;
+            },
+
             openFavorites() {
                 this.isShowFavorites = !this.isShowFavorites;
             },
@@ -195,15 +210,6 @@ import getDataGoods from "@/getGoods";
                 this.sort = '–';
                 this.filterCategory = '–';
                 this.searcher = '';
-            },
-
-            addToFavoriteGood(good) {
-                this.goods.find(baseGood => {
-                    if (baseGood.id === good.id) {
-                        baseGood.isLikeBnActive = true;
-                    }
-                })
-                alert("Товар успешно добавлен в избранное!")
             },
 
             addToFavoriteLike(good) {
@@ -256,35 +262,6 @@ import getDataGoods from "@/getGoods";
 
             closeBasket() {
                 this.isShowBasket = false;
-            },
-
-            addToBasket() {
-                const good = {
-                    title: this.selectedGood.title,
-                    id: this.selectedGood.id,
-                    count: 1,
-                    price: this.selectedGood.price,
-                    image: this.selectedGood.image
-                };
-
-                let isInBasket = false;
-
-                if (good.title.split(' ').length > 6) {
-                    good.title = good.title.split(' ').slice(0, 6).join(' ') + '...';
-                }
-
-                this.basketGoods.forEach(goodBasket => {
-                    if (goodBasket.id === good.id) {
-                        isInBasket = true;
-                        ++goodBasket.count;
-                    }
-                })
-
-                if (!isInBasket) {
-                    this.basketGoods.push(good)
-                    console.log(this.basketGoods)
-                }
-                this.closeGood();
             },
 
             deleteGoodFromBasket(good) {
