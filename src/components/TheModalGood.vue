@@ -79,7 +79,7 @@ export default {
         },
 
         closeGood() {
-            this.$emit('closeGoods', {
+            this.$emit('closeGood', {
                 isShowGood: false,
                 selectedGood: {
                     category: '',

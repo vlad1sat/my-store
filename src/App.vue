@@ -40,28 +40,26 @@
 
         <p v-if="!appGoods.length" class="div-good-text text-no-goods">Товаров нет</p>
 
-        <div v-for="good in appGoods" :key="good.id" class="div-good" @click="openGood(good)">
-            <h2 class="div-good-text div-good-title">{{good.title}}</h2>
-            <img :src="good.image" width="250" height="300" alt="cloth" class="div-good-img">
-            <h2 class="div-good-text div-good-title-category pd-55">RATING:</h2>
-            <p class="div-good-text div-good-base-text pd-55">RATE: {{good.rating.rate}}&nbsp;&nbsp;&nbsp;&nbsp;COUNT: {{good.rating.count}}</p>
-            <h2 class="div-good-text div-good-title-category pd-55">CATEGORY:</h2>
-            <p class="div-good-text div-good-base-text pd-55" style="margin-bottom: 0; display: inline">{{good.category}}</p>
-            <button class="div-good-bn-like" :class="{ 'div-good-bn-like-active': good.isLikeBnActive }" @click.stop="addToFavoriteLike(good)"></button>
-        </div>
+        <good-card v-for="good in appGoods"
+                   :key="good.id"
+                   :good="good"
+                   @openGood="openGood">
+        </good-card>
+
 
 <!--basket-->
         <the-basket @closeBasket="closeBasket"
                     :is-show-basket="isShowBasket"
-                    :basket-goods="basketGoods"></the-basket>
+                    :basket-goods="basketGoods">
+
+        </the-basket>
 
         <!--        good-->
-        <the-modal-good @closeGoods="closeGoods"
+        <the-modal-good @closeGood="closeGood"
                         :is-show-good="isShowGood"
                         :goods="goods"
                         :basket-goods="basketGoods"
                         :selected-good="selectedGood">
-
         </the-modal-good>
 
 <!--        <div v-if="isShowGood" class="modal-background">
@@ -93,9 +91,10 @@
 <script>
 import TheModalGood from "@/components/TheModalGood.vue";
 import TheBasket from "@/components/TheBasket.vue";
+import GoodCard from "@/components/GoodCard.vue";
 import getDataGoods from "@/getGoods";
     export default {
-        components: {TheBasket, TheModalGood},
+        components: {GoodCard, TheBasket, TheModalGood},
         data() {
             return {
                 goods: [],
@@ -170,7 +169,14 @@ import getDataGoods from "@/getGoods";
         },
 
         methods: {
-            closeGoods(data) {
+            openGood(data) {
+                this.selectedGood = data.selectedGood;
+                this.isShowGood = data.isShowGood;
+                this.isShowSort = data.isShowSort;
+
+            },
+
+            closeGood(data) {
                 this.isShowGood = data.isShowGood
                 this.selectedGood = data.selectedGood;
             },
@@ -183,30 +189,6 @@ import getDataGoods from "@/getGoods";
                 this.sort = '–';
                 this.filterCategory = '–';
                 this.searcher = '';
-            },
-
-            addToFavoriteLike(good) {
-                good.isLikeBnActive = !good.isLikeBnActive;
-            },
-
-            //goods
-            openGood(good) {
-                this.selectedGood = {
-                    category: good.category,
-                    description: good.description,
-                    id: good.id,
-                    image: good.image,
-                    price: good.price,
-                    title: good.title,
-                    rating: {
-                        rate: good.rating.rate,
-                        count: good.rating.count,
-                    },
-                };
-
-                this.isShowSort = false;
-
-                this.isShowGood = true;
             },
 
             //basket
@@ -378,20 +360,6 @@ import getDataGoods from "@/getGoods";
 
 //good
 <style>
-    .div-good {
-        width: 400px;
-        height: 600px;
-        background-color: #7F89F8;
-        margin-top: 50px;
-        cursor: pointer;
-        margin-left: 55px;
-        float: left;
-    }
-
-    .div-good:hover {
-        transform: scale(1.01);
-    }
-
     .div-good-text {
         font-family: 'Inter', sans-serif;
         font-weight: 900;
@@ -400,315 +368,10 @@ import getDataGoods from "@/getGoods";
         text-transform: uppercase;
     }
 
-    .div-good-title {
-        text-align: center;
-        font-size: 24px;
-    }
-
-    .div-good-img {
-        padding-left: 75px;
-    }
-
-    .div-good-base-text {
-        font-size: 16px;
-    }
-
-    .pd-55 {
-        padding-left: 55px;
-    }
-
-    .div-good-bn-like {
-        background: Transparent no-repeat url("like-empty.svg");
-        width: 50px;
-        height: 50px;
-        border: none;
-        cursor: pointer;
-        position: relative;
-        float: right;
-        display: block;
-    }
-
-    .div-good-bn-like:hover {
-        transform: scale(1.05);
-    }
-
-    .div-good-bn-like-active {
-        background: Transparent no-repeat url("like.svg");
-    }
-
     .text-no-goods {
         font-size: 40px;
         color: #7F89F8;
         text-align: center;
         margin-top: 80px;
     }
-
-</style>
-
-
-//modal-good
-<style>
-    .modal-good-completely {
-        width: 1200px;
-        height: 800px;
-        position: absolute;
-        left: calc(50% - 1200px/2);
-        top: calc(37% - 700px/2 + 72px);
-        background-color: #FFFFFF;
-        cursor: default;
-    }
-
-    .modal-text {
-        font-family: 'Inter', sans-serif;
-        font-weight: 900;
-        color: #7F89F8;
-        font-size: 24px;
-        text-transform: uppercase;
-    }
-
-    .modal-category {
-        font-size: 16px;
-        text-align: center;
-        font-weight: 500;
-    }
-
-    .modal-title {
-        font-size: 32px;
-        margin: 20px 50px;
-        text-align: center;
-    }
-
-    .modal-picture {
-        margin-left: 490px;
-    }
-
-    .modal-price {
-        text-align: center;
-        margin: 23px 0 15px 0;
-    }
-
-    .modal-description {
-        font-size: 20px;
-        text-align: center;
-        font-weight: 500;
-        margin-top: 10px;
-        padding: 10px 50px;
-        text-transform: none;
-    }
-
-    .modal-background {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(3, 3, 3, 0.3);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-    }
-
-    .modal-rating {
-        text-align: center;
-        margin-bottom: 0;
-        font-size: 26px;
-    }
-
-    .modal-rate {
-        float: left;
-        padding: 10px 10px 10px 200px;
-        margin: 0 0 0 15px;
-    }
-
-    .modal-smile {
-        float: left;
-    }
-
-    .modal-count {
-        margin: 0;
-        padding: 7px 0 0 800px;
-    }
-
-    .bn-modal {
-        width: 150px;
-        height: 50px;
-        color: #FFFFFF;
-        background-color: #7F89F8;
-        border: none;
-        margin: 5px 0 0 145px;
-    }
-
-
-    .bn-modal-close {
-        width: 40px;
-        height: 40px;
-        background: Transparent no-repeat url("close.svg");
-        border: none;
-        margin: 20px 0 0 1130px;
-        position: absolute;
-    }
-
-    .bn-modal-move:hover
-    {
-        transform: scale(1.05);
-        cursor: pointer;
-    }
-</style>
-
-//basket
-<style>
-    .basket {
-        width: 500px;
-        height: 700px;
-        position: absolute;
-        left: 700px;
-        top: 15%;
-        background-color: #FFFFFF;
-        font-family: 'Inter', sans-serif;
-        color: #7F89F8;
-        text-transform: uppercase;
-        font-weight: bold;
-        font-size: 16px;
-        cursor: default;
-    }
-
-    .basket-background {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(3, 3, 3, 0.66);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .basket-no-goods {
-        margin-top: 230px;
-        font-weight: 900;
-        font-size: 26px;
-        text-align: center;
-    }
-
-    .bn-basket-close {
-        width: 40px;
-        height: 40px;
-        background: Transparent no-repeat url("close.svg");
-        margin: 20px 0 0 430px;
-        border: none;
-        position: absolute;
-    }
-
-    .basket-goods {
-        overflow: auto;
-        width: 500px;
-        height: 500px;
-    }
-
-    .basket-good {
-        margin-bottom: 50px;
-    }
-
-    .bn-basket-move:hover {
-        transform: scale(1.05);
-        cursor: pointer;
-    }
-
-    .basket-title {
-        font-weight: 900;
-        font-size: 32px;
-        margin: 27px 0 20px 182px;
-    }
-
-    .basket-img {
-        margin-left: 40px;
-        float: left;
-    }
-
-    .basket-price {
-        margin: 10px 0 10px 270px;
-        font-size: 20px;
-
-    }
-
-    .basket-title-good {
-        margin: 18px 0 0 150px;
-        padding-top: 10px;
-        display: block;
-        text-align: center;
-        width: 300px;
-    }
-
-    .basket-count-goods {
-        display: inline;
-        margin-left: 40px;
-    }
-
-    .bn-basket-count-goods {
-        background-color: Transparent;
-        color: #7F89F8;
-        border: none;
-        font-size: 20px;
-        font-weight: bold;
-    }
-
-    .bn-basket-count-goods:hover {
-        transform: scale(1.3);
-        cursor: pointer;
-    }
-
-    .count-goods {
-        display: inline;
-    }
-
-    .basket-bn-delete {
-        width: 100px;
-        height: 30px;
-        background-color: #7F89F8;
-        border: none;
-        font-size: 16px;
-        color: #FFFFFF;
-        font-family: 'Inter', sans-serif;
-        font-weight: bold;
-        text-transform: uppercase;
-        margin-left: 75px;
-    }
-
-    .basket-bn-delete:hover {
-        transform: scale(1.1);
-        cursor: pointer;
-    }
-
-    .basket-bn-buy {
-        width: 200px;
-        height: 40px;
-        background-color: #7F89F8;
-        color: #FFFFFF;
-        font-family: 'Inter', sans-serif;
-        font-weight: bold;
-        text-transform: uppercase;
-        border: none;
-        font-size: 24px;
-        position: fixed;
-        top: 780px;
-        left: 850px;
-    }
-
-    .basket-bn-buy:hover:enabled {
-        transform: scale(1.1);
-        cursor: pointer;
-    }
-
-    .basket-bn-buy:disabled {
-        background-color: #AAAFEE;
-    }
-
-    .basket-total-sum {
-        margin: 0;
-        padding-left: 125px;
-    }
-
-
 </style>
