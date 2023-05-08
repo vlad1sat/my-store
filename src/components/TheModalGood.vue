@@ -27,28 +27,78 @@ export default {
 
     props: {
         isShowGood: Boolean,
+        selectedGood: Object,
+        basketGoods: Array,
+        goods: Array,
     },
 
     data() {
         return {
-            selectedGood: {
-                category: '',
-                description: '',
-                id: NaN,
-                image: '',
-                price: 0,
-                title: '',
-                rating: {
-                    rate: 0,
-                    count: 0
-                },
-            }
+            imageRating: require("../smile.svg"),
         }
     },
 
     methods: {
+        addToFavoriteGood(good) {
+            this.goods.find(baseGood => {
+                if (baseGood.id === good.id) {
+                    baseGood.isLikeBnActive = true;
+                }
+            });
+
+            alert("Товар успешно добавлен в избранное!");
+        },
+
+        addToBasket() {
+            const good = {
+                title: this.selectedGood.title,
+                id: this.selectedGood.id,
+                count: 1,
+                price: this.selectedGood.price,
+                image: this.selectedGood.image
+            };
+
+            if (good.title.split(' ').length > 6) {
+                good.title = good.title.split(' ').slice(0, 6).join(' ') + '...';
+            }
+
+            let isInBasket = false;
+            this.basketGoods.forEach(goodBasket => {
+                if (goodBasket.id === good.id) {
+                    isInBasket = true;
+                    ++goodBasket.count;
+                }
+            })
+
+            if (!isInBasket) {
+                this.basketGoods.push(good)
+            }
+
+            this.closeGood();
+        },
+
         closeGood() {
-            this.$emit('isShowGood', false)
+            this.$emit('closeGood', {
+                isShowGood: false,
+                selectedGood: {
+                    category: '',
+                    description: '',
+                    id: NaN,
+                    image: '',
+                    price: 0,
+                    title: '',
+                    rating: {
+                        rate: 0,
+                        count: 0
+                    },
+                },
+            });
+        },
+    },
+
+    watch: {
+        isShowGood() {
+            this.imageRating = this.selectedGood.rating.rate >= 4.0 ? require("../smile.svg") : require("../bad.svg");
         }
     }
 
