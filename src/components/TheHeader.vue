@@ -13,8 +13,15 @@ export default {
     name: "TheHeader",
 
     props: {
-        isShowSort: Boolean,
-        isShowFavorites: Boolean,
+        isShowSort: {
+            type: Boolean,
+            required: true,
+        },
+
+        isShowFavorites: {
+            type: Boolean,
+            required: true,
+        },
     },
 
     data() {
@@ -22,7 +29,6 @@ export default {
     },
 
     methods: {
-
         viewSort() {
             this.$emit('viewSort', !this.isShowSort);
         },

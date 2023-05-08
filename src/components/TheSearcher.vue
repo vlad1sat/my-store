@@ -52,15 +52,15 @@ export default {
 
     computed: {
         categories() {
-            return new Set(this.goods.map(good => good.category))
+            return new Set(this.goods.map(good => good.category));
         },
     },
 
     methods: {
         cleanFilter() {
+            this.searcher = '';
             this.sort = '–';
             this.filterCategory = '–';
-            this.searcher = '';
         },
 
         closeSearcher() {

@@ -46,7 +46,7 @@ export default {
                 }
             });
 
-            alert("Товар успешно добавлен в избранное!")
+            alert("Товар успешно добавлен в избранное!");
         },
 
         addToBasket() {
@@ -58,12 +58,11 @@ export default {
                 image: this.selectedGood.image
             };
 
-            let isInBasket = false;
-
             if (good.title.split(' ').length > 6) {
                 good.title = good.title.split(' ').slice(0, 6).join(' ') + '...';
             }
 
+            let isInBasket = false;
             this.basketGoods.forEach(goodBasket => {
                 if (goodBasket.id === good.id) {
                     isInBasket = true;

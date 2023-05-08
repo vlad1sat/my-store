@@ -8,11 +8,9 @@
     </the-header>
     <main>
         <div style="padding-top: 150px"></div>
-<!--        search-->
         <the-searcher :is-show-sort="stateApp.isShowSort"
                       :goods="goods"
                       @closeSearcher="closeSearcher" @changeViewGoods="changeViewGoods">
-
         </the-searcher>
         <p v-if="!appGoods.length" class="div-good-text text-no-goods">Товаров нет</p>
         <good-card v-for="good in appGoods"
@@ -20,16 +18,11 @@
                    :good="good"
                    @openGood="openGood">
         </good-card>
-
-
-<!--basket-->
         <the-basket @closeBasket="closeBasket"
                     :is-show-basket="stateApp.isShowBasket"
                     :basket-goods="basketGoods">
 
         </the-basket>
-
-        <!--        good-->
         <the-modal-good @closeGood="closeGood"
                         :is-show-good="stateApp.isShowGood"
                         :goods="goods"
@@ -37,9 +30,6 @@
                         :selected-good="selectedGood">
         </the-modal-good>
     </main>
-    <footer>
-
-    </footer>
 </template>
 
 <script>
@@ -80,8 +70,10 @@ import getDataGoods from "@/getGoods";
 
                 basketGoods: [],
 
-                filterGoods: [],
-                isOnFilter: false,
+                stateFilter: {
+                    filterGoods: [],
+                    isOnFilter: false,
+                },
             };
         },
 
@@ -92,7 +84,7 @@ import getDataGoods from "@/getGoods";
         computed: {
             appGoods() {
                 console.log('good', this.goods)
-                let result = this.isOnFilter ? this.filterGoods.slice() : this.goods.slice();
+                let result = (this.stateFilter.isOnFilter ? this.stateFilter.filterGoods : this.goods).slice();
 
                 if (this.stateApp.isShowFavorites) {
                     return result.filter(good => good.isLikeBnActive);
@@ -104,9 +96,10 @@ import getDataGoods from "@/getGoods";
         methods: {
             openGood(data) {
                 this.selectedGood = data.selectedGood;
-                const stateApp = this.stateApp;
-                stateApp.isShowGood = data.isShowGood;
-                stateApp.isShowSort = data.isShowSort;
+
+                const state = this.stateApp;
+                state.isShowGood = data.isShowGood;
+                state.isShowSort = data.isShowSort;
             },
 
             viewSort(data) {
@@ -136,10 +129,10 @@ import getDataGoods from "@/getGoods";
             },
 
             changeViewGoods(data) {
-                this.filterGoods = data.filterGoods;
-                this.isOnFilter = data.isOnFilter;
-            }
-
+                const state = this.stateFilter;
+                state.filterGoods = data.filterGoods;
+                this.stateFilter.isOnFilter = data.isOnFilter;
+            },
         }
     }
 </script>
@@ -151,7 +144,6 @@ import getDataGoods from "@/getGoods";
     }
 </style>
 
-//good
 <style>
     .div-good-text {
         font-family: 'Inter', sans-serif;

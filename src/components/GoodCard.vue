@@ -10,12 +10,18 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import IGoodApp from "@/IGoodApp";
+import {PropType} from "vue";
+
 export default {
     name: "GoodCard",
 
     props: {
-        good: Object,
+        good: {
+            required: true,
+            type: Object as PropType<IGoodApp>,
+        },
     },
 
     data() {
@@ -23,24 +29,12 @@ export default {
     },
 
     methods: {
-        addToFavoriteLike(good) {
+        addToFavoriteLike(good: IGoodApp) {
             good.isLikeBnActive = !good.isLikeBnActive;
         },
 
-        //goods
-        openGood(good) {
-            const selectedGood = {
-                category: good.category,
-                description: good.description,
-                id: good.id,
-                image: good.image,
-                price: good.price,
-                title: good.title,
-                rating: {
-                    rate: good.rating.rate,
-                    count: good.rating.count,
-                },
-            };
+        openGood(good: IGoodApp) {
+            const selectedGood = JSON.parse(JSON.stringify(good));
 
             this.$emit('openGood', {
                 selectedGood,

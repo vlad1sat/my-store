@@ -46,24 +46,22 @@ export default {
         },
 
         plusCountGoods(basketGood) {
-            basketGood.count < 100 ? ++basketGood.count : alert('Превышен лимит товаров')
+            basketGood.count < 100 ? ++basketGood.count : alert('Превышен лимит товаров');
         },
 
         buyBasket() {
-            alert(`Вы успешно заказати товары!\nОжидайте подтверждения операции!\nСумма заказа: ${this.totalSum} $`)
+            alert(`Вы успешно заказати товары!\nОжидайте подтверждения операции!\nСумма заказа: ${this.totalSum} $`);
             this.basketGoods.length = 0;
-            this.closeBasket()
+            this.closeBasket();
         },
 
         deleteGoodFromBasket(good) {
-            console.log(this.basketGoods)
-            this.basketGoods = this.basketGoods.filter(basketGood => good.id !== basketGood.id)
-            console.log(this.basketGoods)
+            this.basketGoods = this.basketGoods.filter(basketGood => good.id !== basketGood.id);
         },
 
         closeBasket() {
-            this.$emit('closeBasket', false)
-        }
+            this.$emit('closeBasket', false);
+        },
     }
 }
 </script>
