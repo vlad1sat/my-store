@@ -1,8 +1,6 @@
 <template>
     <div v-if="isShowSort" class="search-modal">
-        <button class="bn-basket-close bn-basket-move"
-                @click="closeSearcher()">
-        </button>
+        <close-button @close="closeSearcher()"></close-button>
         <h2 class="search-text search-text-title">SETUP</h2>
         <div class="search-main-window">
             <div class="search-div">
@@ -17,15 +15,6 @@
                              :data="categories"
                              @changeSelector="(data) => filterCategory = data">
             </select-searcher>
-            <div>
-                <h2 class="search-text">сортировка по:</h2>
-                <select v-model="sort" class="search-sort">
-                    <option disabled>Выберите сортировку</option>
-                    <option value="1">prise</option>
-                    <option value="2">alphabet</option>
-                    <option>–</option>
-                </select>
-            </div>
             <button class="search-bn" @click="cleanFilter()">Clean</button>
         </div>
     </div>
@@ -33,9 +22,12 @@
 
 <script>
 import SelectSearcher from "@/components/auxiliaryComponents/selectSearcher.vue";
+import CloseButton from "@/components/auxiliaryComponents/closeButton.vue";
+
 export default {
     name: "TheSearcher",
-    components: {SelectSearcher},
+
+    components: {CloseButton, SelectSearcher},
 
     props: {
         isShowSort: Boolean,
