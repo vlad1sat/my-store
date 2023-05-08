@@ -1,7 +1,7 @@
 <template>
     <div v-if="isShowBasket" class="basket-background">
         <div class="basket">
-            <button class="bn-basket-close bn-basket-move" @click="closeBasket()"></button>
+            <close-button @close="closeBasket()"></close-button>
             <h2 class="basket-title">basket</h2>
             <p v-if="!basketGoods.length" class="basket-no-goods">Товаров нет</p>
             <div class="basket-goods">
@@ -26,8 +26,12 @@
 </template>
 
 <script>
+import closeButton from "@/components/auxiliaryComponents/closeButton.vue";
+import CloseButton from "@/components/auxiliaryComponents/closeButton.vue";
+
 export default {
     name: "TheBasket",
+    components: {CloseButton},
 
     props: {
         isShowBasket: Boolean,
@@ -56,7 +60,7 @@ export default {
         },
 
         deleteGoodFromBasket(good) {
-            this.basketGoods = this.basketGoods.filter(basketGood => good.id !== basketGood.id);
+           this.$emit('deleteGoodFromBasket', this.basketGoods.filter(basketGood => good.id !== basketGood.id));
         },
 
         closeBasket() {
@@ -105,7 +109,7 @@ export default {
     .bn-basket-close {
         width: 40px;
         height: 40px;
-        background: Transparent no-repeat url("../close.svg");
+        background: Transparent no-repeat url("../../close.svg");
         margin: 20px 0 0 430px;
         border: none;
         position: absolute;

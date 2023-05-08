@@ -87,7 +87,7 @@ export default {
     }
 
     .div-good-bn-like {
-        background: Transparent no-repeat url("../like-empty.svg");
+        background: Transparent no-repeat url("../../like-empty.svg");
         width: 50px;
         height: 50px;
         border: none;
@@ -102,14 +102,7 @@ export default {
     }
 
     .div-good-bn-like-active {
-        background: Transparent no-repeat url("../like.svg");
-    }
-
-    .text-no-goods {
-        font-size: 40px;
-        color: #7F89F8;
-        text-align: center;
-        margin-top: 80px;
+        background: Transparent no-repeat url("../../like.svg");
     }
 
 </style>

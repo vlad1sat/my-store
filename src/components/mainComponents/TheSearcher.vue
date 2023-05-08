@@ -9,6 +9,14 @@
                 <h2 class="search-text">Поиск по странице</h2>
                 <input placeholder="Введите название интересуещего товара" v-model="searcher" class="search-input"/>
             </div>
+            <select-searcher :title="'сортировка по:'"
+                             :data="['prise', 'alphabet']"
+                             @changeSelector="(data) => sort = data">
+            </select-searcher>
+            <select-searcher :title="'фильтрация по:'"
+                             :data="categories"
+                             @changeSelector="(data) => filterCategory = data">
+            </select-searcher>
             <div>
                 <h2 class="search-text">сортировка по:</h2>
                 <select v-model="sort" class="search-sort">
@@ -18,22 +26,16 @@
                     <option>–</option>
                 </select>
             </div>
-            <div>
-                <h2 class="search-text">фильтрация по:</h2>
-                <select v-model="filterCategory" class="search-sort">
-                    <option disabled>Выберите фильтрацию</option>
-                    <option v-for="(category, index) in categories" :key="index">{{ category }}</option>
-                    <option>–</option>
-                </select>
-            </div>
             <button class="search-bn" @click="cleanFilter()">Clean</button>
         </div>
     </div>
 </template>
 
 <script>
+import SelectSearcher from "@/components/auxiliaryComponents/selectSearcher.vue";
 export default {
     name: "TheSearcher",
+    components: {SelectSearcher},
 
     props: {
         isShowSort: Boolean,
@@ -43,7 +45,6 @@ export default {
     data() {
         return {
             categoriesApp: this.categories,
-
             searcher: '',
             sort: '–',
             filterCategory: '–',
@@ -52,7 +53,7 @@ export default {
 
     computed: {
         categories() {
-            return new Set(this.goods.map(good => good.category));
+            return Array.from(new Set(this.goods.map(good => good.category)));
         },
     },
 
@@ -61,44 +62,47 @@ export default {
             this.searcher = '';
             this.sort = '–';
             this.filterCategory = '–';
+            this.sendResultSearch(this.goods);
         },
 
         closeSearcher() {
             this.$emit('closeSearcher', false);
         },
 
-        changeViewGoodsSearcher(searcher) {
+        changeViewGood() {
             let result = this.goods.slice();
 
-            if (searcher) {
-                result = result.filter(good => good.title.toLowerCase().startsWith(this.searcher.toLowerCase()));
-            }
+            result = this.changeViewGoodsSearcher(result);
+            result = this.changeViewGoodsSort(result);
+            result = this.changeViewGoodsFilter(result);
 
             this.sendResultSearch(result);
         },
 
-        changeViewGoodsSort(sort) {
-            let result = this.goods.slice();
+        changeViewGoodsSearcher(goods) {
+            return this.searcher ? goods.filter(good => good.title.toLowerCase().startsWith(this.searcher.toLowerCase())) : goods;
+        },
 
-            if (sort !== '–') {
-                if (sort === "1") {
-                    result = result.sort((el1, el2) => el1.price - el2.price);
-                } else {
-                    result = result.sort((el1, el2) => el1.title.localeCompare(el2.title))
+        changeViewGoodsSort(goods) {
+            if (this.sort !== '–') {
+                if (this.sort === "price") {
+                    return goods.sort((el1, el2) => el1.price - el2.price);
+                }
+
+                if (this.sort === "alphabet") {
+                    return goods.sort((el1, el2) => el1.title.localeCompare(el2.title));
                 }
             }
 
-            this.sendResultSearch(result);
+            return goods;
         },
 
-        changeViewGoodsFilter(filter) {
-            let result = this.goods.slice();
-
-            if (filter !== '–') {
-                result = result.filter(good => good.category === this.filterCategory);
+        changeViewGoodsFilter(goods) {
+            if (this.filterCategory !== '–') {
+                return  goods.filter(good => good.category === this.filterCategory);
             }
 
-            this.sendResultSearch(result);
+            return goods;
         },
 
         sendResultSearch(result) {
@@ -107,20 +111,19 @@ export default {
                 isOnFilter: true,
             });
         },
-
     },
 
     watch: {
-        searcher(newValue) {
-            this.changeViewGoodsSearcher(newValue);
+        searcher() {
+            this.changeViewGood();
         },
 
-        sort(newValue) {
-            this.changeViewGoodsSort(newValue);
+        sort() {
+            this.changeViewGood();
         },
 
-        filterCategory(newValue) {
-            this.changeViewGoodsFilter(newValue);
+        filterCategory() {
+            this.changeViewGood();
         },
     }
 
@@ -142,7 +145,7 @@ export default {
     .bn-basket-close {
         width: 40px;
         height: 40px;
-        background: Transparent no-repeat url("../close.svg");
+        background: Transparent no-repeat url("../../close.svg");
         margin: 20px 0 0 430px;
         border: none;
         position: absolute;
@@ -179,16 +182,6 @@ export default {
     .search-input:focus {
         transform: scale(1.01);
         outline: none;
-    }
-
-    .search-sort {
-        width: 200px;
-        height: 30px;
-        font-size: 16px;
-        color: #7F89F8;
-        font-family: 'Inter', sans-serif;
-        border: #7F89F8 2px solid;
-        border-radius: 7px;
     }
 
     .search-bn {

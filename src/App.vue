@@ -4,7 +4,6 @@
                 @openBasket="openBasket"
                 @viewFavorites="viewFavorites"
                 @viewSort="viewSort">
-
     </the-header>
     <main>
         <div style="padding-top: 150px"></div>
@@ -19,6 +18,7 @@
                    @openGood="openGood">
         </good-card>
         <the-basket @closeBasket="closeBasket"
+                    @deleteGoodFromBasket="deleteGoodFromBasket"
                     :is-show-basket="stateApp.isShowBasket"
                     :basket-goods="basketGoods">
 
@@ -33,11 +33,11 @@
 </template>
 
 <script>
-import TheModalGood from "@/components/TheModalGood.vue";
-import TheBasket from "@/components/TheBasket.vue";
-import GoodCard from "@/components/GoodCard.vue";
-import TheHeader from "@/components/TheHeader.vue";
-import TheSearcher from "@/components/TheSearcher.vue";
+import TheModalGood from "@/components/mainComponents/TheModalGood.vue";
+import TheBasket from "@/components/mainComponents/TheBasket.vue";
+import GoodCard from "@/components/mainComponents/GoodCard.vue";
+import TheHeader from "@/components/mainComponents/TheHeader.vue";
+import TheSearcher from "@/components/mainComponents/TheSearcher.vue";
 
 import getDataGoods from "@/getGoods";
 
@@ -83,12 +83,12 @@ import getDataGoods from "@/getGoods";
 
         computed: {
             appGoods() {
-                console.log('good', this.goods)
                 let result = (this.stateFilter.isOnFilter ? this.stateFilter.filterGoods : this.goods).slice();
 
                 if (this.stateApp.isShowFavorites) {
                     return result.filter(good => good.isLikeBnActive);
                 }
+
                 return result;
             }
         },
@@ -124,6 +124,10 @@ import getDataGoods from "@/getGoods";
                 this.stateApp.isShowBasket = data;
             },
 
+            deleteGoodFromBasket(data) {
+                this.basketGoods = data;
+            },
+
             closeSearcher(data) {
                 this.stateApp.isShowSort = data;
             },
@@ -132,6 +136,12 @@ import getDataGoods from "@/getGoods";
                 const state = this.stateFilter;
                 state.filterGoods = data.filterGoods;
                 this.stateFilter.isOnFilter = data.isOnFilter;
+            },
+        },
+
+        watch: {
+            goods(newValue) {
+                this.stateFilter.filterGoods = newValue;
             },
         }
     }
