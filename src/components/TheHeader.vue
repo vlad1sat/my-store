@@ -3,7 +3,7 @@
         <p class="header-text header-phone">PHONE: 8900000000</p>
         <p class="header-text header-name-store">VLAD1SAT STORE</p>
         <button class="header-magnifier" @click="viewSort()"></button>
-        <button class="header-favorites" @click="openFavorites()" :class="{ 'open-favorites': isShowFavorites }"></button>
+        <button class="header-favorites" @click="viewFavorites()" :class="{ 'open-favorites': isShowFavorites }"></button>
         <button class="header-basket" @click="openBasket()"></button>
     </header>
 </template>
@@ -27,9 +27,9 @@ export default {
             this.$emit('viewSort', !this.isShowSort);
         },
 
-        /*openFavorites() {
-            this.$emit('openFavorites', !this.isShowFavorites);
-        },*/
+        viewFavorites() {
+            this.$emit('viewFavorites', !this.isShowFavorites);
+        },
 
         openBasket() {
             this.$emit('openBasket', {

@@ -2,7 +2,7 @@
     <the-header :is-show-favorites="stateApp.isShowFavorites"
                 :is-show-sort="stateApp.isShowSort"
                 @openBasket="openBasket"
-                @openFavorites="openFavorites"
+                @viewFavorites="viewFavorites"
                 @viewSort="viewSort">
 
     </the-header>
@@ -63,27 +63,6 @@
                         :basket-goods="basketGoods"
                         :selected-good="selectedGood">
         </the-modal-good>
-
-<!--        <div v-if="isShowGood" class="modal-background">
-            <div class="modal-good-completely">
-                <button class="bn-modal-close bn-modal-move" @click="closeGood()"></button>
-                <div>
-                    <h2 class="modal-text modal-title">{{ selectedGood.title }}</h2>
-                    <h3 class="modal-text modal-category">{{ selectedGood.category }}</h3>
-                </div>
-                <img :src="selectedGood.image" class="modal-picture" alt="picture-cloth" width="230" height="330">
-                <h3 class="modal-text modal-price">{{ selectedGood.price }} $</h3>
-                <p class="modal-text modal-description">{{ selectedGood.description }}</p>
-                <div>
-                    <h2 class="modal-text modal-rating">Rating:</h2>
-                    <p class="modal-text modal-rate">rate: {{ selectedGood.rating.rate }}</p>
-                    <img :src="imageRating" alt="emotion" width="44" height="44" class="modal-smile">
-                    <p class="modal-text modal-count">Count: {{selectedGood.rating.count }}</p>
-                </div>
-                <button class="bn-modal modal-text bn-modal-move" @click="addToFavoriteGood(selectedGood)">add to favorite</button>
-                <button class="bn-modal modal-text bn-modal-move" @click="addToBasket(selectedGood)">BUY</button>
-            </div>
-        </div>-->
     </main>
     <footer>
 
@@ -167,7 +146,7 @@ import getDataGoods from "@/getGoods";
                     result = result.filter(good => good.category === this.filterCategory)
                 }
 
-                if (!this.isShowFavorites) {
+                if (!this.stateApp.isShowFavorites) {
                     return result;
                 }  else {
                     return result.filter(good => good.isLikeBnActive)
@@ -193,7 +172,7 @@ import getDataGoods from "@/getGoods";
                 this.stateApp.selectedGood = data.selectedGood;
             },
 
-            openFavorites(data) {
+            viewFavorites(data) {
                 this.stateApp.isShowFavorites = data;
             },
 
