@@ -17,7 +17,7 @@ export default defineComponent({
 
     methods: {
         clickButton(): void {
-            this.$emit('clickButton');
+            this.$emit('click-button');
         }
     }
 })

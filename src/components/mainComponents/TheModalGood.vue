@@ -7,19 +7,19 @@
                 <h3 class="modal-text modal-category">{{ selectedGood.category }}</h3>
             </div>
             <img :src="selectedGood.image" class="modal-picture" alt="picture-cloth" width="230" height="330">
-            <h3 class="modal-text modal-price">{{ selectedGood.price }} $</h3>
+            <h3 class="modal-text modal-price">{{ selectedGood.price }} {{ modalText.PriseSymbol }}}</h3>
             <p class="modal-text modal-description">{{ selectedGood.description }}</p>
             <div>
-                <h2 class="modal-text modal-rating">Rating:</h2>
-                <p class="modal-text modal-rate">rate: {{ selectedGood.rating.rate }}</p>
+                <h2 class="modal-text modal-rating">{{ modalText.RATING.Rating }}</h2>
+                <p class="modal-text modal-rate">{{ modalText.RATING.Rate }} {{ selectedGood.rating.rate }}</p>
                 <img :src="imageRating" alt="emotion" width="44" height="44" class="modal-smile">
-                <p class="modal-text modal-count">Count: {{selectedGood.rating.count }}</p>
+                <p class="modal-text modal-count">{{ modalText.RATING.Count }} {{selectedGood.rating.count }}</p>
             </div>
-            <good-button-action @clickButton="addToFavoriteGood"
-                                      :text-button="'add to favorite list'">
+            <good-button-action @click-button="addToFavoriteGood"
+                                      :text-button="modalText.ButtonFavorite">
             </good-button-action>
-            <good-button-action @clickButton="addToBasket"
-                                      :text-button="'add to basket'">
+            <good-button-action @click-button="addToBasket"
+                                      :text-button="modalText.ButtonBasket">
             </good-button-action>
         </div>
     </div>
@@ -30,9 +30,13 @@ import goodButtonAction from "@/components/auxiliaryComponents/goodButtonAction.
 import CloseButton from "@/components/auxiliaryComponents/closeButton.vue";
 
 import {defineComponent, PropType} from "vue";
+
 import IGoodApp from "@/interfaces/IGoodApp";
 import IBasketGood from "@/interfaces/IBasketGood";
 import IResultCloseGood from "@/interfaces/emitResults/IResultCloseGood";
+
+import {ModalGoodText} from "@/enumsApp/BaseText";
+import IDataModalGood from "@/interfaces/dataComponents/IDataModalGood";
 
 export default defineComponent({
     name: "TheModalGood",
@@ -54,9 +58,10 @@ export default defineComponent({
         },
     },
 
-    data() {
+    data(): IDataModalGood {
         return {
             imageRating: require("../../smile.svg"),
+            modalText: ModalGoodText,
         }
     },
 

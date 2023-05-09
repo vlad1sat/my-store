@@ -3,8 +3,8 @@
         <h2 class="div-good-text div-good-title">{{good.title}}</h2>
         <img :src="good.image" width="250" height="300" alt="cloth" class="div-good-img">
         <h2 class="div-good-text div-good-title-category pd-55">RATING:</h2>
-        <p class="div-good-text div-good-base-text pd-55">RATE: {{good.rating.rate}}&nbsp;&nbsp;&nbsp;&nbsp;COUNT: {{good.rating.count}}</p>
-        <h2 class="div-good-text div-good-title-category pd-55">CATEGORY:</h2>
+        <p class="div-good-text div-good-base-text pd-55">{{goodCardText.RATING.Rate}} {{good.rating.rate}}&nbsp;&nbsp;&nbsp;&nbsp;{{goodCardText.RATING.Count}} {{good.rating.count}}</p>
+        <h2 class="div-good-text div-good-title-category pd-55">{{goodCardText.Category}}</h2>
         <p class="div-good-text div-good-base-text pd-55" style="margin-bottom: 0; display: inline">{{good.category}}</p>
         <button class="div-good-bn-like" :class="{ 'div-good-bn-like-active': good.isLikeBnActive }" @click.stop="addToFavoriteLike(good)"></button>
     </div>
@@ -14,6 +14,7 @@
 import IGoodApp from "@/interfaces/IGoodApp";
 import {PropType, defineComponent} from "vue";
 import IResultOpenGood from "@/interfaces/emitResults/IResultOpenGood";
+import {GoodCardText} from "@/enumsApp/BaseText";
 
 export default defineComponent({
     name: "GoodCard",
@@ -23,6 +24,12 @@ export default defineComponent({
             type: Object as PropType<IGoodApp>,
             required: true,
         },
+    },
+
+    data(): { goodCardText: typeof GoodCardText } {
+        return {
+            goodCardText: GoodCardText
+        };
     },
 
     methods: {

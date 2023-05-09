@@ -1,21 +1,21 @@
 <template>
     <div v-if="isShowSort" class="search-modal">
         <close-button @close="closeSearcher()"></close-button>
-        <h2 class="search-text search-text-title">SETUP</h2>
+        <h2 class="search-text search-text-title">{{ searcherText.Title }}</h2>
         <div class="search-main-window">
             <div class="search-div">
-                <h2 class="search-text">Поиск по странице</h2>
+                <h2 class="search-text">{{ searcherText.Find }}</h2>
                 <input placeholder="Введите название интересуещего товара" v-model="searcher" class="search-input"/>
             </div>
-            <select-searcher :title="'сортировка по:'"
-                             :data="['prise', 'alphabet']"
+            <select-searcher :title="searcherText.Sort"
+                             :data="searcherText.CategoriesFilter"
                              @changeSelector="(data) => sort = data">
             </select-searcher>
-            <select-searcher :title="'фильтрация по:'"
+            <select-searcher :title="searcherText.Filter"
                              :data="categories"
                              @changeSelector="(data) => filterCategory = data">
             </select-searcher>
-            <button class="search-bn" @click="cleanFilter()">Clean</button>
+            <button class="search-bn" @click="cleanFilter()">{{ searcherText.Clean }}</button>
         </div>
     </div>
 </template>
@@ -29,7 +29,7 @@ import {defineComponent, PropType} from "vue";
 import IDataSearcher from "@/interfaces/dataComponents/IDataSearcher";
 import IGoodApp from "@/interfaces/IGoodApp";
 import IResultSearcher from "@/interfaces/emitResults/IResultSearcher";
-
+import {SearcherText} from "@/enumsApp/BaseText";
 export default defineComponent({
     name: "TheSearcher",
 
@@ -52,6 +52,7 @@ export default defineComponent({
             searcher: '',
             sort: '–',
             filterCategory: '–',
+            searcherText: SearcherText,
         };
     },
 

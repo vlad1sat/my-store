@@ -11,7 +11,7 @@
                       :goods="goods"
                       @closeSearcher="closeSearcher" @changeViewGoods="changeViewGoods">
         </the-searcher>
-        <p v-if="!appGoods.length" class="div-good-text text-no-goods">Товаров нет</p>
+        <p v-if="!appGoods.length" class="div-good-text text-no-goods">Don't have goods</p>
         <good-card v-for="good in appGoods"
                    :key="good.id"
                    :good="good"

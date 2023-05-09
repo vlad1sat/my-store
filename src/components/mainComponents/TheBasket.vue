@@ -2,25 +2,25 @@
     <div v-if="isShowBasket" class="basket-background">
         <div class="basket">
             <close-button @close="closeBasket()"></close-button>
-            <h2 class="basket-title">basket</h2>
-            <p v-if="!basketGoods.length" class="basket-no-goods">Товаров нет</p>
+            <h2 class="basket-title">{{basketText.Title}}</h2>
+            <p v-if="!basketGoods.length" class="basket-no-goods">{{ basketText.AbsenceGoods }}</p>
             <div class="basket-goods">
                 <div v-for="basketGood in basketGoods" :key="basketGood.id" class="basket-good">
                     <div>
                         <img :src="basketGood.image" width="90" height="120" class="basket-img" alt="picture good">
                         <h3 class="basket-title-good">{{ basketGood.title }}</h3>
                     </div>
-                    <h3 class="basket-price">{{  (basketGood.price * basketGood.count).toFixed(2) }} $</h3>
+                    <h3 class="basket-price">{{  (basketGood.price * basketGood.count).toFixed(2) }} {{ basketText.PriseSymbol }}</h3>
                     <div class="basket-count-goods">
-                        <p class="count-goods">{{ basketGood.count }} шт.</p>
-                        <button style="margin-left: 10px" class="bn-basket-count-goods bn-basket-move" @click="plusCountGoods(basketGood)">+</button>
-                        <button class="bn-basket-count-goods bn-basket-move" @click="minusCountGood(basketGood)">–</button>
+                        <p class="count-goods">{{ basketGood.count }} {{ basketText.CountSymbol }}</p>
+                        <button style="margin-left: 10px" class="bn-basket-count-goods bn-basket-move" @click="plusCountGoods(basketGood)">{{ basketText.Plus }}</button>
+                        <button class="bn-basket-count-goods bn-basket-move" @click="minusCountGood(basketGood)">{{ basketText.Minus }}</button>
                     </div>
-                    <button class="basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">delete</button>
+                    <button class="basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">{{ basketText.Delete }}</button>
                 </div>
             </div>
-            <h2 v-if="basketGoods.length" class="basket-total-sum">Total sum: {{ totalSum }} $</h2>
-            <button class="basket-bn-buy" :disabled="!basketGoods.length" @click="buyBasket()">buy</button>
+            <h2 v-if="basketGoods.length" class="basket-total-sum">{{ basketText.TotalSum }} {{ totalSum }} {{ basketText.PriseSymbol }}</h2>
+            <button class="basket-bn-buy" :disabled="!basketGoods.length" @click="buyBasket()">{{ basketText.Buy }}</button>
         </div>
     </div>
 </template>
@@ -28,8 +28,9 @@
 <script lang="ts">
 import CloseButton from "@/components/auxiliaryComponents/closeButton.vue";
 
-import {PropType, defineComponent} from "vue";
+import {defineComponent, PropType} from "vue";
 import IBasketGood from "@/interfaces/IBasketGood";
+import {BasketText} from "@/enumsApp/BaseText";
 
 export default defineComponent({
     name: "TheBasket",
@@ -45,6 +46,12 @@ export default defineComponent({
             required: true,
             type: Array as PropType<IBasketGood[]>
         },
+    },
+
+    data(): { basketText: typeof BasketText } {
+        return {
+            basketText: BasketText
+        };
     },
 
     computed: {

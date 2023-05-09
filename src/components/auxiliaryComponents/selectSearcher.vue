@@ -2,7 +2,7 @@
     <div>
         <h2 class="search-text">{{ title }}</h2>
         <select v-model="selector" class="search-sort">
-            <option disabled>Выберите сортировку</option>
+            <option disabled>CHOOSE SORT</option>
             <option v-for="elData in data">{{ elData }}</option>
             <option selected>–</option>
         </select>
@@ -28,7 +28,7 @@ export default defineComponent({
         },
     },
 
-    data(): IDataSelectSearcher {
+    data(): { selector: string } {
         return {
             selector: '–',
         }
