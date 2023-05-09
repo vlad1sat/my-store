@@ -6,18 +6,18 @@
 import {defineComponent} from "vue";
 
 export default defineComponent({
-    name: "modalGoodButtonAction",
+    name: "good-button-action",
 
     props: {
         textButton: {
             type: String,
             required: true
-        },
+        }
     },
 
     methods: {
         clickButton(): void {
-            this.$emit('clickButton');
+            this.$emit('click-button');
         }
     }
 })

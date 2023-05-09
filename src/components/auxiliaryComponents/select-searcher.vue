@@ -2,8 +2,8 @@
     <div>
         <h2 class="search-text">{{ title }}</h2>
         <select v-model="selector" class="search-sort">
-            <option disabled>Выберите сортировку</option>
-            <option v-for="elData in data">{{ elData }}</option>
+            <option disabled>CHOOSE SORT</option>
+            <option v-for="elData in dataSelect">{{ elData }}</option>
             <option selected>–</option>
         </select>
     </div>
@@ -12,35 +12,35 @@
 <script lang="ts">
 import {PropType} from "vue";
 import {defineComponent} from "vue";
-import IDataSelectSearcher from "@/interfaces/dataComponents/IDataSelectSearcher";
 
 export default defineComponent({
-    name: "selectSearcher",
+    name: "select-searcher",
 
     props: {
         title: {
             type: String,
             required: true
         },
-        data: {
+
+        dataSelect: {
             type: Array as PropType<string[]>,
             required: true
-        },
+        }
     },
 
-    data(): IDataSelectSearcher {
+    data(): { selector: string } {
         return {
             selector: '–',
-        }
+        };
     },
 
     watch: {
         selector(): void {
-            this.$emit('changeSelector', this.selector);
+            this.$emit('change-selector', this.selector);
         }
     }
 
-})
+});
 </script>
 
 <style scoped>

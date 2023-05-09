@@ -1,7 +1,7 @@
 <template>
     <header class="header">
-        <p class="header-text header-phone">PHONE: 8900000000</p>
-        <p class="header-text header-name-store">VLAD1SAT STORE</p>
+        <p class="header-text header-phone">{{ headerText.Phone }}</p>
+        <p class="header-text header-name-store">{{ headerText.Name }}</p>
         <button class="header-magnifier" @click="viewSort()"></button>
         <button class="header-favorites" @click="viewFavorites()" :class="{ 'open-favorites': isShowFavorites }"></button>
         <button class="header-basket" @click="openBasket()"></button>
@@ -10,8 +10,8 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-
 import IResultOpenBasket from "@/interfaces/emitResults/IResultOpenBasket";
+import {HeaderText} from "@/constApp/BaseText";
 
 export default defineComponent({
     name: "TheHeader",
@@ -25,7 +25,13 @@ export default defineComponent({
         isShowFavorites: {
             type: Boolean,
             required: true,
-        },
+        }
+    },
+
+    data(): { headerText: typeof HeaderText } {
+        return {
+            headerText: HeaderText
+        };
     },
 
     methods: {
@@ -46,7 +52,7 @@ export default defineComponent({
             this.$emit('openBasket', result);
         },
     }
-})
+});
 </script>
 
 <style scoped>

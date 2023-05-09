@@ -11,7 +11,7 @@
                       :goods="goods"
                       @closeSearcher="closeSearcher" @changeViewGoods="changeViewGoods">
         </the-searcher>
-        <p v-if="!appGoods.length" class="div-good-text text-no-goods">Товаров нет</p>
+        <p v-if="!appGoods.length" class="div-good-text text-no-goods">Don't have goods</p>
         <good-card v-for="good in appGoods"
                    :key="good.id"
                    :good="good"
@@ -38,11 +38,8 @@ import TheBasket from "@/components/mainComponents/TheBasket.vue";
 import GoodCard from "@/components/mainComponents/GoodCard.vue";
 import TheHeader from "@/components/mainComponents/TheHeader.vue";
 import TheSearcher from "@/components/mainComponents/TheSearcher.vue";
-
 import {defineComponent} from "vue";
-
 import IResultOpenGood from "@/interfaces/emitResults/IResultOpenGood";
-
 import getDataGoods from "@/getGoods";
 import IBasketGood from "@/interfaces/IBasketGood";
 import IResultSearcher from "@/interfaces/emitResults/IResultSearcher";
@@ -50,6 +47,7 @@ import IDataApp from "@/interfaces/dataComponents/IDataApp";
 import IGoodApp from "@/interfaces/IGoodApp";
 import IResultOpenBasket from "@/interfaces/emitResults/IResultOpenBasket";
 import IResultCloseGood from "@/interfaces/emitResults/IResultCloseGood";
+import {EMPTY_GOOD} from "@/constApp/FunctionalApp";
 
 export default defineComponent({
     components: {TheSearcher, TheHeader, GoodCard, TheBasket, TheModalGood},
@@ -64,19 +62,7 @@ export default defineComponent({
                 isShowSort: false,
             },
 
-            selectedGood: {
-                category: '',
-                description: '',
-                id: NaN,
-                image: '',
-                price: 0,
-                title: '',
-                rating: {
-                    rate: 0,
-                    count: 0
-                },
-                isLikeBnActive: false,
-            },
+            selectedGood: EMPTY_GOOD,
 
             basketGoods: [],
 

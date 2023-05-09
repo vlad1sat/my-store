@@ -2,34 +2,35 @@
     <div v-if="isShowBasket" class="basket-background">
         <div class="basket">
             <close-button @close="closeBasket()"></close-button>
-            <h2 class="basket-title">basket</h2>
-            <p v-if="!basketGoods.length" class="basket-no-goods">Товаров нет</p>
+            <h2 class="basket-title">{{basketText.Title}}</h2>
+            <p v-if="!basketGoods.length" class="basket-no-goods">{{ basketText.AbsenceGoods }}</p>
             <div class="basket-goods">
                 <div v-for="basketGood in basketGoods" :key="basketGood.id" class="basket-good">
                     <div>
                         <img :src="basketGood.image" width="90" height="120" class="basket-img" alt="picture good">
                         <h3 class="basket-title-good">{{ basketGood.title }}</h3>
                     </div>
-                    <h3 class="basket-price">{{  (basketGood.price * basketGood.count).toFixed(2) }} $</h3>
+                    <h3 class="basket-price">{{  (basketGood.price * basketGood.count).toFixed(2) }} {{ basketText.PriseSymbol }}</h3>
                     <div class="basket-count-goods">
-                        <p class="count-goods">{{ basketGood.count }} шт.</p>
-                        <button style="margin-left: 10px" class="bn-basket-count-goods bn-basket-move" @click="plusCountGoods(basketGood)">+</button>
-                        <button class="bn-basket-count-goods bn-basket-move" @click="minusCountGood(basketGood)">–</button>
+                        <p class="count-goods">{{ basketGood.count }} {{ basketText.CountSymbol }}</p>
+                        <button style="margin-left: 10px" class="bn-basket-count-goods bn-basket-move" @click="countGood(basketGood, basketText.Plus)">{{ basketText.Plus }}</button>
+                        <button class="bn-basket-count-goods bn-basket-move" @click="countGood(basketGood, basketText.Minus)">{{ basketText.Minus }}</button>
                     </div>
-                    <button class="basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">delete</button>
+                    <button class="basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">{{ basketText.Delete }}</button>
                 </div>
             </div>
-            <h2 v-if="basketGoods.length" class="basket-total-sum">Total sum: {{ totalSum }} $</h2>
-            <button class="basket-bn-buy" :disabled="!basketGoods.length" @click="buyBasket()">buy</button>
+            <h2 v-if="basketGoods.length" class="basket-total-sum">{{ basketText.TotalSum }} {{ totalSum }} {{ basketText.PriseSymbol }}</h2>
+            <button class="basket-bn-buy" :disabled="!basketGoods.length" @click="buyBasket()">{{ basketText.Buy }}</button>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import CloseButton from "@/components/auxiliaryComponents/closeButton.vue";
-
-import {PropType, defineComponent} from "vue";
+import CloseButton from "@/components/auxiliaryComponents/close-button.vue";
+import {defineComponent, PropType} from "vue";
 import IBasketGood from "@/interfaces/IBasketGood";
+import {BasketText} from "@/constApp/BaseText";
+import {BorderCountGoods} from "@/constApp/FunctionalApp";
 
 export default defineComponent({
     name: "TheBasket",
@@ -44,26 +45,36 @@ export default defineComponent({
         basketGoods: {
             required: true,
             type: Array as PropType<IBasketGood[]>
-        },
+        }
+    },
+
+    data(): { basketText: typeof BasketText } {
+        return {
+            basketText: BasketText
+        };
     },
 
     computed: {
         totalSum(): number {
             return +this.basketGoods.reduce((sum: number, good: IBasketGood) => sum += good.price * good.count, 0).toFixed(2);
-        },
+        }
     },
 
     methods: {
-        minusCountGood(basketGood: IBasketGood): void {
-            basketGood.count > 1 ? --basketGood.count : this.deleteGoodFromBasket(basketGood);
+        countGood(basketGood: IBasketGood, identification: string): void {
+            const border = BorderCountGoods;
+
+            if (identification === this.basketText.Plus) {
+                basketGood.count < border.Max ? ++basketGood.count : alert('Превышен лимит товаров');
+                return;
+            }
+
+            basketGood.count > border.Min ? --basketGood.count : this.deleteGoodFromBasket(basketGood);
         },
 
-        plusCountGoods(basketGood: IBasketGood): void {
-            basketGood.count < 100 ? ++basketGood.count : alert('Превышен лимит товаров');
-        },
+        buyBasket(): void {
+            alert(`${this.basketText.BuyText} ${this.totalSum} ${this.basketText.PriseSymbol}`);
 
-        buyBasket() {
-            alert(`Вы успешно заказати товары!\nОжидайте подтверждения операции!\nСумма заказа: ${this.totalSum} $`);
             this.basketGoods.length = 0;
             this.closeBasket();
         },
@@ -76,7 +87,7 @@ export default defineComponent({
             this.$emit('closeBasket', false);
         },
     }
-})
+});
 </script>
 
 <style scoped>

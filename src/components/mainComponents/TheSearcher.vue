@@ -1,34 +1,33 @@
 <template>
     <div v-if="isShowSort" class="search-modal">
         <close-button @close="closeSearcher()"></close-button>
-        <h2 class="search-text search-text-title">SETUP</h2>
+        <h2 class="search-text search-text-title">{{ searcherText.Title }}</h2>
         <div class="search-main-window">
             <div class="search-div">
-                <h2 class="search-text">Поиск по странице</h2>
-                <input placeholder="Введите название интересуещего товара" v-model="searcher" class="search-input"/>
+                <h2 class="search-text">{{ searcherText.Find }}</h2>
+                <input :placeholder="searcherText.Placeholder" v-model="searcher" class="search-input"/>
             </div>
-            <select-searcher :title="'сортировка по:'"
-                             :data="['prise', 'alphabet']"
-                             @changeSelector="(data) => sort = data">
+            <select-searcher :title="searcherText.Sort"
+                             :data="searcherText.CategoriesFilter"
+                             @change-selector="(data: string) => sort = data">
             </select-searcher>
-            <select-searcher :title="'фильтрация по:'"
+            <select-searcher :title="searcherText.Filter"
                              :data="categories"
-                             @changeSelector="(data) => filterCategory = data">
+                             @change-selector="(data: string) => filterCategory = data">
             </select-searcher>
-            <button class="search-bn" @click="cleanFilter()">Clean</button>
+            <button class="search-bn" @click="cleanFilter()">{{ searcherText.Clean }}</button>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import SelectSearcher from "@/components/auxiliaryComponents/selectSearcher.vue";
-import CloseButton from "@/components/auxiliaryComponents/closeButton.vue";
-
+import SelectSearcher from "@/components/auxiliaryComponents/select-searcher.vue";
+import CloseButton from "@/components/auxiliaryComponents/close-button.vue";
 import {defineComponent, PropType} from "vue";
-
 import IDataSearcher from "@/interfaces/dataComponents/IDataSearcher";
 import IGoodApp from "@/interfaces/IGoodApp";
 import IResultSearcher from "@/interfaces/emitResults/IResultSearcher";
+import {SearcherText} from "@/constApp/BaseText";
 
 export default defineComponent({
     name: "TheSearcher",
@@ -40,10 +39,11 @@ export default defineComponent({
             type: Boolean,
             required: true,
         },
+
         goods: {
             type: Array as PropType<IGoodApp[]>,
             required: true,
-        },
+        }
     },
 
     data(): IDataSearcher {
@@ -52,13 +52,14 @@ export default defineComponent({
             searcher: '',
             sort: '–',
             filterCategory: '–',
+            searcherText: SearcherText,
         };
     },
 
     computed: {
         categories(): string[] | [] {
             return Array.from(new Set(this.goods.map((good: IGoodApp) => good.category)));
-        },
+        }
     },
 
     methods: {
@@ -92,10 +93,7 @@ export default defineComponent({
                 if (this.sort === "price") {
                     return goods.sort((good1: IGoodApp, good2: IGoodApp) => good1.price - good2.price);
                 }
-
-                if (this.sort === "alphabet") {
-                    return goods.sort((good1: IGoodApp, good2: IGoodApp) => good1.title.localeCompare(good2.title));
-                }
+                return goods.sort((good1: IGoodApp, good2: IGoodApp) => good1.title.localeCompare(good2.title));
             }
 
             return goods;
@@ -103,7 +101,7 @@ export default defineComponent({
 
         changeViewGoodsFilter(goods: IGoodApp[]): IGoodApp[] {
             if (this.filterCategory !== '–') {
-                return  goods.filter((good: IGoodApp) => good.category === this.filterCategory);
+                return goods.filter((good: IGoodApp) => good.category === this.filterCategory);
             }
 
             return goods;
@@ -116,7 +114,7 @@ export default defineComponent({
             };
 
             this.$emit('changeViewGoods', result);
-        },
+        }
     },
 
     watch: {
@@ -130,7 +128,7 @@ export default defineComponent({
 
         filterCategory(): void {
             this.changeViewGood();
-        },
+        }
     }
 });
 </script>

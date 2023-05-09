@@ -6,14 +6,14 @@
 import {defineComponent} from "vue";
 
 export default defineComponent({
-    name: "closeButton",
+    name: "close-button",
 
     methods: {
         close(): void {
             this.$emit('close');
         }
     }
-})
+});
 </script>
 
 <style scoped>
