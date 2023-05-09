@@ -25,20 +25,33 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import goodButtonAction from "@/components/auxiliaryComponents/goodButtonAction.vue";
-import closeButton from "@/components/auxiliaryComponents/closeButton.vue";
 import CloseButton from "@/components/auxiliaryComponents/closeButton.vue";
 
-export default {
+import {defineComponent, PropType} from "vue";
+import IGoodApp from "@/interfaces/IGoodApp";
+import IBasketGood from "@/interfaces/IBasketGood";
+import IResultCloseGood from "@/interfaces/emitResults/IResultCloseGood";
+
+export default defineComponent({
     name: "TheModalGood",
     components: {CloseButton, goodButtonAction},
 
     props: {
         isShowGood: Boolean,
-        selectedGood: Object,
-        basketGoods: Array,
-        goods: Array,
+        selectedGood: {
+            type: Object as PropType<IGoodApp>,
+            required: true
+        },
+        basketGoods: {
+            type: Array as PropType<IBasketGood[]>,
+            required: true
+        },
+        goods: {
+            type: Array as PropType<IGoodApp[]>,
+            required: true
+        },
     },
 
     data() {
@@ -48,7 +61,7 @@ export default {
     },
 
     methods: {
-        addToFavoriteGood() {
+        addToFavoriteGood(): void {
             this.goods.find(baseGood => {
                 if (baseGood.id === this.selectedGood.id) {
                     baseGood.isLikeBnActive = true;
@@ -58,8 +71,9 @@ export default {
             alert("Товар успешно добавлен в избранное!");
         },
 
-        addToBasket() {
-            const good = {
+        addToBasket(): void {
+            //fix
+            const good: IBasketGood = {
                 title: this.selectedGood.title,
                 id: this.selectedGood.id,
                 count: 1,
@@ -72,7 +86,7 @@ export default {
             }
 
             let isInBasket = false;
-            this.basketGoods.forEach(goodBasket => {
+            this.basketGoods.forEach((goodBasket: IBasketGood) => {
                 if (goodBasket.id === good.id) {
                     isInBasket = true;
                     ++goodBasket.count;
@@ -86,8 +100,8 @@ export default {
             this.closeGood();
         },
 
-        closeGood() {
-            this.$emit('closeGood', {
+        closeGood(): void {
+            const result: IResultCloseGood = {
                 isShowGood: false,
                 selectedGood: {
                     category: '',
@@ -100,8 +114,11 @@ export default {
                         rate: 0,
                         count: 0
                     },
+                    isLikeBnActive: false,
                 },
-            });
+            };
+
+            this.$emit('closeGood', result);
         },
     },
 
@@ -111,7 +128,7 @@ export default {
         }
     }
 
-}
+})
 </script>
 
 <style scoped>

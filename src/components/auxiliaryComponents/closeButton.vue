@@ -2,16 +2,18 @@
     <button class="bn-modal-close bn-modal-move" @click="close()"></button>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import {defineComponent} from "vue";
+
+export default defineComponent({
     name: "closeButton",
 
     methods: {
-        close() {
+        close(): void {
             this.$emit('close');
         }
     }
-}
+})
 </script>
 
 <style scoped>

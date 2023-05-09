@@ -11,39 +11,37 @@
 </template>
 
 <script lang="ts">
-import IGoodApp from "@/IGoodApp";
-import {PropType} from "vue";
+import IGoodApp from "@/interfaces/IGoodApp";
+import {PropType, defineComponent} from "vue";
+import IResultOpenGood from "@/interfaces/emitResults/IResultOpenGood";
 
-export default {
+export default defineComponent({
     name: "GoodCard",
 
     props: {
         good: {
-            required: true,
             type: Object as PropType<IGoodApp>,
+            required: true,
         },
-    },
-
-    data() {
-        return {};
     },
 
     methods: {
-        addToFavoriteLike(good: IGoodApp) {
+        addToFavoriteLike(good: IGoodApp): void {
             good.isLikeBnActive = !good.isLikeBnActive;
         },
 
-        openGood(good: IGoodApp) {
-            const selectedGood = JSON.parse(JSON.stringify(good));
+        openGood(selectedGood: IGoodApp): void {
 
-            this.$emit('openGood', {
+            const result: IResultOpenGood = {
                 selectedGood,
                 isShowSort: false,
                 isShowGood: true,
-            })
+            };
+
+            this.$emit('openGood', result);
         },
     },
-}
+})
 </script>
 
 <style scoped>

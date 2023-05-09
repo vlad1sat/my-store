@@ -20,23 +20,35 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import SelectSearcher from "@/components/auxiliaryComponents/selectSearcher.vue";
 import CloseButton from "@/components/auxiliaryComponents/closeButton.vue";
 
-export default {
+import {defineComponent, PropType} from "vue";
+
+import IDataSearcher from "@/interfaces/dataComponents/IDataSearcher";
+import IGoodApp from "@/interfaces/IGoodApp";
+import IResultSearcher from "@/interfaces/emitResults/IResultSearcher";
+
+export default defineComponent({
     name: "TheSearcher",
 
     components: {CloseButton, SelectSearcher},
 
     props: {
-        isShowSort: Boolean,
-        goods: Array,
+        isShowSort: {
+            type: Boolean,
+            required: true,
+        },
+        goods: {
+            type: Array as PropType<IGoodApp[]>,
+            required: true,
+        },
     },
 
-    data() {
+    data(): IDataSearcher {
         return {
-            categoriesApp: this.categories,
+            categoriesApp:  this.categories,
             searcher: '',
             sort: '–',
             filterCategory: '–',
@@ -44,24 +56,24 @@ export default {
     },
 
     computed: {
-        categories() {
-            return Array.from(new Set(this.goods.map(good => good.category)));
+        categories(): string[] | [] {
+            return Array.from(new Set(this.goods.map((good: IGoodApp) => good.category)));
         },
     },
 
     methods: {
-        cleanFilter() {
+        cleanFilter(): void {
             this.searcher = '';
             this.sort = '–';
             this.filterCategory = '–';
             this.sendResultSearch(this.goods);
         },
 
-        closeSearcher() {
+        closeSearcher(): void {
             this.$emit('closeSearcher', false);
         },
 
-        changeViewGood() {
+        changeViewGood(): void {
             let result = this.goods.slice();
 
             result = this.changeViewGoodsSearcher(result);
@@ -71,55 +83,56 @@ export default {
             this.sendResultSearch(result);
         },
 
-        changeViewGoodsSearcher(goods) {
-            return this.searcher ? goods.filter(good => good.title.toLowerCase().startsWith(this.searcher.toLowerCase())) : goods;
+        changeViewGoodsSearcher(goods: IGoodApp[]): IGoodApp[] {
+            return this.searcher ? goods.filter((good: IGoodApp)=> good.title.toLowerCase().startsWith(this.searcher.toLowerCase())) : goods;
         },
 
-        changeViewGoodsSort(goods) {
+        changeViewGoodsSort(goods: IGoodApp[]): IGoodApp[] {
             if (this.sort !== '–') {
                 if (this.sort === "price") {
-                    return goods.sort((el1, el2) => el1.price - el2.price);
+                    return goods.sort((good1: IGoodApp, good2: IGoodApp) => good1.price - good2.price);
                 }
 
                 if (this.sort === "alphabet") {
-                    return goods.sort((el1, el2) => el1.title.localeCompare(el2.title));
+                    return goods.sort((good1: IGoodApp, good2: IGoodApp) => good1.title.localeCompare(good2.title));
                 }
             }
 
             return goods;
         },
 
-        changeViewGoodsFilter(goods) {
+        changeViewGoodsFilter(goods: IGoodApp[]): IGoodApp[] {
             if (this.filterCategory !== '–') {
-                return  goods.filter(good => good.category === this.filterCategory);
+                return  goods.filter((good: IGoodApp) => good.category === this.filterCategory);
             }
 
             return goods;
         },
 
-        sendResultSearch(result) {
-            this.$emit('changeViewGoods', {
-                filterGoods: result,
+        sendResultSearch(filterGoods: IGoodApp[]): void {
+            const result: IResultSearcher = {
+                filterGoods,
                 isOnFilter: true,
-            });
+            };
+
+            this.$emit('changeViewGoods', result);
         },
     },
 
     watch: {
-        searcher() {
+        searcher(): void {
             this.changeViewGood();
         },
 
-        sort() {
+        sort(): void {
             this.changeViewGood();
         },
 
-        filterCategory() {
+        filterCategory(): void {
             this.changeViewGood();
         },
     }
-
-}
+});
 </script>
 
 <style scoped>

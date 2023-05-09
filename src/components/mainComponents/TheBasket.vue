@@ -25,31 +25,40 @@
     </div>
 </template>
 
-<script>
-import closeButton from "@/components/auxiliaryComponents/closeButton.vue";
+<script lang="ts">
 import CloseButton from "@/components/auxiliaryComponents/closeButton.vue";
 
-export default {
+import {PropType, defineComponent} from "vue";
+import IBasketGood from "@/interfaces/IBasketGood";
+
+export default defineComponent({
     name: "TheBasket",
     components: {CloseButton},
 
     props: {
-        isShowBasket: Boolean,
-        basketGoods: Array,
+        isShowBasket: {
+            type: Boolean,
+            required: true
+        },
+
+        basketGoods: {
+            required: true,
+            type: Array as PropType<IBasketGood[]>
+        },
     },
 
     computed: {
-        totalSum() {
-            return this.basketGoods.reduce((sum, good) => sum += good.price * good.count, 0).toFixed(2);
+        totalSum(): number {
+            return +this.basketGoods.reduce((sum: number, good: IBasketGood) => sum += good.price * good.count, 0).toFixed(2);
         },
     },
 
     methods: {
-        minusCountGood(basketGood) {
+        minusCountGood(basketGood: IBasketGood): void {
             basketGood.count > 1 ? --basketGood.count : this.deleteGoodFromBasket(basketGood);
         },
 
-        plusCountGoods(basketGood) {
+        plusCountGoods(basketGood: IBasketGood): void {
             basketGood.count < 100 ? ++basketGood.count : alert('Превышен лимит товаров');
         },
 
@@ -59,15 +68,15 @@ export default {
             this.closeBasket();
         },
 
-        deleteGoodFromBasket(good) {
-           this.$emit('deleteGoodFromBasket', this.basketGoods.filter(basketGood => good.id !== basketGood.id));
+        deleteGoodFromBasket(good : IBasketGood): void {
+           this.$emit('deleteGoodFromBasket', this.basketGoods.filter((basketGood: IBasketGood) => good.id !== basketGood.id));
         },
 
-        closeBasket() {
+        closeBasket(): void {
             this.$emit('closeBasket', false);
         },
     }
-}
+})
 </script>
 
 <style scoped>

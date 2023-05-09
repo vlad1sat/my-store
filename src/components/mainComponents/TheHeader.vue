@@ -8,8 +8,12 @@
     </header>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import {defineComponent} from "vue";
+
+import IResultOpenBasket from "@/interfaces/emitResults/IResultOpenBasket";
+
+export default defineComponent({
     name: "TheHeader",
 
     props: {
@@ -24,27 +28,25 @@ export default {
         },
     },
 
-    data() {
-        return {};
-    },
-
     methods: {
-        viewSort() {
+        viewSort(): void {
             this.$emit('viewSort', !this.isShowSort);
         },
 
-        viewFavorites() {
+        viewFavorites(): void {
             this.$emit('viewFavorites', !this.isShowFavorites);
         },
 
-        openBasket() {
-            this.$emit('openBasket', {
+        openBasket(): void {
+            const result : IResultOpenBasket = {
                 isShowBasket: true,
                 isShowSort: false,
-            });
+            };
+
+            this.$emit('openBasket', result);
         },
     }
-}
+})
 </script>
 
 <style scoped>

@@ -10,4 +10,4 @@ export default interface IGoodApp {
         count: number
     },
     isLikeBnActive?: boolean,
-}
+};

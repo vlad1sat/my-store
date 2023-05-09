@@ -9,28 +9,38 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import {PropType} from "vue";
+import {defineComponent} from "vue";
+import IDataSelectSearcher from "@/interfaces/dataComponents/IDataSelectSearcher";
+
+export default defineComponent({
     name: "selectSearcher",
 
     props: {
-        title: String,
-        data: Array,
+        title: {
+            type: String,
+            required: true
+        },
+        data: {
+            type: Array as PropType<string[]>,
+            required: true
+        },
     },
 
-    data() {
+    data(): IDataSelectSearcher {
         return {
             selector: '–',
         }
     },
 
     watch: {
-        selector() {
+        selector(): void {
             this.$emit('changeSelector', this.selector);
         }
     }
 
-}
+})
 </script>
 
 <style scoped>

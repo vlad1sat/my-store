@@ -32,119 +32,129 @@
     </main>
 </template>
 
-<script>
+<script lang="ts">
 import TheModalGood from "@/components/mainComponents/TheModalGood.vue";
 import TheBasket from "@/components/mainComponents/TheBasket.vue";
 import GoodCard from "@/components/mainComponents/GoodCard.vue";
 import TheHeader from "@/components/mainComponents/TheHeader.vue";
 import TheSearcher from "@/components/mainComponents/TheSearcher.vue";
 
+import {defineComponent} from "vue";
+
+import IResultOpenGood from "@/interfaces/emitResults/IResultOpenGood";
+
 import getDataGoods from "@/getGoods";
+import IBasketGood from "@/interfaces/IBasketGood";
+import IResultSearcher from "@/interfaces/emitResults/IResultSearcher";
+import IDataApp from "@/interfaces/dataComponents/IDataApp";
+import IGoodApp from "@/interfaces/IGoodApp";
+import IResultOpenBasket from "@/interfaces/emitResults/IResultOpenBasket";
+import IResultCloseGood from "@/interfaces/emitResults/IResultCloseGood";
 
-    export default {
-        components: {TheSearcher, TheHeader, GoodCard, TheBasket, TheModalGood},
-        data() {
-            return {
-                goods: [],
+export default defineComponent({
+    components: {TheSearcher, TheHeader, GoodCard, TheBasket, TheModalGood},
+    data(): IDataApp {
+        return {
+            goods: [],
 
-                stateApp: {
-                    isShowGood: false,
-                    isShowBasket: false,
-                    isShowFavorites: false,
-                    isShowSort: false,
+            stateApp: {
+                isShowGood: false,
+                isShowBasket: false,
+                isShowFavorites: false,
+                isShowSort: false,
+            },
+
+            selectedGood: {
+                category: '',
+                description: '',
+                id: NaN,
+                image: '',
+                price: 0,
+                title: '',
+                rating: {
+                    rate: 0,
+                    count: 0
                 },
+                isLikeBnActive: false,
+            },
 
-                selectedGood: {
-                    category: '',
-                    description: '',
-                    id: NaN,
-                    image: '',
-                    price: 0,
-                    title: '',
-                    rating: {
-                        rate: 0,
-                        count: 0
-                    },
-                    isLikeBnActive: false,
-                },
+            basketGoods: [],
 
-                basketGoods: [],
+            stateFilter: {
+                filterGoods: [],
+                isOnFilter: false,
+            },
+        };
+    },
 
-                stateFilter: {
-                    filterGoods: [],
-                    isOnFilter: false,
-                },
-            };
-        },
+    mounted() {
+        getDataGoods().then(res => (this.goods = res));
+    },
 
-        mounted() {
-            getDataGoods().then(res => (this.goods = res));
-        },
+    computed: {
+        appGoods(): IGoodApp[] {
+            let result = (this.stateFilter.isOnFilter ? this.stateFilter.filterGoods : this.goods).slice();
 
-        computed: {
-            appGoods() {
-                let result = (this.stateFilter.isOnFilter ? this.stateFilter.filterGoods : this.goods).slice();
-
-                if (this.stateApp.isShowFavorites) {
-                    return result.filter(good => good.isLikeBnActive);
-                }
-
-                return result;
+            if (this.stateApp.isShowFavorites) {
+                return result.filter((good: IGoodApp) => good.isLikeBnActive);
             }
-        },
 
-        methods: {
-            openGood(data) {
-                this.selectedGood = data.selectedGood;
-
-                const state = this.stateApp;
-                state.isShowGood = data.isShowGood;
-                state.isShowSort = data.isShowSort;
-            },
-
-            viewSort(data) {
-                this.stateApp.isShowSort = data;
-            },
-
-            closeGood(data) {
-                this.stateApp.isShowGood = data.isShowGood
-                this.stateApp.selectedGood = data.selectedGood;
-            },
-
-            viewFavorites(data) {
-                this.stateApp.isShowFavorites = data;
-            },
-
-            openBasket(data) {
-                this.stateApp.isShowBasket = data.isShowBasket;
-                this.stateApp.isShowSort = data.isShowSort;
-            },
-
-            closeBasket(data) {
-                this.stateApp.isShowBasket = data;
-            },
-
-            deleteGoodFromBasket(data) {
-                this.basketGoods = data;
-            },
-
-            closeSearcher(data) {
-                this.stateApp.isShowSort = data;
-            },
-
-            changeViewGoods(data) {
-                const state = this.stateFilter;
-                state.filterGoods = data.filterGoods;
-                this.stateFilter.isOnFilter = data.isOnFilter;
-            },
-        },
-
-        watch: {
-            goods(newValue) {
-                this.stateFilter.filterGoods = newValue;
-            },
+            return result;
         }
+    },
+
+    methods: {
+        openGood(data: IResultOpenGood): void {
+            this.selectedGood = data.selectedGood;
+
+            const state = this.stateApp;
+            state.isShowGood = data.isShowGood;
+            state.isShowSort = data.isShowSort;
+        },
+
+        viewSort(data: boolean): void {
+            this.stateApp.isShowSort = data;
+        },
+
+        closeGood(data: IResultCloseGood): void {
+            this.stateApp.isShowGood = data.isShowGood
+            this.selectedGood = data.selectedGood;
+        },
+
+        viewFavorites(data: boolean): void {
+            this.stateApp.isShowFavorites = data;
+        },
+
+        openBasket(data: IResultOpenBasket): void {
+            this.stateApp.isShowBasket = data.isShowBasket;
+            this.stateApp.isShowSort = data.isShowSort;
+        },
+
+        closeBasket(data: boolean): void {
+            this.stateApp.isShowBasket = data;
+        },
+
+        deleteGoodFromBasket(data: IBasketGood[]): void {
+            this.basketGoods = data;
+        },
+
+        closeSearcher(data: boolean): void {
+            this.stateApp.isShowSort = data;
+        },
+
+        changeViewGoods(data: IResultSearcher): void {
+            const state = this.stateFilter;
+            state.filterGoods = data.filterGoods;
+            state.isOnFilter = data.isOnFilter;
+        },
+    },
+
+    watch: {
+        goods(newValue: IGoodApp[]): void {
+            this.stateFilter.filterGoods = newValue;
+        },
     }
+})
 </script>
 
 <style>
