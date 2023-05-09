@@ -1,7 +1,7 @@
 <template>
     <div v-if="isShowGood" class="modal-background">
         <div class="modal-good-completely">
-            <button class="bn-modal-close bn-modal-move" @click="closeGood()"></button>
+            <close-button @close="closeGood()"></close-button>
             <div>
                 <h2 class="modal-text modal-title">{{ selectedGood.title }}</h2>
                 <h3 class="modal-text modal-category">{{ selectedGood.category }}</h3>
@@ -15,33 +15,55 @@
                 <img :src="imageRating" alt="emotion" width="44" height="44" class="modal-smile">
                 <p class="modal-text modal-count">Count: {{selectedGood.rating.count }}</p>
             </div>
-            <button class="bn-modal modal-text bn-modal-move" @click="addToFavoriteGood(selectedGood)">add to favorite</button>
-            <button class="bn-modal modal-text bn-modal-move" @click="addToBasket(selectedGood)">add to basket</button>
+            <good-button-action @clickButton="addToFavoriteGood"
+                                      :text-button="'add to favorite list'">
+            </good-button-action>
+            <good-button-action @clickButton="addToBasket"
+                                      :text-button="'add to basket'">
+            </good-button-action>
         </div>
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import goodButtonAction from "@/components/auxiliaryComponents/goodButtonAction.vue";
+import CloseButton from "@/components/auxiliaryComponents/closeButton.vue";
+
+import {defineComponent, PropType} from "vue";
+import IGoodApp from "@/interfaces/IGoodApp";
+import IBasketGood from "@/interfaces/IBasketGood";
+import IResultCloseGood from "@/interfaces/emitResults/IResultCloseGood";
+
+export default defineComponent({
     name: "TheModalGood",
+    components: {CloseButton, goodButtonAction},
 
     props: {
         isShowGood: Boolean,
-        selectedGood: Object,
-        basketGoods: Array,
-        goods: Array,
+        selectedGood: {
+            type: Object as PropType<IGoodApp>,
+            required: true
+        },
+        basketGoods: {
+            type: Array as PropType<IBasketGood[]>,
+            required: true
+        },
+        goods: {
+            type: Array as PropType<IGoodApp[]>,
+            required: true
+        },
     },
 
     data() {
         return {
-            imageRating: require("../smile.svg"),
+            imageRating: require("../../smile.svg"),
         }
     },
 
     methods: {
-        addToFavoriteGood(good) {
+        addToFavoriteGood(): void {
             this.goods.find(baseGood => {
-                if (baseGood.id === good.id) {
+                if (baseGood.id === this.selectedGood.id) {
                     baseGood.isLikeBnActive = true;
                 }
             });
@@ -49,8 +71,9 @@ export default {
             alert("Товар успешно добавлен в избранное!");
         },
 
-        addToBasket() {
-            const good = {
+        addToBasket(): void {
+            //fix
+            const good: IBasketGood = {
                 title: this.selectedGood.title,
                 id: this.selectedGood.id,
                 count: 1,
@@ -63,7 +86,7 @@ export default {
             }
 
             let isInBasket = false;
-            this.basketGoods.forEach(goodBasket => {
+            this.basketGoods.forEach((goodBasket: IBasketGood) => {
                 if (goodBasket.id === good.id) {
                     isInBasket = true;
                     ++goodBasket.count;
@@ -77,8 +100,8 @@ export default {
             this.closeGood();
         },
 
-        closeGood() {
-            this.$emit('closeGood', {
+        closeGood(): void {
+            const result: IResultCloseGood = {
                 isShowGood: false,
                 selectedGood: {
                     category: '',
@@ -91,18 +114,21 @@ export default {
                         rate: 0,
                         count: 0
                     },
+                    isLikeBnActive: false,
                 },
-            });
+            };
+
+            this.$emit('closeGood', result);
         },
     },
 
     watch: {
         isShowGood() {
-            this.imageRating = this.selectedGood.rating.rate >= 4.0 ? require("../smile.svg") : require("../bad.svg");
+            this.imageRating = this.selectedGood.rating.rate >= 4.0 ? require("../../smile.svg") : require("../../bad.svg");
         }
     }
 
-}
+})
 </script>
 
 <style scoped>
@@ -186,30 +212,5 @@ export default {
     .modal-count {
         margin: 0;
         padding: 7px 0 0 800px;
-    }
-
-    .bn-modal {
-        width: 150px;
-        height: 50px;
-        color: #FFFFFF;
-        background-color: #7F89F8;
-        border: none;
-        margin: 5px 0 0 145px;
-    }
-
-
-    .bn-modal-close {
-        width: 40px;
-        height: 40px;
-        background: Transparent no-repeat url("../close.svg");
-        border: none;
-        margin: 20px 0 0 1130px;
-        position: absolute;
-    }
-
-    .bn-modal-move:hover
-    {
-        transform: scale(1.05);
-        cursor: pointer;
     }
 </style>

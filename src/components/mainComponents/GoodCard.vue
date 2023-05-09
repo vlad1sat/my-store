@@ -11,39 +11,37 @@
 </template>
 
 <script lang="ts">
-import IGoodApp from "@/IGoodApp";
-import {PropType} from "vue";
+import IGoodApp from "@/interfaces/IGoodApp";
+import {PropType, defineComponent} from "vue";
+import IResultOpenGood from "@/interfaces/emitResults/IResultOpenGood";
 
-export default {
+export default defineComponent({
     name: "GoodCard",
 
     props: {
         good: {
-            required: true,
             type: Object as PropType<IGoodApp>,
+            required: true,
         },
-    },
-
-    data() {
-        return {};
     },
 
     methods: {
-        addToFavoriteLike(good: IGoodApp) {
+        addToFavoriteLike(good: IGoodApp): void {
             good.isLikeBnActive = !good.isLikeBnActive;
         },
 
-        openGood(good: IGoodApp) {
-            const selectedGood = JSON.parse(JSON.stringify(good));
+        openGood(selectedGood: IGoodApp): void {
 
-            this.$emit('openGood', {
+            const result: IResultOpenGood = {
                 selectedGood,
                 isShowSort: false,
                 isShowGood: true,
-            })
+            };
+
+            this.$emit('openGood', result);
         },
     },
-}
+})
 </script>
 
 <style scoped>
@@ -87,7 +85,7 @@ export default {
     }
 
     .div-good-bn-like {
-        background: Transparent no-repeat url("../like-empty.svg");
+        background: Transparent no-repeat url("../../like-empty.svg");
         width: 50px;
         height: 50px;
         border: none;
@@ -102,14 +100,7 @@ export default {
     }
 
     .div-good-bn-like-active {
-        background: Transparent no-repeat url("../like.svg");
-    }
-
-    .text-no-goods {
-        font-size: 40px;
-        color: #7F89F8;
-        text-align: center;
-        margin-top: 80px;
+        background: Transparent no-repeat url("../../like.svg");
     }
 
 </style>

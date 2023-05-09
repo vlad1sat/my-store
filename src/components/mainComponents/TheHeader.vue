@@ -8,8 +8,12 @@
     </header>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import {defineComponent} from "vue";
+
+import IResultOpenBasket from "@/interfaces/emitResults/IResultOpenBasket";
+
+export default defineComponent({
     name: "TheHeader",
 
     props: {
@@ -24,27 +28,25 @@ export default {
         },
     },
 
-    data() {
-        return {};
-    },
-
     methods: {
-        viewSort() {
+        viewSort(): void {
             this.$emit('viewSort', !this.isShowSort);
         },
 
-        viewFavorites() {
+        viewFavorites(): void {
             this.$emit('viewFavorites', !this.isShowFavorites);
         },
 
-        openBasket() {
-            this.$emit('openBasket', {
+        openBasket(): void {
+            const result : IResultOpenBasket = {
                 isShowBasket: true,
                 isShowSort: false,
-            });
+            };
+
+            this.$emit('openBasket', result);
         },
     }
-}
+})
 </script>
 
 <style scoped>
@@ -77,7 +79,7 @@ export default {
     }
 
     .header-magnifier {
-        background: Transparent no-repeat url("../magnifier.svg");
+        background: Transparent no-repeat url("../../magnifier.svg");
         width: 70px;
         height: 70px;
         border: none;
@@ -86,7 +88,7 @@ export default {
     }
 
     .header-basket {
-        background: Transparent no-repeat url("../basket.svg");
+        background: Transparent no-repeat url("../../basket.svg");
         width: 90px;
         height: 90px;
         border: none;
@@ -95,7 +97,7 @@ export default {
     }
 
     .header-favorites {
-        background: Transparent no-repeat url("../favourites.svg");
+        background: Transparent no-repeat url("../../favourites.svg");
         width: 80px;
         height: 80px;
         border: none;
@@ -104,7 +106,7 @@ export default {
     }
 
     .open-favorites {
-        background-image: url("../favourites-use.svg");
+        background-image: url("../../favourites-use.svg");
     }
 
     .header-basket:hover,

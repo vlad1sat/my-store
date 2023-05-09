@@ -1,5 +1,5 @@
 // npx ts-node getGoods.ts
-import IGoodApp from "@/IGoodApp";
+import IGoodApp from "@/interfaces/IGoodApp";
 
 const ADDRESS_GOODS : string = 'https://fakestoreapi.com/products';
 

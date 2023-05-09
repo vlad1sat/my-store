@@ -1,7 +1,7 @@
 <template>
     <div v-if="isShowBasket" class="basket-background">
         <div class="basket">
-            <button class="bn-basket-close bn-basket-move" @click="closeBasket()"></button>
+            <close-button @close="closeBasket()"></close-button>
             <h2 class="basket-title">basket</h2>
             <p v-if="!basketGoods.length" class="basket-no-goods">Товаров нет</p>
             <div class="basket-goods">
@@ -25,27 +25,40 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import CloseButton from "@/components/auxiliaryComponents/closeButton.vue";
+
+import {PropType, defineComponent} from "vue";
+import IBasketGood from "@/interfaces/IBasketGood";
+
+export default defineComponent({
     name: "TheBasket",
+    components: {CloseButton},
 
     props: {
-        isShowBasket: Boolean,
-        basketGoods: Array,
+        isShowBasket: {
+            type: Boolean,
+            required: true
+        },
+
+        basketGoods: {
+            required: true,
+            type: Array as PropType<IBasketGood[]>
+        },
     },
 
     computed: {
-        totalSum() {
-            return this.basketGoods.reduce((sum, good) => sum += good.price * good.count, 0).toFixed(2);
+        totalSum(): number {
+            return +this.basketGoods.reduce((sum: number, good: IBasketGood) => sum += good.price * good.count, 0).toFixed(2);
         },
     },
 
     methods: {
-        minusCountGood(basketGood) {
+        minusCountGood(basketGood: IBasketGood): void {
             basketGood.count > 1 ? --basketGood.count : this.deleteGoodFromBasket(basketGood);
         },
 
-        plusCountGoods(basketGood) {
+        plusCountGoods(basketGood: IBasketGood): void {
             basketGood.count < 100 ? ++basketGood.count : alert('Превышен лимит товаров');
         },
 
@@ -55,15 +68,15 @@ export default {
             this.closeBasket();
         },
 
-        deleteGoodFromBasket(good) {
-            this.basketGoods = this.basketGoods.filter(basketGood => good.id !== basketGood.id);
+        deleteGoodFromBasket(good : IBasketGood): void {
+           this.$emit('deleteGoodFromBasket', this.basketGoods.filter((basketGood: IBasketGood) => good.id !== basketGood.id));
         },
 
-        closeBasket() {
+        closeBasket(): void {
             this.$emit('closeBasket', false);
         },
     }
-}
+})
 </script>
 
 <style scoped>
@@ -105,7 +118,7 @@ export default {
     .bn-basket-close {
         width: 40px;
         height: 40px;
-        background: Transparent no-repeat url("../close.svg");
+        background: Transparent no-repeat url("../../close.svg");
         margin: 20px 0 0 430px;
         border: none;
         position: absolute;
