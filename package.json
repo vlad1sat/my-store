@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^1.4.0",
     "ts-node": "^10.9.1",
+    "ts-transformer-keys": "github:kimamula/ts-transformer-keys",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"

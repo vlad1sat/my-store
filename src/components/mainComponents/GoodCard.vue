@@ -14,7 +14,7 @@
 import IGoodApp from "@/interfaces/IGoodApp";
 import {PropType, defineComponent} from "vue";
 import IResultOpenGood from "@/interfaces/emitResults/IResultOpenGood";
-import {GoodCardText} from "@/enumsApp/BaseText";
+import {GoodCardText} from "@/constApp/BaseText";
 
 export default defineComponent({
     name: "GoodCard",
@@ -23,7 +23,7 @@ export default defineComponent({
         good: {
             type: Object as PropType<IGoodApp>,
             required: true,
-        },
+        }
     },
 
     data(): { goodCardText: typeof GoodCardText } {
@@ -38,7 +38,6 @@ export default defineComponent({
         },
 
         openGood(selectedGood: IGoodApp): void {
-
             const result: IResultOpenGood = {
                 selectedGood,
                 isShowSort: false,
@@ -46,9 +45,9 @@ export default defineComponent({
             };
 
             this.$emit('openGood', result);
-        },
-    },
-})
+        }
+    }
+});
 </script>
 
 <style scoped>

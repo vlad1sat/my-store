@@ -10,10 +10,8 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-
 import IResultOpenBasket from "@/interfaces/emitResults/IResultOpenBasket";
-
-import {HeaderText} from "@/enumsApp/BaseText";
+import {HeaderText} from "@/constApp/BaseText";
 
 export default defineComponent({
     name: "TheHeader",
@@ -27,13 +25,13 @@ export default defineComponent({
         isShowFavorites: {
             type: Boolean,
             required: true,
-        },
+        }
     },
 
     data(): { headerText: typeof HeaderText } {
         return {
             headerText: HeaderText
-        }
+        };
     },
 
     methods: {
@@ -54,7 +52,7 @@ export default defineComponent({
             this.$emit('openBasket', result);
         },
     }
-})
+});
 </script>
 
 <style scoped>

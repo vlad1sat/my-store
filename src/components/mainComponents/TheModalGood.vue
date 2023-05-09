@@ -26,17 +26,15 @@
 </template>
 
 <script lang="ts">
-import goodButtonAction from "@/components/auxiliaryComponents/goodButtonAction.vue";
-import CloseButton from "@/components/auxiliaryComponents/closeButton.vue";
-
+import goodButtonAction from "@/components/auxiliaryComponents/good-button-action.vue";
+import CloseButton from "@/components/auxiliaryComponents/close-button.vue";
 import {defineComponent, PropType} from "vue";
-
 import IGoodApp from "@/interfaces/IGoodApp";
 import IBasketGood from "@/interfaces/IBasketGood";
 import IResultCloseGood from "@/interfaces/emitResults/IResultCloseGood";
-
-import {ModalGoodText} from "@/enumsApp/BaseText";
+import {ModalGoodText} from "@/constApp/BaseText";
 import IDataModalGood from "@/interfaces/dataComponents/IDataModalGood";
+import {EMPTY_GOOD} from "@/constApp/FunctionalApp";
 
 export default defineComponent({
     name: "TheModalGood",
@@ -48,10 +46,12 @@ export default defineComponent({
             type: Object as PropType<IGoodApp>,
             required: true
         },
+
         basketGoods: {
             type: Array as PropType<IBasketGood[]>,
             required: true
         },
+
         goods: {
             type: Array as PropType<IGoodApp[]>,
             required: true
@@ -73,12 +73,11 @@ export default defineComponent({
                 }
             });
 
-            alert("Товар успешно добавлен в избранное!");
+            alert(`${this.modalText.AddFavorite}`);
         },
 
         addToBasket(): void {
-            //fix
-            const good: IBasketGood = {
+            const basketGood: IBasketGood = {
                 title: this.selectedGood.title,
                 id: this.selectedGood.id,
                 count: 1,
@@ -86,45 +85,33 @@ export default defineComponent({
                 image: this.selectedGood.image
             };
 
-            if (good.title.split(' ').length > 6) {
-                good.title = good.title.split(' ').slice(0, 6).join(' ') + '...';
+            if (basketGood.title.split(' ').length > 6) {
+                basketGood.title = basketGood.title.split(' ').slice(0, 6).join(' ') + '...';
             }
 
-            let isInBasket = false;
-            this.basketGoods.forEach((goodBasket: IBasketGood) => {
-                if (goodBasket.id === good.id) {
-                    isInBasket = true;
-                    ++goodBasket.count;
-                }
-            })
-
-            if (!isInBasket) {
-                this.basketGoods.push(good)
-            }
-
+            this.pushInBasket(basketGood);
             this.closeGood();
+        },
+
+        pushInBasket(basketGood: IBasketGood): void {
+            this.basketGoods.find((goodBasket: IBasketGood) => {
+                if (goodBasket.id === basketGood.id) {
+                    ++goodBasket.count;
+                    return;
+                }
+            });
+
+            this.basketGoods.push(basketGood)
         },
 
         closeGood(): void {
             const result: IResultCloseGood = {
                 isShowGood: false,
-                selectedGood: {
-                    category: '',
-                    description: '',
-                    id: NaN,
-                    image: '',
-                    price: 0,
-                    title: '',
-                    rating: {
-                        rate: 0,
-                        count: 0
-                    },
-                    isLikeBnActive: false,
-                },
+                selectedGood: EMPTY_GOOD,
             };
 
             this.$emit('closeGood', result);
-        },
+        }
     },
 
     watch: {

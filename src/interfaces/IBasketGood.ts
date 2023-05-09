@@ -4,4 +4,4 @@ export default interface IBasketGood {
     count: number,
     price: number,
     image: string
-}
+};
