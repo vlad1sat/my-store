@@ -40,7 +40,6 @@ import TheHeader from "@/components/mainComponents/TheHeader.vue";
 import TheSearcher from "@/components/mainComponents/TheSearcher.vue";
 import {defineComponent} from "vue";
 import IResultOpenGood from "@/interfaces/emitResults/IResultOpenGood";
-import getDataGoods from "@/getGoods";
 import IBasketGood from "@/interfaces/IBasketGood";
 import IResultSearcher from "@/interfaces/emitResults/IResultSearcher";
 import IDataApp from "@/interfaces/dataComponents/IDataApp";
@@ -48,6 +47,9 @@ import IGoodApp from "@/interfaces/IGoodApp";
 import IResultOpenBasket from "@/interfaces/emitResults/IResultOpenBasket";
 import IResultCloseGood from "@/interfaces/emitResults/IResultCloseGood";
 import {EMPTY_GOOD} from "@/constApp/FunctionalApp";
+import {goodsApiStorage} from "@/logicStorage/dataStorage";
+import {LocalStorage} from "@/constApp/LocalStorage";
+import {getToStorage, setToStorage} from "@/logicStorage/actionsWithStorage";
 
 export default defineComponent({
     components: {TheSearcher, TheHeader, GoodCard, TheBasket, TheModalGood},
@@ -74,7 +76,15 @@ export default defineComponent({
     },
 
     mounted() {
-        getDataGoods().then(res => (this.goods = res));
+        let isLoadGoodsInStorage = false;
+
+        if (!isLoadGoodsInStorage) {
+            goodsApiStorage().then(() => isLoadGoodsInStorage = true);
+        }
+
+        this.goods = getToStorage(LocalStorage.Goods);
+        this.basketGoods = getToStorage(LocalStorage.BasketGoods);
+
     },
 
     computed: {
@@ -121,6 +131,7 @@ export default defineComponent({
         },
 
         deleteGoodFromBasket(data: IBasketGood[]): void {
+            setToStorage(LocalStorage.BasketGoods, data);
             this.basketGoods = data;
         },
 

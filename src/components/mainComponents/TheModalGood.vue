@@ -35,6 +35,8 @@ import IResultCloseGood from "@/interfaces/emitResults/IResultCloseGood";
 import {ModalGoodText} from "@/constApp/BaseText";
 import IDataModalGood from "@/interfaces/dataComponents/IDataModalGood";
 import {EMPTY_GOOD} from "@/constApp/FunctionalApp";
+import {setToStorage} from "@/logicStorage/actionsWithStorage";
+import {LocalStorage} from "@/constApp/LocalStorage";
 
 export default defineComponent({
     name: "TheModalGood",
@@ -101,7 +103,8 @@ export default defineComponent({
                 }
             });
 
-            this.basketGoods.push(basketGood)
+            this.basketGoods.push(basketGood);
+            setToStorage(LocalStorage.BasketGoods, this.basketGoods);
         },
 
         closeGood(): void {
