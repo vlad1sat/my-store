@@ -96,15 +96,18 @@ export default defineComponent({
         },
 
         pushInBasket(basketGood: IBasketGood): void {
+            let isInBasket = false;
             this.basketGoods.find((goodBasket: IBasketGood) => {
                 if (goodBasket.id === basketGood.id) {
                     ++goodBasket.count;
-                    return;
+                    isInBasket = true;
                 }
             });
 
-            this.basketGoods.push(basketGood);
-            setToStorage(LocalStorage.BasketGoods, this.basketGoods);
+            if (!isInBasket) {
+                this.basketGoods.push(basketGood);
+                setToStorage(LocalStorage.BasketGoods, this.basketGoods);
+            }
         },
 
         closeGood(): void {

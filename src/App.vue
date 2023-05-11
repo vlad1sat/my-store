@@ -47,7 +47,6 @@ import IGoodApp from "@/interfaces/IGoodApp";
 import IResultOpenBasket from "@/interfaces/emitResults/IResultOpenBasket";
 import IResultCloseGood from "@/interfaces/emitResults/IResultCloseGood";
 import {EMPTY_GOOD} from "@/constApp/FunctionalApp";
-import {goodsApiStorage} from "@/logicStorage/dataStorage";
 import {LocalStorage} from "@/constApp/LocalStorage";
 import {getToStorage, setToStorage} from "@/logicStorage/actionsWithStorage";
 
@@ -62,6 +61,7 @@ export default defineComponent({
                 isShowBasket: false,
                 isShowFavorites: false,
                 isShowSort: false,
+                isLoadGoodsInStorage: false,
             },
 
             selectedGood: EMPTY_GOOD,
@@ -76,20 +76,13 @@ export default defineComponent({
     },
 
     mounted() {
-        let isLoadGoodsInStorage = false;
-
-        if (!isLoadGoodsInStorage) {
-            goodsApiStorage().then(() => isLoadGoodsInStorage = true);
-        }
-
         this.goods = getToStorage(LocalStorage.Goods);
         this.basketGoods = getToStorage(LocalStorage.BasketGoods);
-
     },
 
     computed: {
         appGoods(): IGoodApp[] {
-            let result = (this.stateFilter.isOnFilter ? this.stateFilter.filterGoods : this.goods).slice();
+            const result = (this.stateFilter.isOnFilter ? this.stateFilter.filterGoods : this.goods).slice();
 
             if (this.stateApp.isShowFavorites) {
                 return result.filter((good: IGoodApp) => good.isLikeBnActive);
@@ -131,8 +124,8 @@ export default defineComponent({
         },
 
         deleteGoodFromBasket(data: IBasketGood[]): void {
-            setToStorage(LocalStorage.BasketGoods, data);
             this.basketGoods = data;
+            setToStorage(LocalStorage.BasketGoods, this.basketGoods);
         },
 
         closeSearcher(data: boolean): void {

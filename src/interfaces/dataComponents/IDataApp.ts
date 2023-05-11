@@ -19,4 +19,5 @@ type StateApp = {
     isShowBasket: boolean,
     isShowFavorites: boolean,
     isShowSort: boolean,
+    isLoadGoodsInStorage: boolean
 };

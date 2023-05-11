@@ -52,4 +52,9 @@ type TBorderCountGoods = {
     Max: number
 }
 
-export { TRating, TModalGood, TGoodCard, TBasket, THeader, TSearcher, TBorderCountGoods };
+type TLocalStorage = {
+    Goods: string,
+    BasketGoods: string
+}
+
+export { TRating, TModalGood, TGoodCard, TBasket, THeader, TSearcher, TBorderCountGoods, TLocalStorage };
