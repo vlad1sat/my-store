@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isShowBasket" class="basket-background">
+    <div v-show="isShowBasket" class="basket-background">
         <div class="basket">
             <close-button @close="closeBasket()"></close-button>
             <h2 class="basket-title">{{basketText.Title}}</h2>

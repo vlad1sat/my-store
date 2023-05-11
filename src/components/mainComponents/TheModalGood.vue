@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isShowGood" class="modal-background">
+    <div v-show="isShowGood" class="modal-background">
         <div class="modal-good-completely">
             <close-button @close="closeGood()"></close-button>
             <div>

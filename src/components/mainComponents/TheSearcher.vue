@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isShowSort" class="search-modal">
+    <div v-show="isShowSort" class="search-modal">
         <close-button @close="closeSearcher()"></close-button>
         <h2 class="search-text search-text-title">{{ searcherText.Title }}</h2>
         <div class="search-main-window">
@@ -9,7 +9,7 @@
             </div>
             <select-searcher :title="searcherText.Sort"
                              :data-select="searcherText.CategoriesFilter"
-                             @change-selector="(data: string) => sort = data" :selector="this.sort">
+                             @change-selector="(data: string) => sort = data">
             </select-searcher>
             <select-searcher :title="searcherText.Filter"
                              :data-select="categories"
@@ -71,7 +71,6 @@ export default defineComponent({
         },
 
         closeSearcher(): void {
-            console.log(this.sort)
             this.$emit('closeSearcher', false);
         },
 
@@ -90,6 +89,7 @@ export default defineComponent({
         },
 
         changeViewGoodsSort(goods: IGoodApp[]): IGoodApp[] {
+            console.log(this.sort)
             if (this.sort !== '–') {
                 if (this.sort === "prise") {
                     return goods.sort((good1: IGoodApp, good2: IGoodApp) => good1.price - good2.price);

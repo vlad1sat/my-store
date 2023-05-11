@@ -4,7 +4,7 @@
         <select v-model="selector" class="search-sort">
             <option disabled>CHOOSE SORT</option>
             <option v-for="elData in dataSelect">{{ elData }}</option>
-            <option>–</option>
+            <option selected>–</option>
         </select>
     </div>
 </template>
@@ -30,16 +30,16 @@ export default defineComponent({
 
     data(): { selector: string } {
         return {
-            selector: '—',
+            selector: '–',
         };
     },
 
     watch: {
         selector(): void {
-            console.log(this.selector);
             this.$emit('change-selector', this.selector);
         }
     }
+
 });
 </script>
 
