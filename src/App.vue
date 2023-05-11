@@ -40,7 +40,6 @@ import TheHeader from "@/components/mainComponents/TheHeader.vue";
 import TheSearcher from "@/components/mainComponents/TheSearcher.vue";
 import {defineComponent} from "vue";
 import IResultOpenGood from "@/interfaces/emitResults/IResultOpenGood";
-import getDataGoods from "@/getGoods";
 import IBasketGood from "@/interfaces/IBasketGood";
 import IResultSearcher from "@/interfaces/emitResults/IResultSearcher";
 import IDataApp from "@/interfaces/dataComponents/IDataApp";
@@ -48,6 +47,8 @@ import IGoodApp from "@/interfaces/IGoodApp";
 import IResultOpenBasket from "@/interfaces/emitResults/IResultOpenBasket";
 import IResultCloseGood from "@/interfaces/emitResults/IResultCloseGood";
 import {EMPTY_GOOD} from "@/constApp/FunctionalApp";
+import {LocalStorage} from "@/constApp/LocalStorage";
+import {getToStorage, setToStorage} from "@/logicStorage/ActionsWithStorage";
 
 export default defineComponent({
     components: {TheSearcher, TheHeader, GoodCard, TheBasket, TheModalGood},
@@ -60,6 +61,7 @@ export default defineComponent({
                 isShowBasket: false,
                 isShowFavorites: false,
                 isShowSort: false,
+                isLoadGoodsInStorage: false,
             },
 
             selectedGood: EMPTY_GOOD,
@@ -74,12 +76,13 @@ export default defineComponent({
     },
 
     mounted() {
-        getDataGoods().then(res => (this.goods = res));
+        this.goods = getToStorage(LocalStorage.Goods);
+        this.basketGoods = getToStorage(LocalStorage.BasketGoods);
     },
 
     computed: {
         appGoods(): IGoodApp[] {
-            let result = (this.stateFilter.isOnFilter ? this.stateFilter.filterGoods : this.goods).slice();
+            const result = (this.stateFilter.isOnFilter ? this.stateFilter.filterGoods : this.goods).slice();
 
             if (this.stateApp.isShowFavorites) {
                 return result.filter((good: IGoodApp) => good.isLikeBnActive);
@@ -98,8 +101,8 @@ export default defineComponent({
             state.isShowSort = data.isShowSort;
         },
 
-        viewSort(data: boolean): void {
-            this.stateApp.isShowSort = data;
+        viewSort(stateShow: boolean): void {
+            this.stateApp.isShowSort = stateShow;
         },
 
         closeGood(data: IResultCloseGood): void {
@@ -107,8 +110,8 @@ export default defineComponent({
             this.selectedGood = data.selectedGood;
         },
 
-        viewFavorites(data: boolean): void {
-            this.stateApp.isShowFavorites = data;
+        viewFavorites(stateFavorite: boolean): void {
+            this.stateApp.isShowFavorites = stateFavorite;
         },
 
         openBasket(data: IResultOpenBasket): void {
@@ -116,20 +119,22 @@ export default defineComponent({
             this.stateApp.isShowSort = data.isShowSort;
         },
 
-        closeBasket(data: boolean): void {
-            this.stateApp.isShowBasket = data;
+        closeBasket(stateBasket: boolean): void {
+            this.stateApp.isShowBasket = stateBasket;
         },
 
-        deleteGoodFromBasket(data: IBasketGood[]): void {
-            this.basketGoods = data;
+        deleteGoodFromBasket(goods: IBasketGood[]): void {
+            this.basketGoods = goods;
+            setToStorage(LocalStorage.BasketGoods, this.basketGoods);
         },
 
-        closeSearcher(data: boolean): void {
-            this.stateApp.isShowSort = data;
+        closeSearcher(stateSort: boolean): void {
+            this.stateApp.isShowSort = stateSort;
         },
 
         changeViewGoods(data: IResultSearcher): void {
             const state = this.stateFilter;
+
             state.filterGoods = data.filterGoods;
             state.isOnFilter = data.isOnFilter;
         },
@@ -138,7 +143,7 @@ export default defineComponent({
     watch: {
         goods(newValue: IGoodApp[]): void {
             this.stateFilter.filterGoods = newValue;
-        },
+        }
     }
 })
 </script>

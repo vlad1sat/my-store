@@ -15,6 +15,8 @@ import IGoodApp from "@/interfaces/IGoodApp";
 import {PropType, defineComponent} from "vue";
 import IResultOpenGood from "@/interfaces/emitResults/IResultOpenGood";
 import {GoodCardText} from "@/constApp/BaseText";
+import {setToStorage} from "@/logicStorage/ActionsWithStorage";
+import {LocalStorage} from "@/constApp/LocalStorage";
 
 export default defineComponent({
     name: "GoodCard",

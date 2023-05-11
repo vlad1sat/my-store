@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isShowBasket" class="basket-background">
+    <div v-show="isShowBasket" class="basket-background">
         <div class="basket">
             <close-button @close="closeBasket()"></close-button>
             <h2 class="basket-title">{{basketText.Title}}</h2>
@@ -31,6 +31,8 @@ import {defineComponent, PropType} from "vue";
 import IBasketGood from "@/interfaces/IBasketGood";
 import {BasketText} from "@/constApp/BaseText";
 import {BorderCountGoods} from "@/constApp/FunctionalApp";
+import {setToStorage} from "@/logicStorage/ActionsWithStorage";
+import {LocalStorage} from "@/constApp/LocalStorage";
 
 export default defineComponent({
     name: "TheBasket",
@@ -66,16 +68,19 @@ export default defineComponent({
 
             if (identification === this.basketText.Plus) {
                 basketGood.count < border.Max ? ++basketGood.count : alert('Превышен лимит товаров');
+                setToStorage(LocalStorage.BasketGoods, this.basketGoods);
                 return;
             }
 
             basketGood.count > border.Min ? --basketGood.count : this.deleteGoodFromBasket(basketGood);
+            setToStorage(LocalStorage.BasketGoods, this.basketGoods);
         },
 
         buyBasket(): void {
             alert(`${this.basketText.BuyText} ${this.totalSum} ${this.basketText.PriseSymbol}`);
 
             this.basketGoods.length = 0;
+            setToStorage(LocalStorage.BasketGoods, this.basketGoods);
             this.closeBasket();
         },
 

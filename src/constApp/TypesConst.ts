@@ -1,10 +1,8 @@
-import {BorderCountGoods} from "@/constApp/FunctionalApp";
-
 type TRating = {
     Rating: string,
     Rate:  string,
     Count: string
-}
+};
 
 type TModalGood = {
     ButtonFavorite: string,
@@ -12,12 +10,12 @@ type TModalGood = {
     PriseSymbol: string,
     AddFavorite: string,
     RATING: TRating
-}
+};
 
 type TGoodCard = {
     RATING: TRating,
     Category: string
-}
+};
 
 type TBasket = {
     Title: string,
@@ -30,12 +28,12 @@ type TBasket = {
     TotalSum: string,
     Buy: string,
     BuyText: string
-}
+};
 
 type THeader = {
     Phone: string,
     Name: string
-}
+};
 
 type TSearcher = {
     Title: string,
@@ -45,11 +43,16 @@ type TSearcher = {
     Filter: string,
     Clean: string,
     Placeholder: string
-}
+};
 
 type TBorderCountGoods = {
     Min: number,
     Max: number
-}
+};
 
-export { TRating, TModalGood, TGoodCard, TBasket, THeader, TSearcher, TBorderCountGoods };
+type TLocalStorage = {
+    Goods: string,
+    BasketGoods: string
+};
+
+export { TRating, TModalGood, TGoodCard, TBasket, THeader, TSearcher, TBorderCountGoods, TLocalStorage };

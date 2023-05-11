@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isShowGood" class="modal-background">
+    <div v-show="isShowGood" class="modal-background">
         <div class="modal-good-completely">
             <close-button @close="closeGood()"></close-button>
             <div>
@@ -35,6 +35,8 @@ import IResultCloseGood from "@/interfaces/emitResults/IResultCloseGood";
 import {ModalGoodText} from "@/constApp/BaseText";
 import IDataModalGood from "@/interfaces/dataComponents/IDataModalGood";
 import {EMPTY_GOOD} from "@/constApp/FunctionalApp";
+import {setToStorage} from "@/logicStorage/ActionsWithStorage";
+import {LocalStorage} from "@/constApp/LocalStorage";
 
 export default defineComponent({
     name: "TheModalGood",
@@ -94,14 +96,19 @@ export default defineComponent({
         },
 
         pushInBasket(basketGood: IBasketGood): void {
+            let isInBasket = false;
             this.basketGoods.find((goodBasket: IBasketGood) => {
                 if (goodBasket.id === basketGood.id) {
                     ++goodBasket.count;
-                    return;
+                    isInBasket = true;
                 }
             });
 
-            this.basketGoods.push(basketGood)
+            if (!isInBasket) {
+                this.basketGoods.push(basketGood);
+            }
+
+            setToStorage(LocalStorage.BasketGoods, this.basketGoods);
         },
 
         closeGood(): void {
