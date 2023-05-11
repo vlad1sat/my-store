@@ -25,7 +25,7 @@ export default defineComponent({
         dataSelect: {
             type: Array as PropType<string[]>,
             required: true
-        },
+        }
     },
 
     data(): { selector: string } {

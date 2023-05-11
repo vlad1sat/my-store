@@ -9,13 +9,12 @@
             </div>
             <select-searcher :title="searcherText.Sort"
                              :data-select="searcherText.CategoriesFilter"
-                             @change-selector="(data: string) => sort = data">
+                             @change-selector="(data: string) => sort = data" v-model:selector-test="sort">
             </select-searcher>
             <select-searcher :title="searcherText.Filter"
                              :data-select="categories"
                              @change-selector="(data: string) => filterCategory = data">
             </select-searcher>
-            <button class="search-bn" @click="cleanFilter()">{{ searcherText.Clean }}</button>
         </div>
     </div>
 </template>
@@ -24,10 +23,10 @@
 import SelectSearcher from "@/components/auxiliaryComponents/select-searcher.vue";
 import CloseButton from "@/components/auxiliaryComponents/close-button.vue";
 import {defineComponent, PropType} from "vue";
-import IDataSearcher from "@/interfaces/dataComponents/IDataSearcher";
 import IGoodApp from "@/interfaces/IGoodApp";
 import IResultSearcher from "@/interfaces/emitResults/IResultSearcher";
 import {SearcherText} from "@/constApp/BaseText";
+import IDataSearcher from "@/interfaces/dataComponents/IDataSearcher";
 
 export default defineComponent({
     name: "TheSearcher",
@@ -46,7 +45,7 @@ export default defineComponent({
         }
     },
 
-    data()/*: IDataSearcher */{
+    data(): IDataSearcher {
         return {
             categoriesApp:  this.categories,
             searcher: '',
@@ -59,17 +58,10 @@ export default defineComponent({
     computed: {
         categories(): string[] | [] {
             return Array.from(new Set(this.goods.map((good: IGoodApp) => good.category)));
-        }
+        },
     },
 
     methods: {
-        cleanFilter(): void {
-            this.searcher = '';
-            this.sort = '–';
-            this.filterCategory = '–';
-            this.sendResultSearch(this.goods);
-        },
-
         closeSearcher(): void {
             this.$emit('closeSearcher', false);
         },
