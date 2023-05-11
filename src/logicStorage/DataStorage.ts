@@ -1,5 +1,5 @@
 import {setToStorage} from "@/logicStorage/ActionsWithStorage";
-import getDataGoods from "@/getGoods";
+import getDataGoods from "@/apiLogic/GetGoods";
 import IGoodApp from "@/interfaces/IGoodApp";
 import {LocalStorage} from "@/constApp/LocalStorage";
 

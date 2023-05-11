@@ -140,7 +140,7 @@ export default defineComponent({
     .bn-basket-close {
         width: 40px;
         height: 40px;
-        background: Transparent no-repeat url("../../close.svg");
+        background: Transparent no-repeat url("elementsDesign/close.svg");
         margin: 20px 0 0 430px;
         border: none;
         position: absolute;

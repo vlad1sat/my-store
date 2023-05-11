@@ -93,7 +93,7 @@ export default defineComponent({
     }
 
     .div-good-bn-like {
-        background: Transparent no-repeat url("../../like-empty.svg");
+        background: Transparent no-repeat url("elementsDesign/like-empty.svg");
         width: 50px;
         height: 50px;
         border: none;
@@ -108,7 +108,7 @@ export default defineComponent({
     }
 
     .div-good-bn-like-active {
-        background: Transparent no-repeat url("../../like.svg");
+        background: Transparent no-repeat url("elementsDesign/like.svg");
     }
 
 </style>

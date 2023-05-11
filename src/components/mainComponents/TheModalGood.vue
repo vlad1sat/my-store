@@ -62,7 +62,7 @@ export default defineComponent({
 
     data(): IDataModalGood {
         return {
-            imageRating: require("../../smile.svg"),
+            imageRating: require("../../elementsDesign/emotions/smile.svg"),
             modalText: ModalGoodText,
         }
     },
@@ -123,7 +123,7 @@ export default defineComponent({
 
     watch: {
         isShowGood() {
-            this.imageRating = this.selectedGood.rating.rate >= 4.0 ? require("../../smile.svg") : require("../../bad.svg");
+            this.imageRating = this.selectedGood.rating.rate >= 4.0 ? require("../../elementsDesign/emotions/smile.svg") : require("../../elementsDesign/emotions/bad.svg");
         }
     }
 

@@ -85,7 +85,7 @@ export default defineComponent({
     }
 
     .header-magnifier {
-        background: Transparent no-repeat url("../../magnifier.svg");
+        background: Transparent no-repeat url("elementsDesign/magnifier.svg");
         width: 70px;
         height: 70px;
         border: none;
@@ -94,7 +94,7 @@ export default defineComponent({
     }
 
     .header-basket {
-        background: Transparent no-repeat url("../../basket.svg");
+        background: Transparent no-repeat url("elementsDesign/basket.svg");
         width: 90px;
         height: 90px;
         border: none;
@@ -103,7 +103,7 @@ export default defineComponent({
     }
 
     .header-favorites {
-        background: Transparent no-repeat url("../../favourites.svg");
+        background: Transparent no-repeat url("elementsDesign/favourites.svg");
         width: 80px;
         height: 80px;
         border: none;
@@ -112,7 +112,7 @@ export default defineComponent({
     }
 
     .open-favorites {
-        background-image: url("../../favourites-use.svg");
+        background-image: url("elementsDesign/favourites-use.svg");
     }
 
     .header-basket:hover,
