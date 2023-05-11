@@ -4,13 +4,9 @@ import IResultSearcher from "@/interfaces/emitResults/IResultSearcher";
 
 export default interface IDataApp {
     goods: IGoodApp[] | [],
-
     stateApp: StateApp,
-
     selectedGood: IGoodApp,
-
     basketGoods: IBasketGood[] | [],
-
     stateFilter: IResultSearcher,
 };
 

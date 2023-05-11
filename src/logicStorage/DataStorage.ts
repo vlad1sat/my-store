@@ -1,4 +1,4 @@
-import {setToStorage} from "@/logicStorage/actionsWithStorage";
+import {setToStorage} from "@/logicStorage/ActionsWithStorage";
 import getDataGoods from "@/getGoods";
 import IGoodApp from "@/interfaces/IGoodApp";
 import {LocalStorage} from "@/constApp/LocalStorage";

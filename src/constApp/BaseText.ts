@@ -15,12 +15,12 @@ const ModalGoodText: TModalGood = {
     PriseSymbol: PRISE_SYMBOL,
     AddFavorite: 'Товар успешно добавлен в избранное!',
     RATING,
-}
+};
 
 const GoodCardText: TGoodCard = {
     RATING,
     Category: 'CATEGORY:'
-}
+};
 
 const BasketText: TBasket = {
     Title: 'Basket',
@@ -33,12 +33,12 @@ const BasketText: TBasket = {
     TotalSum: 'Total sum:',
     Buy: 'Buy',
     BuyText: 'Вы успешно заказати товары!\nОжидайте подтверждения операции!\nСумма заказа:'
-}
+};
 
 const HeaderText: THeader = {
     Phone: 'PHONE: 8900000000',
     Name:'VLAD1SAT STORE'
-}
+};
 
 const SearcherText: TSearcher = {
     Title: 'SETUP',
@@ -48,6 +48,6 @@ const SearcherText: TSearcher = {
     Filter: 'filter by:',
     Clean: 'Clean',
     Placeholder: 'Введите название интересуещего товара'
-}
+};
 
 export { ModalGoodText, GoodCardText, BasketText, HeaderText, SearcherText };

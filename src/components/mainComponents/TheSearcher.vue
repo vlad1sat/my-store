@@ -8,11 +8,11 @@
                 <input :placeholder="searcherText.Placeholder" v-model="searcher" class="search-input"/>
             </div>
             <select-searcher :title="searcherText.Sort"
-                             :data="searcherText.CategoriesFilter"
-                             @change-selector="(data: string) => sort = data">
+                             :data-select="searcherText.CategoriesFilter"
+                             @change-selector="(data: string) => sort = data" :selector="this.sort">
             </select-searcher>
             <select-searcher :title="searcherText.Filter"
-                             :data="categories"
+                             :data-select="categories"
                              @change-selector="(data: string) => filterCategory = data">
             </select-searcher>
             <button class="search-bn" @click="cleanFilter()">{{ searcherText.Clean }}</button>
@@ -46,7 +46,7 @@ export default defineComponent({
         }
     },
 
-    data(): IDataSearcher {
+    data()/*: IDataSearcher */{
         return {
             categoriesApp:  this.categories,
             searcher: '',
@@ -71,6 +71,7 @@ export default defineComponent({
         },
 
         closeSearcher(): void {
+            console.log(this.sort)
             this.$emit('closeSearcher', false);
         },
 
@@ -90,12 +91,11 @@ export default defineComponent({
 
         changeViewGoodsSort(goods: IGoodApp[]): IGoodApp[] {
             if (this.sort !== '–') {
-                if (this.sort === "price") {
+                if (this.sort === "prise") {
                     return goods.sort((good1: IGoodApp, good2: IGoodApp) => good1.price - good2.price);
                 }
                 return goods.sort((good1: IGoodApp, good2: IGoodApp) => good1.title.localeCompare(good2.title));
             }
-
             return goods;
         },
 
