@@ -1,5 +1,5 @@
 <template>
-    <div v-show="isShowSort" class="search-modal">
+    <div v-show="isShowSort" class="search-modal" @mousedown="moveSearcher" ref="searcher-window">
         <close-button @close="closeSearcher()" class="close-bn-position"></close-button>
         <h2 class="search-text search-text-title">{{ searcherText.Title }}</h2>
         <div class="search-main-window">
@@ -15,11 +15,13 @@
             </div>
             <select-searcher :title="searcherText.Sort"
                              :data-select="searcherText.CategoriesFilter"
-                             @change-selector="(data: string) => sort = data" v-model:selector-test="sort">
+                             @change-selector="(data: string) => sort = data" v-model:selector-test="sort"
+                             @change-is-move="changeIsMove">
             </select-searcher>
             <select-searcher :title="searcherText.Filter"
                              :data-select="categories"
-                             @change-selector="(data: string) => filterCategory = data">
+                             @change-selector="(data: string) => filterCategory = data"
+                             @change-is-move="changeIsMove">
             </select-searcher>
         </div>
     </div>
@@ -35,6 +37,7 @@ import {SearcherText} from "@/constApp/BaseText";
 import IDataSearcher from "@/interfaces/dataComponents/IDataSearcher";
 import GoodButtonAction from "@/components/auxiliaryComponents/good-button-action.vue";
 import {SearcherData} from "@/constApp/FunctionalApp";
+import {pageMoveElement, startPosition} from "@/moveSearcher/MoveSearcher";
 
 export default defineComponent({
     name: "TheSearcher",
@@ -52,24 +55,38 @@ export default defineComponent({
         }
     },
 
-    data(): IDataSearcher {
+    $refs: {
+        checkboxElement: HTMLFormElement
+    },
+
+    data()/*: IDataSearcher*/ {
         return {
             categoriesApp:  this.categories,
             searcher: '',
             sort: SearcherData.Delimiter,
             filterCategory: SearcherData.Delimiter,
             searcherText: SearcherText,
+            isMove: true,
         };
+    },
+
+    mounted() {
+        console.log(this.searcherWindow)
     },
 
     computed: {
         categories(): string[] | [] {
             return Array.from(new Set(this.goods.map((good: IGoodApp) => good.category)));
         },
+
+        searcherWindow(): HTMLDivElement {
+            return this.$refs["searcher-window"] as HTMLDivElement
+        },
     },
 
     methods: {
         closeSearcher(): void {
+            startPosition(this.searcherWindow, 1300, 178);
             this.$emit(SearcherData.EMITS.Close, false);
         },
 
@@ -103,6 +120,16 @@ export default defineComponent({
             }
 
             return goods;
+        },
+
+        moveSearcher(event: MouseEvent): void {
+            if (this.isMove) {
+                pageMoveElement(this.searcherWindow);
+            }
+        },
+
+        changeIsMove(data: boolean) {
+            this.isMove = data;
         },
 
         sendResultSearch(filterGoods: IGoodApp[]): void {

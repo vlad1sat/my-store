@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2 class="search-text">{{ title }}</h2>
-        <select v-model="selector" class="search-sort">
+        <select v-model="selector" class="search-sort" @mouseover="isMove = false" @mouseout="isMove = true">
             <option disabled>CHOOSE SORT</option>
             <option v-for="elData in dataSelect">{{ elData }}</option>
             <option selected>–</option>
@@ -12,6 +12,7 @@
 <script lang="ts">
 import {PropType} from "vue";
 import {defineComponent} from "vue";
+import IDataSelectSearcher from "@/interfaces/dataComponents/IDataSelectSearcher";
 
 export default defineComponent({
     name: "select-searcher",
@@ -28,15 +29,20 @@ export default defineComponent({
         }
     },
 
-    data(): { selector: string } {
+    data(): IDataSelectSearcher {
         return {
             selector: '–',
+            isMove: true,
         };
     },
 
     watch: {
         selector(): void {
             this.$emit('change-selector', this.selector);
+        },
+
+        isMove(): void {
+            this.$emit('change-is-move', this.isMove);
         }
     }
 });

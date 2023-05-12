@@ -78,7 +78,7 @@ export default defineComponent({
         };
     },
 
-    mounted() {
+    mounted(): void {
         goodsApiStorage().then(() => {
             this.goods = getToStorage(LocalStorage.Goods);
             this.basketGoods = getToStorage(LocalStorage.BasketGoods);
@@ -96,7 +96,7 @@ export default defineComponent({
             return result;
         },
 
-        existGoods() {
+        existGoods(): string {
             return ABSENCE_GOODS;
         }
     },
