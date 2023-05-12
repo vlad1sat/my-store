@@ -5,8 +5,13 @@
         <div class="search-main-window">
             <div class="search-div">
                 <h2 class="search-text">{{ searcherText.Find }}</h2>
-                <input :placeholder="searcherText.Placeholder" v-model="searcher" class="search-input"/>
-                <good-button-action text-button="clean searcher" class="search-bn-clean" @click-button="() => this.searcher = ''"></good-button-action>
+                <input :placeholder="searcherText.Placeholder"
+                       v-model="searcher"
+                       class="search-input"/>
+                <good-button-action text-button="clean searcher"
+                                    class="search-bn-clean"
+                                    @click-button="() => this.searcher = ''">
+                </good-button-action>
             </div>
             <select-searcher :title="searcherText.Sort"
                              :data-select="searcherText.CategoriesFilter"
@@ -33,7 +38,6 @@ import {SearcherData} from "@/constApp/FunctionalApp";
 
 export default defineComponent({
     name: "TheSearcher",
-
     components: {GoodButtonAction, CloseButton, SelectSearcher},
 
     props: {
