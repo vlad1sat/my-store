@@ -1,29 +1,30 @@
 <template>
     <the-header :is-show-favorites="stateApp.isShowFavorites"
                 :is-show-sort="stateApp.isShowSort"
-                @openBasket="openBasket"
-                @viewFavorites="viewFavorites"
-                @viewSort="viewSort">
+                @open-basket="openBasket"
+                @view-favorites="viewFavorites"
+                @view-sort="viewSort">
     </the-header>
     <main>
         <div style="padding-top: 150px"></div>
         <the-searcher :is-show-sort="stateApp.isShowSort"
                       :goods="goods"
-                      @closeSearcher="closeSearcher" @changeViewGoods="changeViewGoods">
+                      @close-searcher="closeSearcher"
+                      @change-view-goods="changeViewGoods">
         </the-searcher>
         <p v-if="!appGoods.length" class="div-good-text text-no-goods">Don't have goods</p>
         <good-card v-for="good in appGoods"
                    :key="good.id"
                    :good="good"
-                   @openGood="openGood">
+                   @open-good="openGood">
         </good-card>
-        <the-basket @closeBasket="closeBasket"
-                    @deleteGoodFromBasket="deleteGoodFromBasket"
+        <the-basket @close-basket="closeBasket"
+                    @delete-good-from-basket="deleteGoodFromBasket"
                     :is-show-basket="stateApp.isShowBasket"
                     :basket-goods="basketGoods">
 
         </the-basket>
-        <the-modal-good @closeGood="closeGood"
+        <the-modal-good @close-good="closeGood"
                         :is-show-good="stateApp.isShowGood"
                         :goods="goods"
                         :basket-goods="basketGoods"
@@ -151,19 +152,18 @@ export default defineComponent({
 <style>
     body {
         margin: 0;
-        background-color: #FFF5D9;
+        background-color: #FFFBF1;
+        font-family: 'Inter', sans-serif;
+        font-weight: 900;
+        text-transform: uppercase;
+    }
+
+    .center-img {
+        text-align: center;
     }
 </style>
 
 <style>
-    .div-good-text {
-        font-family: 'Inter', sans-serif;
-        font-weight: 900;
-        font-size: 20px;
-        color: #FFFFFF;
-        text-transform: uppercase;
-    }
-
     .text-no-goods {
         font-size: 40px;
         color: #7F89F8;

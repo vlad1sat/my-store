@@ -13,6 +13,12 @@ import {defineComponent} from "vue";
 import IResultOpenBasket from "@/interfaces/emitResults/IResultOpenBasket";
 import {HeaderText} from "@/constApp/BaseText";
 
+const EMITS = {
+    Sort: 'view-sort',
+    Favorite: 'view-favorites',
+    Basket: 'open-basket'
+};
+
 export default defineComponent({
     name: "TheHeader",
 
@@ -36,11 +42,11 @@ export default defineComponent({
 
     methods: {
         viewSort(): void {
-            this.$emit('viewSort', !this.isShowSort);
+            this.$emit(EMITS.Sort, !this.isShowSort);
         },
 
         viewFavorites(): void {
-            this.$emit('viewFavorites', !this.isShowFavorites);
+            this.$emit(EMITS.Favorite, !this.isShowFavorites);
         },
 
         openBasket(): void {
@@ -49,7 +55,7 @@ export default defineComponent({
                 isShowSort: false,
             };
 
-            this.$emit('openBasket', result);
+            this.$emit(EMITS.Basket, result);
         },
     }
 });
@@ -59,7 +65,7 @@ export default defineComponent({
     .header {
         height: 150px;
         width: 100%;
-        background-color: #7F89F8;
+        background-color: #202024;
         color: #FFFFFF;
         display: flex;
         position: fixed;
@@ -85,7 +91,7 @@ export default defineComponent({
     }
 
     .header-magnifier {
-        background: Transparent no-repeat url("elementsDesign/magnifier.svg");
+        background: Transparent no-repeat url("../../elementsDesign/header/magnifier.svg");
         width: 70px;
         height: 70px;
         border: none;
@@ -94,7 +100,7 @@ export default defineComponent({
     }
 
     .header-basket {
-        background: Transparent no-repeat url("elementsDesign/basket.svg");
+        background: Transparent no-repeat url("../../elementsDesign/header/basket.svg");
         width: 90px;
         height: 90px;
         border: none;
@@ -103,7 +109,7 @@ export default defineComponent({
     }
 
     .header-favorites {
-        background: Transparent no-repeat url("elementsDesign/favourites.svg");
+        background: Transparent no-repeat url("../../elementsDesign/header/favourites.svg");
         width: 80px;
         height: 80px;
         border: none;
@@ -112,7 +118,7 @@ export default defineComponent({
     }
 
     .open-favorites {
-        background-image: url("elementsDesign/favourites-use.svg");
+        background-image: url("../../elementsDesign/header/favourites-use.svg");
     }
 
     .header-basket:hover,
@@ -124,4 +130,8 @@ export default defineComponent({
     .header-phone:hover {
         opacity: 0.5;
     }
+    
+   /* @media screen and (max-width: 1280px) {
+
+    }*/
 </style>

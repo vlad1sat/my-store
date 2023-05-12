@@ -1,5 +1,5 @@
 <template>
-    <button class="bn-modal modal-text bn-modal-move" @click="clickButton()">{{ textButton }}</button>
+    <button class="bn-modal" @click="clickButton()">{{ textButton }}</button>
 </template>
 
 <script lang="ts">
@@ -30,6 +30,15 @@ export default defineComponent({
         color: #FFFFFF;
         background-color: #7F89F8;
         border: none;
-        margin: 5px 0 0 145px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 900;
+        margin-top: 30px;
+        font-size: 20px;
+        text-transform: uppercase;
+    }
+
+    .bn-modal:hover {
+        transform: scale(1.01);
+        cursor: pointer;
     }
 </style>

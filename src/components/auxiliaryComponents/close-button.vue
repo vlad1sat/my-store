@@ -20,7 +20,7 @@ export default defineComponent({
     .bn-modal-close {
         width: 40px;
         height: 40px;
-        background: Transparent no-repeat url("elementsDesign/close.svg");
+        background: Transparent no-repeat url("../../elementsDesign/close.svg");
         border: none;
         position: absolute;
     }

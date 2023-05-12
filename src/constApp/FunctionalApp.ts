@@ -1,10 +1,21 @@
 import IGoodApp from "@/interfaces/IGoodApp";
-import {TBorderCountGoods} from "@/constApp/TypesConst";
+import {TBorderCountGoods, TSearcherData} from "@/constApp/TypesConst";
 
 const BorderCountGoods: TBorderCountGoods = {
     Min: 1,
     Max: 100,
+    Rounding: 2
 };
+
+const SearcherData: TSearcherData = {
+    EMITS: {
+        Close: 'close-searcher',
+        ChangeGoods: 'change-view-goods'
+    },
+    Delimiter: '–',
+    SortPrice: 'price',
+    SortAlphabet: 'alphabet'
+}
 
 const EMPTY_GOOD: IGoodApp = {
     category: '',
@@ -20,4 +31,4 @@ const EMPTY_GOOD: IGoodApp = {
     isLikeBnActive: false,
 };
 
-export {BorderCountGoods, EMPTY_GOOD};
+export {BorderCountGoods, EMPTY_GOOD, SearcherData};

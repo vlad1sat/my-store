@@ -27,6 +27,7 @@ type TBasket = {
     Delete: string,
     TotalSum: string,
     Buy: string,
+    Limit: string
     BuyText: string
 };
 
@@ -47,7 +48,8 @@ type TSearcher = {
 
 type TBorderCountGoods = {
     Min: number,
-    Max: number
+    Max: number,
+    Rounding: number
 };
 
 type TLocalStorage = {
@@ -55,4 +57,14 @@ type TLocalStorage = {
     BasketGoods: string
 };
 
-export { TRating, TModalGood, TGoodCard, TBasket, THeader, TSearcher, TBorderCountGoods, TLocalStorage };
+type TSearcherData = {
+    EMITS: {
+        Close: string,
+        ChangeGoods: string
+    },
+    Delimiter: string,
+    SortPrice: string,
+    SortAlphabet: string
+};
+
+export { TRating, TModalGood, TGoodCard, TBasket, THeader, TSearcher, TBorderCountGoods, TLocalStorage, TSearcherData };

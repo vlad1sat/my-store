@@ -1,7 +1,7 @@
 import {TBasket, TGoodCard, THeader, TModalGood, TRating, TSearcher} from "@/constApp/TypesConst";
 
 const PRISE_SYMBOL: string = '$';
-const FILTER_CATEGORIES: string[] = ['prise', 'alphabet'];
+const FILTER_CATEGORIES: string[] = ['price', 'alphabet'];
 
 const RATING: TRating = {
     Rating: 'Rating',
@@ -27,11 +27,12 @@ const BasketText: TBasket = {
     AbsenceGoods: 'Don\'t have goods',
     CountSymbol: 'шт.',
     Plus: '+',
-    Minus: '-',
+    Minus: '–',
     PriseSymbol: PRISE_SYMBOL,
     Delete: 'Delete',
     TotalSum: 'Total sum:',
     Buy: 'Buy',
+    Limit: 'Превышен лимит товаров',
     BuyText: 'Вы успешно заказати товары!\nОжидайте подтверждения операции!\nСумма заказа:'
 };
 

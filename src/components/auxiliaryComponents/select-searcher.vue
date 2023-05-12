@@ -39,7 +39,6 @@ export default defineComponent({
             this.$emit('change-selector', this.selector);
         }
     }
-
 });
 </script>
 
@@ -50,15 +49,7 @@ export default defineComponent({
         font-size: 16px;
         color: #7F89F8;
         font-family: 'Inter', sans-serif;
-        border: #7F89F8 2px solid;
+        border: #7F89F8 3px solid;
         border-radius: 7px;
-    }
-
-    .search-text {
-        font-size: 16px;
-        font-family: 'Inter', sans-serif;
-        font-weight: 900;
-        text-transform: uppercase;
-        color: #7F89F8;
     }
 </style>

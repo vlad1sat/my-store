@@ -1,11 +1,12 @@
 <template>
     <div v-show="isShowSort" class="search-modal">
-        <close-button @close="closeSearcher()"></close-button>
+        <close-button @close="closeSearcher()" class="close-bn-position"></close-button>
         <h2 class="search-text search-text-title">{{ searcherText.Title }}</h2>
         <div class="search-main-window">
             <div class="search-div">
                 <h2 class="search-text">{{ searcherText.Find }}</h2>
                 <input :placeholder="searcherText.Placeholder" v-model="searcher" class="search-input"/>
+                <good-button-action text-button="clean searcher" class="search-bn-clean" @click-button="() => this.searcher = ''"></good-button-action>
             </div>
             <select-searcher :title="searcherText.Sort"
                              :data-select="searcherText.CategoriesFilter"
@@ -27,11 +28,13 @@ import IGoodApp from "@/interfaces/IGoodApp";
 import IResultSearcher from "@/interfaces/emitResults/IResultSearcher";
 import {SearcherText} from "@/constApp/BaseText";
 import IDataSearcher from "@/interfaces/dataComponents/IDataSearcher";
+import GoodButtonAction from "@/components/auxiliaryComponents/good-button-action.vue";
+import {SearcherData} from "@/constApp/FunctionalApp";
 
 export default defineComponent({
     name: "TheSearcher",
 
-    components: {CloseButton, SelectSearcher},
+    components: {GoodButtonAction, CloseButton, SelectSearcher},
 
     props: {
         isShowSort: {
@@ -49,8 +52,8 @@ export default defineComponent({
         return {
             categoriesApp:  this.categories,
             searcher: '',
-            sort: '–',
-            filterCategory: '–',
+            sort: SearcherData.Delimiter,
+            filterCategory: SearcherData.Delimiter,
             searcherText: SearcherText,
         };
     },
@@ -63,7 +66,7 @@ export default defineComponent({
 
     methods: {
         closeSearcher(): void {
-            this.$emit('closeSearcher', false);
+            this.$emit(SearcherData.EMITS.Close, false);
         },
 
         changeViewGood(): void {
@@ -81,9 +84,8 @@ export default defineComponent({
         },
 
         changeViewGoodsSort(goods: IGoodApp[]): IGoodApp[] {
-            console.log(this.sort)
-            if (this.sort !== '–') {
-                if (this.sort === "prise") {
+            if (this.sort !== SearcherData.Delimiter) {
+                if (this.sort === SearcherData.SortPrice) {
                     return goods.sort((good1: IGoodApp, good2: IGoodApp) => good1.price - good2.price);
                 }
                 return goods.sort((good1: IGoodApp, good2: IGoodApp) => good1.title.localeCompare(good2.title));
@@ -92,7 +94,7 @@ export default defineComponent({
         },
 
         changeViewGoodsFilter(goods: IGoodApp[]): IGoodApp[] {
-            if (this.filterCategory !== '–') {
+            if (this.filterCategory !== SearcherData.Delimiter) {
                 return goods.filter((good: IGoodApp) => good.category === this.filterCategory);
             }
 
@@ -105,7 +107,7 @@ export default defineComponent({
                 isOnFilter: true,
             };
 
-            this.$emit('changeViewGoods', result);
+            this.$emit(SearcherData.EMITS.ChangeGoods, result);
         }
     },
 
@@ -125,33 +127,26 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-    .search-modal {
-        width: 500px;
-        height: 350px;
-        position: fixed;
-        left: 1300px;
-        top: 178px;
-        background-color: #FFFFFF;
-        cursor: default;
-        z-index: 1000;
-    }
-
-    .bn-basket-close {
-        width: 40px;
-        height: 40px;
-        background: Transparent no-repeat url("elementsDesign/close.svg");
-        margin: 20px 0 0 430px;
-        border: none;
-        position: absolute;
-    }
-
+<style>
     .search-text {
         font-size: 16px;
         font-family: 'Inter', sans-serif;
         font-weight: 900;
         text-transform: uppercase;
-        color: #7F89F8;
+        color: #FFFFFF;
+    }
+</style>
+
+<style scoped>
+    .search-modal {
+        width: 500px;
+        height: 380px;
+        position: fixed;
+        left: 1300px;
+        top: 178px;
+        background-color: #202024;
+        cursor: default;
+        z-index: 1000;
     }
 
     .search-text-title {
@@ -164,8 +159,7 @@ export default defineComponent({
         width: 400px;
         height: 30px;
         font-size: 16px;
-        color: #7F89F8;
-        font-family: 'Inter', sans-serif;
+        color: #202024;
         border: #7F89F8 2px solid;
         border-radius: 7px;
     }
@@ -179,19 +173,18 @@ export default defineComponent({
         outline: none;
     }
 
-    .search-bn {
-        margin: 10px 0 0 200px;
-        width: 100px;
-        height: 30px;
-        background-color: #7F89F8;
+    .search-bn-clean {
+        height: 35px;
+        width: 200px;
+        margin: 15px 0 0 110px;
+        text-transform: uppercase;
+        font-size: 16px;
         color: #FFFFFF;
         font-family: 'Inter', sans-serif;
-        text-transform: uppercase;
-        font-weight: 900;
-        border: 0;
+        font-weight: bold;
     }
 
-    .search-bn:hover {
-        transform: scale(1.05);
+    .close-bn-position {
+        margin: 15px 0 0 440px;
     }
 </style>

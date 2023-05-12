@@ -1,26 +1,30 @@
 <template>
     <div v-show="isShowGood" class="modal-background">
         <div class="modal-good-completely">
-            <close-button @close="closeGood()"></close-button>
+            <close-button @close="closeGood()" style="margin: 20px 0 0 1120px"></close-button>
             <div>
                 <h2 class="modal-text modal-title">{{ selectedGood.title }}</h2>
                 <h3 class="modal-text modal-category">{{ selectedGood.category }}</h3>
             </div>
-            <img :src="selectedGood.image" class="modal-picture" alt="picture-cloth" width="230" height="330">
-            <h3 class="modal-text modal-price">{{ selectedGood.price }} {{ modalText.PriseSymbol }}}</h3>
-            <p class="modal-text modal-description">{{ selectedGood.description }}</p>
+            <div class="center-img">
+                <img :src="selectedGood.image" class="modal-picture" alt="picture-cloth">
+            </div>
+            <h3 class="modal-text modal-price">{{ selectedGood.price }} {{ modalText.PriseSymbol }}</h3>
+            <p class="modal-text modal-description good-information">{{ selectedGood.description }}</p>
             <div>
                 <h2 class="modal-text modal-rating">{{ modalText.RATING.Rating }}</h2>
                 <p class="modal-text modal-rate">{{ modalText.RATING.Rate }} {{ selectedGood.rating.rate }}</p>
                 <img :src="imageRating" alt="emotion" width="44" height="44" class="modal-smile">
                 <p class="modal-text modal-count">{{ modalText.RATING.Count }} {{selectedGood.rating.count }}</p>
             </div>
-            <good-button-action @click-button="addToFavoriteGood"
-                                      :text-button="modalText.ButtonFavorite">
-            </good-button-action>
-            <good-button-action @click-button="addToBasket"
-                                      :text-button="modalText.ButtonBasket">
-            </good-button-action>
+            <div>
+                <good-button-action @click-button="addToFavoriteGood"
+                                          :text-button="modalText.ButtonFavorite">
+                </good-button-action>
+                <good-button-action @click-button="addToBasket"
+                                          :text-button="modalText.ButtonBasket" style="margin-left: 150px">
+                </good-button-action>
+            </div>
         </div>
     </div>
 </template>
@@ -117,13 +121,15 @@ export default defineComponent({
                 selectedGood: EMPTY_GOOD,
             };
 
-            this.$emit('closeGood', result);
+            this.$emit('close-good', result);
         }
     },
 
     watch: {
         isShowGood() {
-            this.imageRating = this.selectedGood.rating.rate >= 4.0 ? require("../../elementsDesign/emotions/smile.svg") : require("../../elementsDesign/emotions/bad.svg");
+            this.imageRating = this.selectedGood.rating.rate >= 4.0
+                ? require("../../elementsDesign/emotions/smile.svg")
+                : require("../../elementsDesign/emotions/bad.svg");
         }
     }
 
@@ -133,7 +139,7 @@ export default defineComponent({
 <style scoped>
     .modal-good-completely {
         width: 1200px;
-        height: 800px;
+        height: 820px;
         position: absolute;
         left: calc(50% - 1200px/2);
         top: calc(37% - 700px/2 + 72px);
@@ -155,14 +161,21 @@ export default defineComponent({
         font-weight: 500;
     }
 
+    .good-information {
+        height: 100px;
+        overflow: auto;
+    }
+
     .modal-title {
         font-size: 32px;
         margin: 20px 50px;
         text-align: center;
+        width: 1050px;
     }
 
     .modal-picture {
-        margin-left: 490px;
+        height: 275px;
+        width: auto;
     }
 
     .modal-price {

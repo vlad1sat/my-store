@@ -1,7 +1,7 @@
 <template>
     <div v-show="isShowBasket" class="basket-background">
         <div class="basket">
-            <close-button @close="closeBasket()"></close-button>
+            <close-button @close="closeBasket()" class="close-bn-position"></close-button>
             <h2 class="basket-title">{{basketText.Title}}</h2>
             <p v-if="!basketGoods.length" class="basket-no-goods">{{ basketText.AbsenceGoods }}</p>
             <div class="basket-goods">
@@ -16,11 +16,11 @@
                         <button style="margin-left: 10px" class="bn-basket-count-goods bn-basket-move" @click="countGood(basketGood, basketText.Plus)">{{ basketText.Plus }}</button>
                         <button class="bn-basket-count-goods bn-basket-move" @click="countGood(basketGood, basketText.Minus)">{{ basketText.Minus }}</button>
                     </div>
-                    <button class="basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">{{ basketText.Delete }}</button>
+                    <button class="basket-bn basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">{{ basketText.Delete }}</button>
                 </div>
             </div>
             <h2 v-if="basketGoods.length" class="basket-total-sum">{{ basketText.TotalSum }} {{ totalSum }} {{ basketText.PriseSymbol }}</h2>
-            <button class="basket-bn-buy" :disabled="!basketGoods.length" @click="buyBasket()">{{ basketText.Buy }}</button>
+            <button class="basket-bn basket-bn-buy" :disabled="!basketGoods.length" @click="buyBasket()">{{ basketText.Buy }}</button>
         </div>
     </div>
 </template>
@@ -33,6 +33,11 @@ import {BasketText} from "@/constApp/BaseText";
 import {BorderCountGoods} from "@/constApp/FunctionalApp";
 import {setToStorage} from "@/logicStorage/ActionsWithStorage";
 import {LocalStorage} from "@/constApp/LocalStorage";
+
+const EMITS = {
+    DeleteGood: 'delete-good-from-basket',
+    Close: 'close-basket'
+};
 
 export default defineComponent({
     name: "TheBasket",
@@ -58,7 +63,8 @@ export default defineComponent({
 
     computed: {
         totalSum(): number {
-            return +this.basketGoods.reduce((sum: number, good: IBasketGood) => sum += good.price * good.count, 0).toFixed(2);
+            return +this.basketGoods.reduce((sum: number, good: IBasketGood) =>
+                sum += good.price * good.count, 0).toFixed(BorderCountGoods.Rounding);
         }
     },
 
@@ -67,7 +73,7 @@ export default defineComponent({
             const border = BorderCountGoods;
 
             if (identification === this.basketText.Plus) {
-                basketGood.count < border.Max ? ++basketGood.count : alert('Превышен лимит товаров');
+                basketGood.count < border.Max ? ++basketGood.count : alert(BasketText.Limit);
                 setToStorage(LocalStorage.BasketGoods, this.basketGoods);
                 return;
             }
@@ -85,11 +91,11 @@ export default defineComponent({
         },
 
         deleteGoodFromBasket(good : IBasketGood): void {
-           this.$emit('deleteGoodFromBasket', this.basketGoods.filter((basketGood: IBasketGood) => good.id !== basketGood.id));
+           this.$emit(EMITS.DeleteGood, this.basketGoods.filter((basketGood: IBasketGood) => good.id !== basketGood.id));
         },
 
         closeBasket(): void {
-            this.$emit('closeBasket', false);
+            this.$emit(EMITS.Close, false);
         },
     }
 });
@@ -103,10 +109,7 @@ export default defineComponent({
         left: 700px;
         top: 15%;
         background-color: #FFFFFF;
-        font-family: 'Inter', sans-serif;
         color: #7F89F8;
-        text-transform: uppercase;
-        font-weight: bold;
         font-size: 16px;
         cursor: default;
     }
@@ -124,20 +127,14 @@ export default defineComponent({
         z-index: 2;
     }
 
-    .basket-no-goods {
-        margin-top: 230px;
-        font-weight: 900;
-        font-size: 26px;
-        text-align: center;
+    .close-bn-position {
+        margin: 15px 0 0 430px;
     }
 
-    .bn-basket-close {
-        width: 40px;
-        height: 40px;
-        background: Transparent no-repeat url("elementsDesign/close.svg");
-        margin: 20px 0 0 430px;
-        border: none;
-        position: absolute;
+    .basket-no-goods {
+        margin-top: 230px;
+        font-size: 26px;
+        text-align: center;
     }
 
     .basket-goods {
@@ -156,8 +153,8 @@ export default defineComponent({
     }
 
     .basket-title {
-        font-weight: 900;
         font-size: 32px;
+        font-weight: 900;
         margin: 27px 0 20px 182px;
     }
 
@@ -169,7 +166,6 @@ export default defineComponent({
     .basket-price {
         margin: 10px 0 10px 270px;
         font-size: 20px;
-
     }
 
     .basket-title-good {
@@ -200,11 +196,10 @@ export default defineComponent({
 
     .count-goods {
         display: inline;
+        font-weight: bold;
     }
 
-    .basket-bn-delete {
-        width: 100px;
-        height: 30px;
+    .basket-bn {
         background-color: #7F89F8;
         border: none;
         font-size: 16px;
@@ -212,10 +207,18 @@ export default defineComponent({
         font-family: 'Inter', sans-serif;
         font-weight: bold;
         text-transform: uppercase;
+    }
+
+    .basket-bn-delete {
+        width: 100px;
+        height: 30px;
+        border: none;
+        font-size: 16px;
         margin-left: 75px;
     }
 
-    .basket-bn-delete:hover {
+    .basket-bn-delete:hover,
+    .basket-bn-buy:hover:enabled {
         transform: scale(1.1);
         cursor: pointer;
     }
@@ -223,21 +226,10 @@ export default defineComponent({
     .basket-bn-buy {
         width: 200px;
         height: 40px;
-        background-color: #7F89F8;
-        color: #FFFFFF;
-        font-family: 'Inter', sans-serif;
-        font-weight: bold;
-        text-transform: uppercase;
-        border: none;
         font-size: 24px;
         position: fixed;
         top: 780px;
         left: 850px;
-    }
-
-    .basket-bn-buy:hover:enabled {
-        transform: scale(1.1);
-        cursor: pointer;
     }
 
     .basket-bn-buy:disabled {

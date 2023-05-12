@@ -1,12 +1,18 @@
 <template>
     <div class="div-good" @click="openGood(good)">
         <h2 class="div-good-text div-good-title">{{good.title}}</h2>
-        <img :src="good.image" width="250" height="300" alt="cloth" class="div-good-img">
+        <div class="center-img">
+            <img :src="good.image" alt="cloth" class="div-good-img">
+        </div>
         <h2 class="div-good-text div-good-title-category pd-55">RATING:</h2>
-        <p class="div-good-text div-good-base-text pd-55">{{goodCardText.RATING.Rate}} {{good.rating.rate}}&nbsp;&nbsp;&nbsp;&nbsp;{{goodCardText.RATING.Count}} {{good.rating.count}}</p>
+        <p class="div-good-text div-good-base-text pd-55">
+            {{goodCardText.RATING.Rate}} {{good.rating.rate}}&nbsp;&nbsp;&nbsp;&nbsp;{{goodCardText.RATING.Count}} {{good.rating.count}}</p>
         <h2 class="div-good-text div-good-title-category pd-55">{{goodCardText.Category}}</h2>
-        <p class="div-good-text div-good-base-text pd-55" style="margin-bottom: 0; display: inline">{{good.category}}</p>
-        <button class="div-good-bn-like" :class="{ 'div-good-bn-like-active': good.isLikeBnActive }" @click.stop="addToFavoriteLike(good)"></button>
+        <p class="div-good-text div-good-base-text pd-55" id="category2">{{good.category}}</p>
+        <button class="div-good-bn-like"
+                :class="{ 'div-good-bn-like-active': good.isLikeBnActive }"
+                @click.stop="addToFavoriteLike(good)">
+        </button>
     </div>
 </template>
 
@@ -15,8 +21,6 @@ import IGoodApp from "@/interfaces/IGoodApp";
 import {PropType, defineComponent} from "vue";
 import IResultOpenGood from "@/interfaces/emitResults/IResultOpenGood";
 import {GoodCardText} from "@/constApp/BaseText";
-import {setToStorage} from "@/logicStorage/ActionsWithStorage";
-import {LocalStorage} from "@/constApp/LocalStorage";
 
 export default defineComponent({
     name: "GoodCard",
@@ -46,7 +50,7 @@ export default defineComponent({
                 isShowGood: true,
             };
 
-            this.$emit('openGood', result);
+            this.$emit('open-good', result);
         }
     }
 });
@@ -55,7 +59,7 @@ export default defineComponent({
 <style scoped>
     .div-good {
         width: 400px;
-        height: 600px;
+        height: 650px;
         background-color: #7F89F8;
         margin-top: 50px;
         cursor: pointer;
@@ -78,10 +82,13 @@ export default defineComponent({
     .div-good-title {
         text-align: center;
         font-size: 24px;
+        height: 100px;
     }
 
     .div-good-img {
-        padding-left: 75px;
+        width: auto;
+        max-width: 300px;
+        height: 300px;
     }
 
     .div-good-base-text {
@@ -93,7 +100,7 @@ export default defineComponent({
     }
 
     .div-good-bn-like {
-        background: Transparent no-repeat url("elementsDesign/like-empty.svg");
+        background: Transparent no-repeat url("../../elementsDesign/likes/like-empty.svg");
         width: 50px;
         height: 50px;
         border: none;
@@ -101,6 +108,7 @@ export default defineComponent({
         position: relative;
         float: right;
         display: block;
+        margin-right: 20px;
     }
 
     .div-good-bn-like:hover {
@@ -108,7 +116,11 @@ export default defineComponent({
     }
 
     .div-good-bn-like-active {
-        background: Transparent no-repeat url("elementsDesign/like.svg");
+        background: Transparent no-repeat url("../../elementsDesign/likes/like.svg");
     }
 
+    #category2 {
+        margin-bottom: 0;
+        display: inline;
+    }
 </style>
