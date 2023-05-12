@@ -50,6 +50,7 @@ import IResultCloseGood from "@/interfaces/emitResults/IResultCloseGood";
 import {EMPTY_GOOD} from "@/constApp/FunctionalApp";
 import {LocalStorage} from "@/constApp/LocalStorage";
 import {getToStorage, setToStorage} from "@/logicStorage/ActionsWithStorage";
+import {goodsApiStorage} from "@/logicStorage/DataStorage";
 
 export default defineComponent({
     components: {TheSearcher, TheHeader, GoodCard, TheBasket, TheModalGood},
@@ -77,8 +78,10 @@ export default defineComponent({
     },
 
     mounted() {
-        this.goods = getToStorage(LocalStorage.Goods);
-        this.basketGoods = getToStorage(LocalStorage.BasketGoods);
+        goodsApiStorage().then(() => {
+            this.goods = getToStorage(LocalStorage.Goods);
+            this.basketGoods = getToStorage(LocalStorage.BasketGoods);
+        });
     },
 
     computed: {
