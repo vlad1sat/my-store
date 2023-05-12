@@ -4,4 +4,4 @@ export default interface IResultOpenGood {
     selectedGood: IGoodApp,
     isShowSort: boolean,
     isShowGood: boolean
-}
+};

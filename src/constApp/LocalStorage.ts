@@ -1,6 +1,6 @@
 import {TLocalStorage} from "@/constApp/TypesConst";
 
-export const LocalStorage: TLocalStorage = {
+export const LocalStorage: Readonly<TLocalStorage> = {
     Goods: 'goods',
     BasketGoods: 'basketGoods'
 };

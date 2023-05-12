@@ -2,14 +2,15 @@ import {TBasket, TGoodCard, THeader, TModalGood, TRating, TSearcher} from "@/con
 
 const PRISE_SYMBOL: string = '$';
 const FILTER_CATEGORIES: string[] = ['price', 'alphabet'];
+const ABSENCE_GOODS: string = 'Don\'t have goods';
 
-const RATING: TRating = {
+const RATING: Readonly<TRating> = {
     Rating: 'Rating',
     Rate: 'RATE:',
     Count: 'COUNT:',
 };
 
-const ModalGoodText: TModalGood = {
+const ModalGoodText: Readonly<TModalGood> = {
     ButtonFavorite: 'add to favorite list',
     ButtonBasket: 'add to basket',
     PriseSymbol: PRISE_SYMBOL,
@@ -17,14 +18,13 @@ const ModalGoodText: TModalGood = {
     RATING,
 };
 
-const GoodCardText: TGoodCard = {
+const GoodCardText: Readonly<TGoodCard> = {
     RATING,
     Category: 'CATEGORY:'
 };
 
-const BasketText: TBasket = {
+const BasketText: Readonly<TBasket> = {
     Title: 'Basket',
-    AbsenceGoods: 'Don\'t have goods',
     CountSymbol: 'шт.',
     Plus: '+',
     Minus: '–',
@@ -36,12 +36,12 @@ const BasketText: TBasket = {
     BuyText: 'Вы успешно заказати товары!\nОжидайте подтверждения операции!\nСумма заказа:'
 };
 
-const HeaderText: THeader = {
+const HeaderText: Readonly<THeader> = {
     Phone: 'PHONE: 8900000000',
     Name:'VLAD1SAT STORE'
 };
 
-const SearcherText: TSearcher = {
+const SearcherText: Readonly<TSearcher> = {
     Title: 'SETUP',
     Sort: 'sort by',
     Find: 'find by page',
@@ -51,4 +51,4 @@ const SearcherText: TSearcher = {
     Placeholder: 'Введите название интересуещего товара'
 };
 
-export { ModalGoodText, GoodCardText, BasketText, HeaderText, SearcherText };
+export { ModalGoodText, GoodCardText, BasketText, HeaderText, SearcherText, ABSENCE_GOODS };

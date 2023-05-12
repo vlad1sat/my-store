@@ -1,7 +1,7 @@
 type TRating = {
-    Rating: string,
-    Rate:  string,
-    Count: string
+    readonly Rating: string,
+    readonly Rate:  string,
+    readonly Count: string
 };
 
 type TModalGood = {
@@ -19,7 +19,6 @@ type TGoodCard = {
 
 type TBasket = {
     Title: string,
-    AbsenceGoods: string,
     CountSymbol: string,
     Plus: string,
     Minus: string,

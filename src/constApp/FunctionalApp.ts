@@ -1,13 +1,13 @@
 import IGoodApp from "@/interfaces/IGoodApp";
 import {TBorderCountGoods, TSearcherData} from "@/constApp/TypesConst";
 
-const BorderCountGoods: TBorderCountGoods = {
+const BorderCountGoods: Readonly<TBorderCountGoods> = {
     Min: 1,
     Max: 100,
     Rounding: 2
 };
 
-const SearcherData: TSearcherData = {
+const SearcherData: Readonly<TSearcherData> = {
     EMITS: {
         Close: 'close-searcher',
         ChangeGoods: 'change-view-goods'
@@ -17,7 +17,7 @@ const SearcherData: TSearcherData = {
     SortAlphabet: 'alphabet'
 }
 
-const EMPTY_GOOD: IGoodApp = {
+const EMPTY_GOOD: Readonly<IGoodApp> = {
     category: '',
     description: '',
     id: NaN,

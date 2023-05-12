@@ -3,7 +3,7 @@
         <div class="basket">
             <close-button @close="closeBasket()" class="close-bn-position"></close-button>
             <h2 class="basket-title">{{basketText.Title}}</h2>
-            <p v-if="!basketGoods.length" class="basket-no-goods">{{ basketText.AbsenceGoods }}</p>
+            <p v-if="!basketGoods.length" class="basket-no-goods">{{ ABSENCE_GOODS }}</p>
             <div class="basket-goods">
                 <div v-for="basketGood in basketGoods" :key="basketGood.id" class="basket-good">
                     <div>
@@ -29,7 +29,7 @@
 import CloseButton from "@/components/auxiliaryComponents/close-button.vue";
 import {defineComponent, PropType} from "vue";
 import IBasketGood from "@/interfaces/IBasketGood";
-import {BasketText} from "@/constApp/BaseText";
+import {ABSENCE_GOODS, BasketText} from "@/constApp/BaseText";
 import {BorderCountGoods} from "@/constApp/FunctionalApp";
 import {setToStorage} from "@/logicStorage/ActionsWithStorage";
 import {LocalStorage} from "@/constApp/LocalStorage";
@@ -69,6 +69,9 @@ export default defineComponent({
     },
 
     methods: {
+        ABSENCE_GOODS() {
+            return ABSENCE_GOODS
+        },
         countGood(basketGood: IBasketGood, identification: string): void {
             const border = BorderCountGoods;
 

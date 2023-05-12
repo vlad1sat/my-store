@@ -12,7 +12,7 @@
                       @close-searcher="closeSearcher"
                       @change-view-goods="changeViewGoods">
         </the-searcher>
-        <p v-if="!appGoods.length" class="div-good-text text-no-goods">Don't have goods</p>
+        <p v-if="!appGoods.length" class="div-good-text text-no-goods">{{ existGoods }}</p>
         <good-card v-for="good in appGoods"
                    :key="good.id"
                    :good="good"
@@ -51,6 +51,7 @@ import {EMPTY_GOOD} from "@/constApp/FunctionalApp";
 import {LocalStorage} from "@/constApp/LocalStorage";
 import {getToStorage, setToStorage} from "@/logicStorage/ActionsWithStorage";
 import {goodsApiStorage} from "@/logicStorage/DataStorage";
+import {ABSENCE_GOODS} from "./constApp/BaseText";
 
 export default defineComponent({
     components: {TheSearcher, TheHeader, GoodCard, TheBasket, TheModalGood},
@@ -93,6 +94,10 @@ export default defineComponent({
             }
 
             return result;
+        },
+
+        existGoods() {
+            return ABSENCE_GOODS;
         }
     },
 
