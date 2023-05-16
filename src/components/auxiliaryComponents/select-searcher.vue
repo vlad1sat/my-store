@@ -13,6 +13,7 @@
 import {PropType} from "vue";
 import {defineComponent} from "vue";
 import IDataSelectSearcher from "@/interfaces/dataComponents/IDataSelectSearcher";
+import {SearcherData} from "@/constApp/FunctionalApp";
 
 export default defineComponent({
     name: "select-searcher",
@@ -31,7 +32,7 @@ export default defineComponent({
 
     data(): IDataSelectSearcher {
         return {
-            selector: '–',
+            selector: SearcherData.Delimiter,
             isMove: true,
         };
     },

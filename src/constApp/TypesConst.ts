@@ -66,4 +66,9 @@ type TSearcherData = {
     SortAlphabet: string
 };
 
-export { TRating, TModalGood, TGoodCard, TBasket, THeader, TSearcher, TBorderCountGoods, TLocalStorage, TSearcherData };
+type TPositionSearcher = {
+    Left: number,
+    Top: number
+};
+
+export { TRating, TModalGood, TGoodCard, TBasket, THeader, TSearcher, TBorderCountGoods, TLocalStorage, TSearcherData, TPositionSearcher };

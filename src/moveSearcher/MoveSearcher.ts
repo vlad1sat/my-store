@@ -18,10 +18,10 @@ const pageMoveElement = (element: HTMLDivElement): void => {
     element.ondragstart = (): boolean => false;
 };
 
-const startPosition = (element: HTMLDivElement, startWidth: number, startHeight: number): void => {
+const startPosition = (element: HTMLDivElement, startLeft: number, startTop: number): void => {
     const elStyle: CSSStyleDeclaration = element.style;
-    elStyle.left = startWidth + PIXEL;
-    elStyle.top = startHeight + PIXEL;
+    elStyle.left = startLeft + PIXEL;
+    elStyle.top = startTop + PIXEL;
 }
 
 export {pageMoveElement, startPosition};

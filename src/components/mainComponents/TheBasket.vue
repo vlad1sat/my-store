@@ -1,9 +1,12 @@
 <template>
     <div v-show="isShowBasket" class="basket-background">
         <div class="basket">
-            <close-button @close="closeBasket()" class="close-bn-position"></close-button>
+            <close-button
+                @close="closeBasket"
+                class="close-bn-position"
+            />
             <h2 class="basket-title">{{basketText.Title}}</h2>
-            <p v-if="!basketGoods.length" class="basket-no-goods">{{ ABSENCE_GOODS }}</p>
+            <p v-if="!basketGoods.length" class="basket-no-goods">{{ getAbsenceGoods }}</p>
             <div class="basket-goods">
                 <div v-for="basketGood in basketGoods" :key="basketGood.id" class="basket-good">
                     <div>
@@ -13,7 +16,7 @@
                     <h3 class="basket-price">{{  (basketGood.price * basketGood.count).toFixed(2) }} {{ basketText.PriseSymbol }}</h3>
                     <div class="basket-count-goods">
                         <p class="count-goods">{{ basketGood.count }} {{ basketText.CountSymbol }}</p>
-                        <button style="margin-left: 10px" class="bn-basket-count-goods bn-basket-move" @click="countGood(basketGood, basketText.Plus)">{{ basketText.Plus }}</button>
+                        <button class="bn-basket-count-goods bn-basket-move" @click="countGood(basketGood, basketText.Plus)">{{ basketText.Plus }}</button>
                         <button class="bn-basket-count-goods bn-basket-move" @click="countGood(basketGood, basketText.Minus)">{{ basketText.Minus }}</button>
                     </div>
                     <button class="basket-bn basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">{{ basketText.Delete }}</button>
@@ -29,7 +32,7 @@
 import CloseButton from "@/components/auxiliaryComponents/close-button.vue";
 import {defineComponent, PropType} from "vue";
 import IBasketGood from "@/interfaces/IBasketGood";
-import {ABSENCE_GOODS, BasketText} from "@/constApp/BaseText";
+import {AbsenceGoods, BasketText} from "@/constApp/BaseText";
 import {BorderCountGoods} from "@/constApp/FunctionalApp";
 import {setToStorage} from "@/logicStorage/ActionsWithStorage";
 import {LocalStorage} from "@/constApp/LocalStorage";
@@ -65,13 +68,14 @@ export default defineComponent({
         totalSum(): number {
             return +this.basketGoods.reduce((sum: number, good: IBasketGood) =>
                 sum += good.price * good.count, 0).toFixed(BorderCountGoods.Rounding);
-        }
+        },
+
+        getAbsenceGoods() {
+            return AbsenceGoods
+        },
     },
 
     methods: {
-        ABSENCE_GOODS() {
-            return ABSENCE_GOODS
-        },
         countGood(basketGood: IBasketGood, identification: string): void {
             const border = BorderCountGoods;
 

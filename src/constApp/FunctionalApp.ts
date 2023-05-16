@@ -1,5 +1,5 @@
 import IGoodApp from "@/interfaces/IGoodApp";
-import {TBorderCountGoods, TSearcherData} from "@/constApp/TypesConst";
+import {TBorderCountGoods, TPositionSearcher, TSearcherData} from "@/constApp/TypesConst";
 
 const BorderCountGoods: Readonly<TBorderCountGoods> = {
     Min: 1,
@@ -31,4 +31,9 @@ const EMPTY_GOOD: Readonly<IGoodApp> = {
     isLikeBnActive: false,
 };
 
-export {BorderCountGoods, EMPTY_GOOD, SearcherData};
+const BasePositionSearcher: Readonly<TPositionSearcher> = {
+    Left: 1300,
+    Top: 178
+};
+
+export {BorderCountGoods, EMPTY_GOOD, SearcherData, BasePositionSearcher};

@@ -1,35 +1,39 @@
 <template>
-    <the-header :is-show-favorites="stateApp.isShowFavorites"
-                :is-show-sort="stateApp.isShowSort"
-                @open-basket="openBasket"
-                @view-favorites="viewFavorites"
-                @view-sort="viewSort">
-    </the-header>
+    <the-header
+        :is-show-favorites="stateApp.isShowFavorites"
+        :is-show-sort="stateApp.isShowSort"
+        @openBasket="openBasket"
+        @viewFavorites="viewFavorites"
+        @viewSort="viewSort"
+    />
     <main>
-        <div style="padding-top: 150px"></div>
-        <the-searcher :is-show-sort="stateApp.isShowSort"
-                      :goods="goods"
-                      @close-searcher="closeSearcher"
-                      @change-view-goods="changeViewGoods">
+        <div class="header-padding"></div>
+        <the-searcher
+            :is-show-sort="stateApp.isShowSort"
+            :goods="goods"
+            @closeSearcher="closeSearcher"
+            @changeViewGoods="changeViewGoods">
         </the-searcher>
         <p v-if="!appGoods.length" class="div-good-text text-no-goods">{{ existGoods }}</p>
-        <good-card v-for="good in appGoods"
-                   :key="good.id"
-                   :good="good"
-                   @open-good="openGood">
-        </good-card>
-        <the-basket @close-basket="closeBasket"
-                    @delete-good-from-basket="deleteGoodFromBasket"
-                    :is-show-basket="stateApp.isShowBasket"
-                    :basket-goods="basketGoods">
-
-        </the-basket>
-        <the-modal-good @close-good="closeGood"
-                        :is-show-good="stateApp.isShowGood"
-                        :goods="goods"
-                        :basket-goods="basketGoods"
-                        :selected-good="selectedGood">
-        </the-modal-good>
+        <good-card
+            v-for="good in appGoods"
+            :key="good.id"
+            :good="good"
+            @openGood="openGood"
+        />
+        <the-basket
+            :is-show-basket="stateApp.isShowBasket"
+            :basket-goods="basketGoods"
+            @closeBasket="closeBasket"
+            @deleteGoodFromBasket="deleteGoodFromBasket"
+        />
+        <the-modal-good
+            :is-show-good="stateApp.isShowGood"
+            :goods="goods"
+            :basket-goods="basketGoods"
+            :selected-good="selectedGood"
+            @closeGood="closeGood"
+        />
     </main>
 </template>
 
@@ -51,7 +55,7 @@ import {EMPTY_GOOD} from "@/constApp/FunctionalApp";
 import {LocalStorage} from "@/constApp/LocalStorage";
 import {getToStorage, setToStorage} from "@/logicStorage/ActionsWithStorage";
 import {goodsApiStorage} from "@/logicStorage/DataStorage";
-import {ABSENCE_GOODS} from "./constApp/BaseText";
+import {AbsenceGoods} from "./constApp/BaseText";
 
 export default defineComponent({
     components: {TheSearcher, TheHeader, GoodCard, TheBasket, TheModalGood},
@@ -97,7 +101,7 @@ export default defineComponent({
         },
 
         existGoods(): string {
-            return ABSENCE_GOODS;
+            return AbsenceGoods;
         }
     },
 
@@ -177,5 +181,9 @@ export default defineComponent({
         color: #7F89F8;
         text-align: center;
         margin-top: 80px;
+    }
+
+    .header-padding {
+        padding-top: 150px;
     }
 </style>

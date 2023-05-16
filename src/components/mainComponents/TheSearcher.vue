@@ -1,28 +1,36 @@
 <template>
     <div v-show="isShowSort" class="search-modal" @mousedown="moveSearcher" ref="searcher-window">
-        <close-button @close="closeSearcher()" class="close-bn-position"></close-button>
+        <close-button
+            @close="closeSearcher"
+            class="close-bn-position"
+        />
         <h2 class="search-text search-text-title">{{ searcherText.Title }}</h2>
         <div class="search-main-window">
             <div class="search-div">
                 <h2 class="search-text">{{ searcherText.Find }}</h2>
-                <input :placeholder="searcherText.Placeholder"
+                <input
+                       :placeholder="searcherText.Placeholder"
                        v-model="searcher"
-                       class="search-input"/>
-                <good-button-action text-button="clean searcher"
-                                    class="search-bn-clean"
-                                    @click-button="() => this.searcher = ''">
-                </good-button-action>
+                       class="search-input"
+                />
+                <good-button-action
+                    text-button="clean searcher"
+                    class="search-bn-clean"
+                    @clickButton="() => this.searcher = ''"
+                />
             </div>
-            <select-searcher :title="searcherText.Sort"
-                             :data-select="searcherText.CategoriesFilter"
-                             @change-selector="(data: string) => sort = data" v-model:selector-test="sort"
-                             @change-is-move="changeIsMove">
-            </select-searcher>
-            <select-searcher :title="searcherText.Filter"
-                             :data-select="categories"
-                             @change-selector="(data: string) => filterCategory = data"
-                             @change-is-move="changeIsMove">
-            </select-searcher>
+            <select-searcher
+                :title="searcherText.Sort"
+                :data-select="searcherText.CategoriesFilter"
+                @changeSelector="(data: string) => sort = data" v-model:selector-test="sort"
+                @changeIsMove="changeIsMove"
+            />
+            <select-searcher
+                :title="searcherText.Filter"
+                :data-select="categories"
+                @changeSelector="(data: string) => filterCategory = data"
+                @changeIsMove="changeIsMove"
+            />
         </div>
     </div>
 </template>
@@ -36,7 +44,7 @@ import IResultSearcher from "@/interfaces/emitResults/IResultSearcher";
 import {SearcherText} from "@/constApp/BaseText";
 import IDataSearcher from "@/interfaces/dataComponents/IDataSearcher";
 import GoodButtonAction from "@/components/auxiliaryComponents/good-button-action.vue";
-import {SearcherData} from "@/constApp/FunctionalApp";
+import {SearcherData, BasePositionSearcher} from "@/constApp/FunctionalApp";
 import {pageMoveElement, startPosition} from "@/moveSearcher/MoveSearcher";
 
 export default defineComponent({
@@ -55,23 +63,15 @@ export default defineComponent({
         }
     },
 
-    $refs: {
-        checkboxElement: HTMLFormElement
-    },
-
-    data()/*: IDataSearcher*/ {
+    data(): IDataSearcher {
         return {
             categoriesApp:  this.categories,
             searcher: '',
             sort: SearcherData.Delimiter,
             filterCategory: SearcherData.Delimiter,
             searcherText: SearcherText,
-            isMove: true,
+            isMove: true
         };
-    },
-
-    mounted() {
-        console.log(this.searcherWindow)
     },
 
     computed: {
@@ -80,13 +80,13 @@ export default defineComponent({
         },
 
         searcherWindow(): HTMLDivElement {
-            return this.$refs["searcher-window"] as HTMLDivElement
+            return this.$refs["searcher-window"] as HTMLDivElement;
         },
     },
 
     methods: {
         closeSearcher(): void {
-            startPosition(this.searcherWindow, 1300, 178);
+            startPosition(this.searcherWindow, BasePositionSearcher.Left, BasePositionSearcher.Top);
             this.$emit(SearcherData.EMITS.Close, false);
         },
 

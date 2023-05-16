@@ -1,5 +1,8 @@
 <template>
-    <button class="bn-modal-close bn-modal-move" @click="close()"></button>
+    <button
+        class="bn-modal-close bn-modal-move"
+        @click="closeElement">
+    </button>
 </template>
 
 <script lang="ts">
@@ -9,7 +12,7 @@ export default defineComponent({
     name: "close-button",
 
     methods: {
-        close(): void {
+        closeElement(): void {
             this.$emit('close');
         }
     }

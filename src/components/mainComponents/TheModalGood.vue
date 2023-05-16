@@ -1,7 +1,10 @@
 <template>
     <div v-show="isShowGood" class="modal-background">
         <div class="modal-good-completely">
-            <close-button @close="closeGood()" style="margin: 20px 0 0 1120px"></close-button>
+            <close-button
+                @close="closeGood"
+                class="bn-close-position"
+            />
             <div>
                 <h2 class="modal-text modal-title">{{ selectedGood.title }}</h2>
                 <h3 class="modal-text modal-category">{{ selectedGood.category }}</h3>
@@ -18,12 +21,14 @@
                 <p class="modal-text modal-count">{{ modalText.RATING.Count }} {{selectedGood.rating.count }}</p>
             </div>
             <div>
-                <good-button-action @click-button="addToFavoriteGood"
-                                          :text-button="modalText.ButtonFavorite">
-                </good-button-action>
-                <good-button-action @click-button="addToBasket"
-                                          :text-button="modalText.ButtonBasket" style="margin-left: 150px">
-                </good-button-action>
+                <good-button-action
+                    :text-button="modalText.ButtonFavorite"
+                    @clickButton="addToFavoriteGood"
+                />
+                <good-button-action
+                    :text-button="modalText.ButtonBasket" class="bn-basket-position"
+                    @clickButton="addToBasket"
+                />
             </div>
         </div>
     </div>
@@ -224,5 +229,13 @@ export default defineComponent({
     .modal-count {
         margin: 0;
         padding: 7px 0 0 800px;
+    }
+
+    .bn-close-position {
+        margin: 20px 0 0 1120px;
+    }
+
+    .bn-basket-position {
+        margin-left: 150px;
     }
 </style>

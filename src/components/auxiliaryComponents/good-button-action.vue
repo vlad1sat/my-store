@@ -1,5 +1,9 @@
 <template>
-    <button class="bn-modal" @click="clickButton()">{{ textButton }}</button>
+    <button
+        class="bn-modal"
+        @click="clickButton">
+        {{ textButton }}
+    </button>
 </template>
 
 <script lang="ts">

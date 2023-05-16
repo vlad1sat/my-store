@@ -2,7 +2,7 @@ import {TBasket, TGoodCard, THeader, TModalGood, TRating, TSearcher} from "@/con
 
 const PRISE_SYMBOL: string = '$';
 const FILTER_CATEGORIES: string[] = ['price', 'alphabet'];
-const ABSENCE_GOODS: string = 'Don\'t have goods';
+const AbsenceGoods: string = 'Don\'t have goods';
 
 const RATING: Readonly<TRating> = {
     Rating: 'Rating',
@@ -51,4 +51,4 @@ const SearcherText: Readonly<TSearcher> = {
     Placeholder: 'Введите название интересуещего товара'
 };
 
-export { ModalGoodText, GoodCardText, BasketText, HeaderText, SearcherText, ABSENCE_GOODS };
+export { ModalGoodText, GoodCardText, BasketText, HeaderText, SearcherText, AbsenceGoods };

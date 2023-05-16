@@ -2,9 +2,23 @@
     <header class="header">
         <p class="header-text header-phone">{{ headerText.Phone }}</p>
         <p class="header-text header-name-store">{{ headerText.Name }}</p>
-        <button class="header-magnifier" @click="viewSort()"></button>
-        <button class="header-favorites" @click="viewFavorites()" :class="{ 'open-favorites': isShowFavorites }"></button>
-        <button class="header-basket" @click="openBasket()"></button>
+        <div class="header-main-bn">
+            <button
+                class="header-magnifier"
+                @click="viewSort">
+
+            </button>
+            <button
+                class="header-favorites"
+                @click="viewFavorites"
+                :class="{ 'open-favorites': isShowFavorites }">
+
+            </button>
+            <button
+                class="header-basket"
+                @click="openBasket">
+            </button>
+        </div>
     </header>
 </template>
 
@@ -71,6 +85,9 @@ export default defineComponent({
         position: fixed;
         border-bottom: 5px #FFFFFF solid;
         z-index: 1;
+        margin: 0;
+        align-items: center;
+        justify-content: space-between;
     }
 
     .header-text {
@@ -81,22 +98,22 @@ export default defineComponent({
 
     .header-phone {
         font-size: 24px;
-        margin: 61px 354px 0 118px;
         cursor: pointer;
+        margin-left: 100px;
     }
 
     .header-name-store {
         font-size: 48px;
+        text-align: center;
         cursor: default;
     }
 
     .header-magnifier {
         background: Transparent no-repeat url("../../elementsDesign/header/magnifier.svg");
-        width: 70px;
-        height: 70px;
+        width: 75px;
+        height: 75px;
         border: none;
         cursor: pointer;
-        margin: 40px 5px 0 250px;
     }
 
     .header-basket {
@@ -104,7 +121,6 @@ export default defineComponent({
         width: 90px;
         height: 90px;
         border: none;
-        margin: 30px 5px 0 0;
         cursor: pointer;
     }
 
@@ -113,12 +129,15 @@ export default defineComponent({
         width: 80px;
         height: 80px;
         border: none;
-        margin-top: 37px;
         cursor: pointer;
     }
 
     .open-favorites {
         background-image: url("../../elementsDesign/header/favourites-use.svg");
+    }
+
+    .header-main-bn {
+        padding-right: 100px;
     }
 
     .header-basket:hover,
@@ -130,8 +149,4 @@ export default defineComponent({
     .header-phone:hover {
         opacity: 0.5;
     }
-    
-   /* @media screen and (max-width: 1280px) {
-
-    }*/
 </style>

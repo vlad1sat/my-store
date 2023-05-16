@@ -5,5 +5,6 @@ export default interface IDataSearcher {
     sort: string,
     filterCategory: string,
     categoriesApp: Function,
-    readonly searcherText: typeof SearcherText
+    readonly searcherText: typeof SearcherText,
+    isMove: boolean
 };
