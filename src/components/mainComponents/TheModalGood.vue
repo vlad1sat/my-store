@@ -1,6 +1,6 @@
 <template>
-    <div v-show="isShowGood" class="modal-background">
-        <div class="modal-good-completely">
+    <div class="modal-background" @click="closeGood">
+        <div class="modal-good-completely" @click="isNeedClose = false">
             <close-button
                 @close="closeGood"
                 class="bn-close-position"
@@ -52,7 +52,6 @@ export default defineComponent({
     components: {CloseButton, goodButtonAction},
 
     props: {
-        isShowGood: Boolean,
         selectedGood: {
             type: Object as PropType<IGoodApp>,
             required: true
@@ -72,6 +71,7 @@ export default defineComponent({
     data(): IDataModalGood {
         return {
             imageRating: require("../../elementsDesign/emotions/smile.svg"),
+            isNeedClose: true,
             modalText: ModalGoodText,
         }
     },
@@ -87,7 +87,8 @@ export default defineComponent({
             alert(`${this.modalText.AddFavorite}`);
         },
 
-        addToBasket(): void {
+        addToBasket(e: any): void {
+            console.log(e)
             const basketGood: IBasketGood = {
                 title: this.selectedGood.title,
                 id: this.selectedGood.id,
@@ -103,7 +104,6 @@ export default defineComponent({
             this.pushInBasket(basketGood);
             this.closeGood();
         },
-
         pushInBasket(basketGood: IBasketGood): void {
             let isInBasket = false;
             this.basketGoods.find((goodBasket: IBasketGood) => {
@@ -121,6 +121,10 @@ export default defineComponent({
         },
 
         closeGood(): void {
+            if (!this.isNeedClose) {
+                this.isNeedClose = true;
+                return
+            }
             const result: IResultCloseGood = {
                 isShowGood: false,
                 selectedGood: EMPTY_GOOD,

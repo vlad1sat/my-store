@@ -46,8 +46,10 @@ export default defineComponent({
         openGood(selectedGood: IGoodApp): void {
             const result: IResultOpenGood = {
                 selectedGood,
-                isShowSort: false,
-                isShowGood: true,
+                stateGood: {
+                    isShowSort: false,
+                    isShowGood: true
+                }
             };
 
             this.$emit('open-good', result);

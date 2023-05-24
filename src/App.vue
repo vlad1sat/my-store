@@ -6,15 +6,14 @@
         @viewFavorites="viewFavorites"
         @viewSort="viewSort"
     />
-    <main>
-        <div class="header-padding"></div>
+    <main class="header-padding">
+        <p v-if="!appGoods.length" class="div-good-text text-no-goods">{{ existGoods }}</p>
         <the-searcher
-            :is-show-sort="stateApp.isShowSort"
+            v-show="stateApp.isShowSort"
             :goods="goods"
             @closeSearcher="closeSearcher"
             @changeViewGoods="changeViewGoods">
         </the-searcher>
-        <p v-if="!appGoods.length" class="div-good-text text-no-goods">{{ existGoods }}</p>
         <good-card
             v-for="good in appGoods"
             :key="good.id"
@@ -22,13 +21,13 @@
             @openGood="openGood"
         />
         <the-basket
-            :is-show-basket="stateApp.isShowBasket"
+            v-show="stateApp.isShowBasket"
             :basket-goods="basketGoods"
             @closeBasket="closeBasket"
             @deleteGoodFromBasket="deleteGoodFromBasket"
         />
         <the-modal-good
-            :is-show-good="stateApp.isShowGood"
+            v-show="stateApp.isShowGood"
             :goods="goods"
             :basket-goods="basketGoods"
             :selected-good="selectedGood"
@@ -108,10 +107,7 @@ export default defineComponent({
     methods: {
         openGood(data: IResultOpenGood): void {
             this.selectedGood = data.selectedGood;
-
-            const state = this.stateApp;
-            state.isShowGood = data.isShowGood;
-            state.isShowSort = data.isShowSort;
+            this.stateApp = {...this.stateApp, ...data.stateGood};
         },
 
         viewSort(stateShow: boolean): void {
@@ -119,7 +115,7 @@ export default defineComponent({
         },
 
         closeGood(data: IResultCloseGood): void {
-            this.stateApp.isShowGood = data.isShowGood
+            this.stateApp.isShowGood = data.isShowGood;
             this.selectedGood = data.selectedGood;
         },
 
@@ -128,8 +124,7 @@ export default defineComponent({
         },
 
         openBasket(data: IResultOpenBasket): void {
-            this.stateApp.isShowBasket = data.isShowBasket;
-            this.stateApp.isShowSort = data.isShowSort;
+            this.stateApp = {...this.stateApp, ...data};
         },
 
         closeBasket(stateBasket: boolean): void {
@@ -146,10 +141,7 @@ export default defineComponent({
         },
 
         changeViewGoods(data: IResultSearcher): void {
-            const state = this.stateFilter;
-
-            state.filterGoods = data.filterGoods;
-            state.isOnFilter = data.isOnFilter;
+            this.stateFilter = {...this.stateFilter, ...data};
         },
     },
 

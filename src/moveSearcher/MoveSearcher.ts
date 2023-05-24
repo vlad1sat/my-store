@@ -5,8 +5,9 @@ const pageMoveElement = (element: HTMLDivElement): void => {
         const getStyleSmile = (sizePage: number, sizeSmile: number): string => sizePage - sizeSmile / 2 + PIXEL;
 
         const allSizeElement: DOMRect = element.getBoundingClientRect();
+        console.log(window.scrollY)
         element.style.left = getStyleSmile(e.pageX, allSizeElement.width);
-        element.style.top = getStyleSmile(e.pageY, allSizeElement.height);
+        element.style.top = getStyleSmile(e.pageY - window.scrollY, allSizeElement.height);
     };
 
     document.addEventListener('mousemove' , moveElement);

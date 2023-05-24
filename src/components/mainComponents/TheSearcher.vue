@@ -1,5 +1,5 @@
 <template>
-    <div v-show="isShowSort" class="search-modal" @mousedown="moveSearcher" ref="searcher-window">
+    <div class="search-modal" @mousedown="moveSearcher" ref="searcher-window">
         <close-button
             @close="closeSearcher"
             class="close-bn-position"
@@ -52,11 +52,6 @@ export default defineComponent({
     components: {GoodButtonAction, CloseButton, SelectSearcher},
 
     props: {
-        isShowSort: {
-            type: Boolean,
-            required: true,
-        },
-
         goods: {
             type: Array as PropType<IGoodApp[]>,
             required: true,
@@ -86,7 +81,6 @@ export default defineComponent({
 
     methods: {
         closeSearcher(): void {
-            startPosition(this.searcherWindow, BasePositionSearcher.Left, BasePositionSearcher.Top);
             this.$emit(SearcherData.EMITS.Close, false);
         },
 
@@ -122,7 +116,7 @@ export default defineComponent({
             return goods;
         },
 
-        moveSearcher(event: MouseEvent): void {
+        moveSearcher(): void {
             if (this.isMove) {
                 pageMoveElement(this.searcherWindow);
             }
@@ -173,8 +167,8 @@ export default defineComponent({
         width: 500px;
         height: 380px;
         position: fixed;
-        left: 1300px;
-        top: 178px;
+        right: 100px;
+        top: 180px;
         background-color: #202024;
         cursor: default;
         z-index: 1000;

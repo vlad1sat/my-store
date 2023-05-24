@@ -1,6 +1,6 @@
 <template>
-    <div v-show="isShowBasket" class="basket-background">
-        <div class="basket">
+    <div class="basket-background" @click="closeBasket">
+        <div class="basket" @click="isNeedClose = false">
             <close-button
                 @close="closeBasket"
                 class="close-bn-position"
@@ -47,20 +47,16 @@ export default defineComponent({
     components: {CloseButton},
 
     props: {
-        isShowBasket: {
-            type: Boolean,
-            required: true
-        },
-
         basketGoods: {
             required: true,
             type: Array as PropType<IBasketGood[]>
         }
     },
 
-    data(): { basketText: typeof BasketText } {
+    data(): { basketText: typeof BasketText, isNeedClose: boolean } {
         return {
-            basketText: BasketText
+            basketText: BasketText,
+            isNeedClose: true
         };
     },
 
@@ -71,7 +67,7 @@ export default defineComponent({
         },
 
         getAbsenceGoods() {
-            return AbsenceGoods
+            return AbsenceGoods;
         },
     },
 
@@ -102,6 +98,10 @@ export default defineComponent({
         },
 
         closeBasket(): void {
+            if (!this.isNeedClose) {
+                this.isNeedClose = true;
+                return;
+            }
             this.$emit(EMITS.Close, false);
         },
     }

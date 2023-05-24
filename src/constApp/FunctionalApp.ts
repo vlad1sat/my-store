@@ -33,7 +33,7 @@ const EMPTY_GOOD: Readonly<IGoodApp> = {
 
 const BasePositionSearcher: Readonly<TPositionSearcher> = {
     Left: 1300,
-    Top: 178
+    Top: 180
 };
 
 export {BorderCountGoods, EMPTY_GOOD, SearcherData, BasePositionSearcher};
