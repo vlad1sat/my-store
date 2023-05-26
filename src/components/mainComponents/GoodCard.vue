@@ -21,6 +21,7 @@ import IGoodApp from "@/interfaces/IGoodApp";
 import {PropType, defineComponent} from "vue";
 import IResultOpenGood from "@/interfaces/emitResults/IResultOpenGood";
 import {GoodCardText} from "@/constApp/BaseText";
+import {TGoodCard} from "@/constApp/TypesConst";
 
 export default defineComponent({
     name: "GoodCard",
@@ -32,7 +33,7 @@ export default defineComponent({
         }
     },
 
-    data(): { goodCardText: typeof GoodCardText } {
+    data(): { goodCardText: Readonly<TGoodCard> } {
         return {
             goodCardText: GoodCardText
         };

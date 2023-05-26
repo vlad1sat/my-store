@@ -1,29 +1,50 @@
 <template>
-    <div class="basket-background" @click="closeBasket">
-        <div class="basket" @click="isNeedClose = false">
+    <div class="basket-background"
+         @click="closeBasket">
+        <div class="basket"
+             @click="isNeedClose = false">
             <close-button
                 @close="closeBasket"
                 class="close-bn-position"
             />
             <h2 class="basket-title">{{basketText.Title}}</h2>
-            <p v-if="!basketGoods.length" class="basket-no-goods">{{ getAbsenceGoods }}</p>
+            <p v-if="!basketGoods.length"
+               class="basket-no-goods">{{ getAbsenceGoods }}
+            </p>
             <div class="basket-goods">
-                <div v-for="basketGood in basketGoods" :key="basketGood.id" class="basket-good">
+                <div v-for="basketGood in basketGoods"
+                     :key="basketGood.id" class="basket-good">
                     <div>
-                        <img :src="basketGood.image" width="90" height="120" class="basket-img" alt="picture good">
+                        <img :src="basketGood.image"
+                             width="90"
+                             height="120"
+                             class="basket-img"
+                             alt="picture good"
+                        />
                         <h3 class="basket-title-good">{{ basketGood.title }}</h3>
                     </div>
                     <h3 class="basket-price">{{  (basketGood.price * basketGood.count).toFixed(2) }} {{ basketText.PriseSymbol }}</h3>
                     <div class="basket-count-goods">
                         <p class="count-goods">{{ basketGood.count }} {{ basketText.CountSymbol }}</p>
-                        <button class="bn-basket-count-goods bn-basket-move" @click="countGood(basketGood, basketText.Plus)">{{ basketText.Plus }}</button>
-                        <button class="bn-basket-count-goods bn-basket-move" @click="countGood(basketGood, basketText.Minus)">{{ basketText.Minus }}</button>
+                        <button class="bn-basket-count-goods bn-basket-move"
+                                @click="countGood(basketGood, basketText.Plus)">{{ basketText.Plus }}
+                        </button>
+                        <button class="bn-basket-count-goods bn-basket-move"
+                                @click="countGood(basketGood, basketText.Minus)">{{ basketText.Minus }}
+                        </button>
                     </div>
-                    <button class="basket-bn basket-bn-delete" @click="deleteGoodFromBasket(basketGood)">{{ basketText.Delete }}</button>
+                    <button class="basket-bn basket-bn-delete"
+                            @click="deleteGoodFromBasket(basketGood)">{{ basketText.Delete }}
+                    </button>
                 </div>
             </div>
-            <h2 v-if="basketGoods.length" class="basket-total-sum">{{ basketText.TotalSum }} {{ totalSum }} {{ basketText.PriseSymbol }}</h2>
-            <button class="basket-bn basket-bn-buy" :disabled="!basketGoods.length" @click="buyBasket()">{{ basketText.Buy }}</button>
+            <h2 v-if="basketGoods.length"
+                class="basket-total-sum">{{ basketText.TotalSum }} {{ totalSum }} {{ basketText.PriseSymbol }}
+            </h2>
+            <button class="basket-bn basket-bn-buy"
+                    :disabled="!basketGoods.length"
+                    @click="buyBasket">{{ basketText.Buy }}
+            </button>
         </div>
     </div>
 </template>

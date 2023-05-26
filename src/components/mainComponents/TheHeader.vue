@@ -6,13 +6,11 @@
             <button
                 class="header-magnifier"
                 @click="viewSort">
-
             </button>
             <button
                 class="header-favorites"
                 @click="viewFavorites"
                 :class="{ 'open-favorites': isShowFavorites }">
-
             </button>
             <button
                 class="header-basket"
@@ -26,6 +24,7 @@
 import {defineComponent} from "vue";
 import IResultOpenBasket from "@/interfaces/emitResults/IResultOpenBasket";
 import {HeaderText} from "@/constApp/BaseText";
+import {THeader} from "@/constApp/TypesConst";
 
 const EMITS = {
     Sort: 'view-sort',
@@ -48,7 +47,7 @@ export default defineComponent({
         }
     },
 
-    data(): { headerText: typeof HeaderText } {
+    data(): { headerText: Readonly<THeader> } {
         return {
             headerText: HeaderText
         };

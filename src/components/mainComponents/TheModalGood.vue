@@ -10,14 +10,21 @@
                 <h3 class="modal-text modal-category">{{ selectedGood.category }}</h3>
             </div>
             <div class="center-img">
-                <img :src="selectedGood.image" class="modal-picture" alt="picture-cloth">
+                <img :src="selectedGood.image"
+                     class="modal-picture"
+                     alt="picture-cloth"
+                />
             </div>
             <h3 class="modal-text modal-price">{{ selectedGood.price }} {{ modalText.PriseSymbol }}</h3>
             <p class="modal-text modal-description good-information">{{ selectedGood.description }}</p>
             <div>
                 <h2 class="modal-text modal-rating">{{ modalText.RATING.Rating }}</h2>
                 <p class="modal-text modal-rate">{{ modalText.RATING.Rate }} {{ selectedGood.rating.rate }}</p>
-                <img :src="imageRating" alt="emotion" width="44" height="44" class="modal-smile">
+                <img :src="imageRating"
+                     alt="emotion" width="44"
+                     height="44"
+                     class="modal-smile"
+                />
                 <p class="modal-text modal-count">{{ modalText.RATING.Count }} {{selectedGood.rating.count }}</p>
             </div>
             <div>
@@ -87,8 +94,7 @@ export default defineComponent({
             alert(`${this.modalText.AddFavorite}`);
         },
 
-        addToBasket(e: any): void {
-            console.log(e)
+        addToBasket(): void {
             const basketGood: IBasketGood = {
                 title: this.selectedGood.title,
                 id: this.selectedGood.id,
@@ -123,8 +129,9 @@ export default defineComponent({
         closeGood(): void {
             if (!this.isNeedClose) {
                 this.isNeedClose = true;
-                return
+                return;
             }
+
             const result: IResultCloseGood = {
                 isShowGood: false,
                 selectedGood: EMPTY_GOOD,
